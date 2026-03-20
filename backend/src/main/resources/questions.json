@@ -1,0 +1,638 @@
+[
+  {
+    "id": 1,
+    "group": "Variables & Strings",
+    "order": 1,
+    "title": "f-String Formatting",
+    "prompt": "A variable called `name` has been defined with the value `'Alice'`.\n\nCreate a new variable called `greeting` using an f-string that produces the text: `Hello, Alice!`",
+    "starterCode": "name = 'Alice'\n# Write your code below\n",
+    "tests": [
+      "assert greeting == 'Hello, Alice!', \"greeting should equal 'Hello, Alice!'\""
+    ],
+    "answer": "greeting = f\"Hello, {name}!\"",
+    "pythonicTip": "Use f-strings (f\"...\") for string interpolation — they are faster and more readable than .format() or % string formatting.",
+    "conceptSummary": { "title": "What is string interpolation?", "description": "A way to embed variable values directly inside a string — no concatenation or formatting calls needed." },
+    "languageNotes": [
+      { "language": "Java", "note": "Uses String.format(\"Hello, %s!\", name) or \"Hello, \" + name — no native interpolation, verbose and error-prone." },
+      { "language": "C++", "note": "Uses printf() or std::cout — no interpolation syntax exists. You concatenate or format manually." },
+      { "language": "JavaScript", "note": "Template literals do the same thing: `Hello, ${name}!` — introduced in ES6, nearly identical to Python f-strings." }
+    ]
+  },
+  {
+    "id": 14,
+    "group": "Variables & Strings",
+    "order": 2,
+    "title": "String join() and split()",
+    "prompt": "A list `words = ['the', 'quick', 'brown', 'fox']` has been defined.\n\n- Join the words with spaces into a string called `sentence`\n- Split `sentence` back into a list called `word_list`\n- Join the words with hyphens into a string called `hyphenated`",
+    "starterCode": "words = ['the', 'quick', 'brown', 'fox']\n# Write your code below\n",
+    "tests": [
+      "assert sentence == 'the quick brown fox', \"sentence should be 'the quick brown fox'\"",
+      "assert word_list == ['the', 'quick', 'brown', 'fox'], 'word_list should match the original words list'",
+      "assert hyphenated == 'the-quick-brown-fox', \"hyphenated should use '-' as the separator\""
+    ],
+    "answer": "sentence = ' '.join(words)\nword_list = sentence.split()\nhyphenated = '-'.join(words)",
+    "pythonicTip": "Use separator.join(list) to build strings from lists — it is O(n) and far faster than string concatenation in a loop. .split() with no argument splits on any whitespace and drops empty strings.",
+    "conceptSummary": { "title": "What are join() and split()?", "description": "join() assembles a list of strings into one string with a separator. split() breaks a string into a list at whitespace (or a specified delimiter)." },
+    "languageNotes": [
+      { "language": "Java", "note": "String.join(\" \", words) is the equivalent of ' '.join(words). str.split(\" \") splits by space but creates empty strings for consecutive spaces, unlike Python." },
+      { "language": "C++", "note": "No built-in join. Requires a manual loop with std::ostringstream. split() also requires manual implementation." },
+      { "language": "Interview tip", "note": "Building strings with += in a loop is O(n²) — strings are immutable and each += creates a new string. Always collect parts in a list and join once at the end." }
+    ]
+  },
+  {
+    "id": 2,
+    "group": "Data Structures",
+    "order": 3,
+    "title": "Create a List",
+    "prompt": "Create a list called `numbers` containing the integers 1 through 5 in order.",
+    "starterCode": "# Write your code below\n",
+    "tests": [
+      "assert isinstance(numbers, list), 'numbers should be a list — use square brackets []'",
+      "assert numbers == [1, 2, 3, 4, 5], 'numbers should contain [1, 2, 3, 4, 5] in order'"
+    ],
+    "answer": "numbers = [1, 2, 3, 4, 5]",
+    "pythonicTip": "Use the [] literal syntax to create lists. It is faster and more idiomatic than calling list().",
+    "conceptSummary": { "title": "What is a list?", "description": "An ordered, mutable sequence of elements. You can add, remove, and change items at any time." },
+    "languageNotes": [
+      { "language": "Java", "note": "ArrayList<Integer> numbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5)) — you must declare the element type and import java.util." },
+      { "language": "C++", "note": "std::vector<int> numbers = {1, 2, 3, 4, 5} — closest equivalent, but strictly typed to one element type." },
+      { "language": "Key difference", "note": "Python lists are dynamic and untyped — [1, \"hello\", 3.14, True] is perfectly valid. Java and C++ collections require all elements to share a type." }
+    ]
+  },
+  {
+    "id": 3,
+    "group": "Data Structures",
+    "order": 4,
+    "title": "Create a Dictionary",
+    "prompt": "Create a dictionary called `person` with three keys: `name` (a string), `age` (an integer), and `city` (a string). Use any values you like.",
+    "starterCode": "# Write your code below\n",
+    "tests": [
+      "assert isinstance(person, dict), 'person should be a dictionary — use curly braces {}'",
+      "assert 'name' in person, \"person must have a key called 'name'\"",
+      "assert 'age' in person, \"person must have a key called 'age'\"",
+      "assert 'city' in person, \"person must have a key called 'city'\"",
+      "assert isinstance(person['name'], str), \"The value for 'name' should be a string\"",
+      "assert isinstance(person['age'], int), \"The value for 'age' should be an integer\"",
+      "assert isinstance(person['city'], str), \"The value for 'city' should be a string\""
+    ],
+    "answer": "person = {\"name\": \"Alice\", \"age\": 30, \"city\": \"New York\"}",
+    "pythonicTip": "Use the {} literal syntax for dictionaries. Meaningful string keys make your data self-documenting.",
+    "conceptSummary": { "title": "What is a dictionary?", "description": "A collection of key-value pairs with O(1) average lookup. Keys must be unique and hashable." },
+    "languageNotes": [
+      { "language": "Java", "note": "HashMap<String, Object> — same key-value concept. You call .put(\"name\", \"Alice\") to add entries rather than using literal syntax." },
+      { "language": "C++", "note": "std::unordered_map is hash-based like Python's dict. std::map is sorted by key — pick based on whether you need ordering." },
+      { "language": "Key difference", "note": "Python dicts maintain insertion order since Python 3.7. Java's HashMap does NOT guarantee order — use LinkedHashMap if you need that." },
+      { "language": "Interview tip", "note": "When you need O(1) average lookup, reach for a Python dict (or Java HashMap / C++ unordered_map). They are all hash tables under the hood." }
+    ]
+  },
+  {
+    "id": 4,
+    "group": "Data Structures",
+    "order": 5,
+    "title": "Create a Tuple",
+    "prompt": "Create a tuple called `coords` containing exactly 3 numeric values representing x, y, and z coordinates.",
+    "starterCode": "# Write your code below\n",
+    "tests": [
+      "assert isinstance(coords, tuple), 'coords should be a tuple — use parentheses ()'",
+      "assert len(coords) == 3, 'coords should have exactly 3 elements'",
+      "assert all(isinstance(value, (int, float)) for value in coords), 'All elements in coords should be numbers'"
+    ],
+    "answer": "coords = (10, 20, 30)",
+    "pythonicTip": "Use tuples for fixed collections that should not change after creation. Tuples are immutable and slightly faster than lists.",
+    "conceptSummary": { "title": "What is a tuple?", "description": "An immutable, ordered sequence of elements. Once created, values cannot be changed — making it faster than a list and usable as a dictionary key." },
+    "languageNotes": [
+      { "language": "Java", "note": "No built-in tuple. You'd use an int[] array or a custom class — a gap Java developers commonly notice when switching to Python." },
+      { "language": "C++", "note": "std::tuple<int, int, int> exists but is verbose. std::pair handles two elements. Neither is as natural as Python's tuple syntax." },
+      { "language": "Key difference", "note": "Python tuples are immutable — values cannot change after creation. This makes them safe to use as dictionary keys, which lists cannot be." }
+    ]
+  },
+  {
+    "id": 5,
+    "group": "Data Structures",
+    "order": 6,
+    "title": "Create a Set and Check Membership",
+    "prompt": "A list `nums = [1, 2, 2, 3, 4, 4, 5]` has been defined.\n\nCreate a set called `unique_nums` from it. Then check if `3` is in the set — store the boolean result in `has_three`.",
+    "starterCode": "nums = [1, 2, 2, 3, 4, 4, 5]\n# Write your code below\n",
+    "tests": [
+      "assert isinstance(unique_nums, set), 'unique_nums should be a set — use set()'",
+      "assert unique_nums == {1, 2, 3, 4, 5}, 'unique_nums should have no duplicates'",
+      "assert has_three == True, 'has_three should be True since 3 is in the set'"
+    ],
+    "answer": "unique_nums = set(nums)\nhas_three = 3 in unique_nums",
+    "pythonicTip": "Convert a list to a set to remove duplicates in O(n). The `in` operator on a set is O(1) average — the most-used pattern in array hashing problems like Contains Duplicate.",
+    "conceptSummary": { "title": "What is a set?", "description": "An unordered collection of unique, hashable elements. Backed by a hash table — O(1) average add, remove, and membership test." },
+    "languageNotes": [
+      { "language": "Java", "note": "HashSet<Integer> — same O(1) average behavior. Use .add(), .contains(), and .remove()." },
+      { "language": "C++", "note": "std::unordered_set<int> is the hash-based equivalent. std::set is sorted (BST-backed), not hash-based." },
+      { "language": "Key difference", "note": "Python sets use {} literal syntax: {1, 2, 3}. But {} alone creates an empty dict — use set() to create an empty set." }
+    ]
+  },
+  {
+    "id": 15,
+    "group": "Data Structures",
+    "order": 7,
+    "title": "Safe Dictionary Access with .get()",
+    "prompt": "A frequency map `freq = {'a': 3, 'b': 1}` has been defined.\n\nUse `.get()` to safely retrieve the count for the key `'c'`, defaulting to `0` if not found — store it in `c_count`. Then compute the new count for `'a'` (current value + 1) using `.get()` — store it in `a_new_count`.",
+    "starterCode": "freq = {'a': 3, 'b': 1}\n# Write your code below\n",
+    "tests": [
+      "assert c_count == 0, \"c_count should be 0 since 'c' is not in freq\"",
+      "assert a_new_count == 4, \"a_new_count should be 4 (3 + 1)\""
+    ],
+    "answer": "c_count = freq.get('c', 0)\na_new_count = freq.get('a', 0) + 1",
+    "pythonicTip": "Use dict.get(key, default) instead of manually checking `if key in dict`. The one-liner freq[char] = freq.get(char, 0) + 1 builds a frequency map without KeyError — used in Valid Anagram, Two Sum, and most hashing problems.",
+    "conceptSummary": { "title": "What is dict.get()?", "description": "A safe way to access a dictionary value that returns a default instead of raising KeyError when the key is missing." },
+    "languageNotes": [
+      { "language": "Java", "note": "map.getOrDefault(key, 0) — exact equivalent, introduced in Java 8." },
+      { "language": "C++", "note": "Accessing a missing key with map[key] auto-inserts a default (0 for ints). Use map.count(key) to check existence without insertion." },
+      { "language": "Interview tip", "note": "The pattern freq[char] = freq.get(char, 0) + 1 is how you build a character frequency map in Python. It appears in at least 10 Blind 75 problems." }
+    ]
+  },
+  {
+    "id": 16,
+    "group": "Data Structures",
+    "order": 8,
+    "title": "defaultdict for Grouping",
+    "prompt": "A list of words has been defined. Group them by their first letter using a `defaultdict(list)` — store the result in a variable called `grouped`.",
+    "starterCode": "from collections import defaultdict\nwords = ['apple', 'ant', 'banana', 'avocado', 'blueberry']\n# Write your code below\n",
+    "tests": [
+      "assert isinstance(grouped, defaultdict), 'grouped should be a defaultdict'",
+      "assert sorted(grouped['a']) == ['ant', 'apple', 'avocado'], \"Words starting with 'a' should be grouped together\"",
+      "assert sorted(grouped['b']) == ['banana', 'blueberry'], \"Words starting with 'b' should be grouped together\""
+    ],
+    "answer": "grouped = defaultdict(list)\nfor word in words:\n    grouped[word[0]].append(word)",
+    "pythonicTip": "Use defaultdict(list) to group items without checking if a key exists first. It eliminates the verbose `if key not in d: d[key] = []` pattern — critical for Group Anagrams and graph adjacency lists.",
+    "conceptSummary": { "title": "What is a defaultdict?", "description": "A dict subclass that automatically creates a default value for missing keys. defaultdict(list) gives you an empty list for any new key — no KeyError, no guard clause." },
+    "languageNotes": [
+      { "language": "Java", "note": "map.computeIfAbsent(key, k -> new ArrayList<>()).add(value) — same effect but more verbose." },
+      { "language": "C++", "note": "std::unordered_map<char, std::vector<std::string>> — accessing a missing key auto-creates it with a default-constructed value." },
+      { "language": "Interview tip", "note": "defaultdict(list) is the standard Python pattern for adjacency lists in graph problems like Course Schedule and Clone Graph." }
+    ]
+  },
+  {
+    "id": 17,
+    "group": "Data Structures",
+    "order": 9,
+    "title": "Count Frequencies with Counter",
+    "prompt": "A list `nums = [1, 2, 2, 3, 3, 3, 4]` has been defined.\n\nUse `Counter` to count how many times each number appears — store the result in `freq`. Then store the most common number in `most_common_num`.",
+    "starterCode": "from collections import Counter\nnums = [1, 2, 2, 3, 3, 3, 4]\n# Write your code below\n",
+    "tests": [
+      "assert isinstance(freq, Counter), 'freq should be a Counter'",
+      "assert freq[3] == 3, 'The number 3 appears 3 times'",
+      "assert freq[2] == 2, 'The number 2 appears 2 times'",
+      "assert freq[1] == 1, 'The number 1 appears 1 time'",
+      "assert most_common_num == 3, 'The most common number is 3'"
+    ],
+    "answer": "freq = Counter(nums)\nmost_common_num = freq.most_common(1)[0][0]",
+    "pythonicTip": "Counter is a dict built for frequency counting. freq.most_common(k) returns the k most frequent elements as (element, count) pairs — this directly solves Top K Frequent Elements.",
+    "conceptSummary": { "title": "What is a Counter?", "description": "A dict subclass that counts hashable objects. Pass it an iterable and it returns a mapping of element to count." },
+    "languageNotes": [
+      { "language": "Java", "note": "Map<Integer, Integer> freq = new HashMap<>(); — manually loop with getOrDefault(n, 0) + 1. Counter is one line vs four." },
+      { "language": "C++", "note": "std::unordered_map<int, int> — same manual loop approach. No built-in Counter equivalent." },
+      { "language": "Interview tip", "note": "Counter solves frequency problems in one line. It's used in Valid Anagram, Group Anagrams, Top K Frequent Elements, and many more." }
+    ]
+  },
+  {
+    "id": 18,
+    "group": "Data Structures",
+    "order": 10,
+    "title": "Deque as a Queue",
+    "prompt": "Import `deque` from collections. Create a deque called `queue`. Enqueue the numbers `1`, `2`, `3` using `.append()`. Then dequeue the first element using `.popleft()` and store it in `first_out`.",
+    "starterCode": "from collections import deque\n# Write your code below\n",
+    "tests": [
+      "assert isinstance(queue, deque), 'queue should be a deque'",
+      "assert first_out == 1, 'first_out should be 1 (first-in, first-out)'",
+      "assert list(queue) == [2, 3], 'After dequeuing, queue should contain [2, 3]'"
+    ],
+    "answer": "queue = deque()\nqueue.append(1)\nqueue.append(2)\nqueue.append(3)\nfirst_out = queue.popleft()",
+    "pythonicTip": "Use deque for queues — popleft() is O(1). A regular list's pop(0) is O(n) because it shifts all elements. Always use deque for BFS — it is the standard pattern in graph and tree traversal.",
+    "conceptSummary": { "title": "What is a deque?", "description": "A double-ended queue with O(1) appends and pops from both ends. Use it as a queue (append + popleft) or a stack (append + pop)." },
+    "languageNotes": [
+      { "language": "Java", "note": "ArrayDeque<Integer> — same double-ended behavior. Use .offer() to enqueue and .poll() to dequeue." },
+      { "language": "C++", "note": "std::deque<int> — supports push_back, push_front, pop_back, pop_front with the same O(1) guarantees." },
+      { "language": "Interview tip", "note": "deque is used in BFS (graphs, trees), Sliding Window Maximum, and monotonic deque problems. It is one of the most important data structures in Python interviews." }
+    ]
+  },
+  {
+    "id": 30,
+    "group": "Data Structures",
+    "order": 11,
+    "title": "2D List (Grid / Matrix)",
+    "prompt": "Create a 3x3 grid called `grid` initialized to all zeros using a list comprehension. Then set `grid[1][2]` to `5`. Store the number of rows in `num_rows` and the number of columns in `num_cols`.",
+    "starterCode": "# Write your code below\n",
+    "tests": [
+      "assert len(grid) == 3, 'grid should have 3 rows'",
+      "assert len(grid[0]) == 3, 'each row should have 3 columns'",
+      "assert grid[1][2] == 5, 'grid[1][2] should be 5'",
+      "assert grid[0][0] == 0, 'other cells should remain 0'",
+      "assert num_rows == 3, 'num_rows should be 3'",
+      "assert num_cols == 3, 'num_cols should be 3'"
+    ],
+    "answer": "grid = [[0] * 3 for _ in range(3)]\ngrid[1][2] = 5\nnum_rows = len(grid)\nnum_cols = len(grid[0])",
+    "pythonicTip": "Always create 2D grids with [[0]*cols for _ in range(rows)]. Never use [[0]*cols]*rows — it creates rows that all reference the same list object, so modifying one cell changes every row.",
+    "conceptSummary": { "title": "What is a 2D list?", "description": "A list of lists — each inner list is a row. Access elements with grid[row][col]. Used to represent matrices, grids, and DP tables." },
+    "languageNotes": [
+      { "language": "Java", "note": "int[][] grid = new int[3][3] — each cell is zero by default. Access with grid[row][col], same as Python." },
+      { "language": "C++", "note": "std::vector<std::vector<int>> grid(3, std::vector<int>(3, 0)) — verbose but same 2D structure." },
+      { "language": "Interview tip", "note": "For grid traversal (Number of Islands, Pacific Atlantic Water Flow), store directions as dirs = [(0,1),(0,-1),(1,0),(-1,0)] and loop through them." }
+    ]
+  },
+  {
+    "id": 6,
+    "group": "Control Flow",
+    "order": 12,
+    "title": "For Loop Over a List",
+    "prompt": "A list called `fruits` has been defined containing three fruit names.\n\nWrite a for loop that builds a new list called `uppercased` where each fruit name is converted to uppercase.",
+    "starterCode": "fruits = ['apple', 'banana', 'mango']\n# Write your for loop below\n",
+    "tests": [
+      "assert isinstance(uppercased, list), 'uppercased should be a list'",
+      "assert uppercased == ['APPLE', 'BANANA', 'MANGO'], \"Expected ['APPLE', 'BANANA', 'MANGO']\""
+    ],
+    "answer": "uppercased = []\nfor fruit in fruits:\n    uppercased.append(fruit.upper())",
+    "pythonicTip": "When iterating, write 'for item in collection' directly. Avoid range(len(collection)) unless you specifically need the index.",
+    "conceptSummary": { "title": "What is a for loop?", "description": "A control structure that iterates over each item in a sequence, executing a block of code once per item." },
+    "languageNotes": [
+      { "language": "Java", "note": "for (String fruit : fruits) — the enhanced for-each loop (Java 5+). Same idea as Python, just with a type declaration." },
+      { "language": "C++", "note": "for (const auto& fruit : fruits) — range-based for loop, introduced in C++11. auto infers the type." },
+      { "language": "Key difference", "note": "Python's for is always a for-each. There is no classic for (int i = 0; i < n; i++) style. If you need the index too, use enumerate()." }
+    ]
+  },
+  {
+    "id": 7,
+    "group": "Control Flow",
+    "order": 13,
+    "title": "While Loop",
+    "prompt": "Write a while loop that counts from 1 to 5, appending each number to a list called `counted`.\n\nExpected result: [1, 2, 3, 4, 5]",
+    "starterCode": "# Write your while loop below\n",
+    "tests": [
+      "assert isinstance(counted, list), 'counted should be a list'",
+      "assert counted == [1, 2, 3, 4, 5], 'counted should equal [1, 2, 3, 4, 5]'"
+    ],
+    "answer": "counted = []\ni = 1\nwhile i <= 5:\n    counted.append(i)\n    i += 1",
+    "pythonicTip": "Prefer a for loop over a while loop when iterating a known range. Use while only when the stop condition is dynamic or not known in advance.",
+    "conceptSummary": { "title": "What is a while loop?", "description": "A loop that keeps executing as long as a condition is True. Use it when the number of iterations is not known in advance." },
+    "languageNotes": [
+      { "language": "Java / C++", "note": "while (condition) { } — nearly identical logic. Just add parentheses around the condition and curly braces around the body." },
+      { "language": "Unique to Python", "note": "while/else — the else block runs when the condition becomes False naturally. If you break out early, the else is skipped. Java and C++ have no equivalent." },
+      { "language": "No do-while", "note": "Python has no do-while loop. The closest equivalent is: while True: ... if condition: break" }
+    ]
+  },
+  {
+    "id": 8,
+    "group": "Control Flow",
+    "order": 14,
+    "title": "If / Else Statement",
+    "prompt": "A variable called `score` has been set to 75.\n\nWrite an if/else block that assigns the string `'Pass'` to a variable called `result` if score is 60 or above, otherwise assign `'Fail'`.",
+    "starterCode": "score = 75\n# Write your if/else below\n",
+    "tests": [
+      "assert result == 'Pass', \"For score=75, result should be 'Pass'\""
+    ],
+    "answer": "if score >= 60:\n    result = 'Pass'\nelse:\n    result = 'Fail'",
+    "pythonicTip": "For simple true/false assignments, Python supports the ternary expression: result = 'Pass' if score >= 60 else 'Fail'",
+    "conceptSummary": { "title": "What is a conditional?", "description": "A control structure that runs different code depending on whether a condition evaluates to True or False." },
+    "languageNotes": [
+      { "language": "Java / C++", "note": "if (condition) { } else { } — parentheses around the condition are required, curly braces define the block." },
+      { "language": "Ternary operator", "note": "Java/C++ use condition ? a : b. Python flips it: a if condition else b. Same result, different syntax." },
+      { "language": "elif", "note": "Python uses elif (one word). Java and C++ use else if (two words). Small difference — same concept." }
+    ]
+  },
+  {
+    "id": 9,
+    "group": "Functions & Pythonic Style",
+    "order": 15,
+    "title": "Define a Function",
+    "prompt": "Write a function called `add` that accepts two parameters, `a` and `b`, and returns their sum.",
+    "starterCode": "# Write your function below\n",
+    "tests": [
+      "assert callable(add), 'add should be a function defined with the def keyword'",
+      "assert add(2, 3) == 5, 'add(2, 3) should return 5'",
+      "assert add(-1, 1) == 0, 'add(-1, 1) should return 0'",
+      "assert add(0, 0) == 0, 'add(0, 0) should return 0'"
+    ],
+    "answer": "def add(a, b):\n    return a + b",
+    "pythonicTip": "Functions should do one thing and do it well. Keep them short, name them with verbs, and always return a value explicitly.",
+    "conceptSummary": { "title": "What is a function?", "description": "A named, reusable block of code that takes inputs (parameters) and returns an output. Keeps code DRY and testable." },
+    "languageNotes": [
+      { "language": "Java", "note": "Methods must live inside a class. You need a return type and access modifier: public int add(int a, int b) { return a + b; }" },
+      { "language": "C++", "note": "Can be standalone (no class needed), but return and parameter types are required: int add(int a, int b) { return a + b; }" },
+      { "language": "Key difference", "note": "Python functions are first-class objects — you can pass them as arguments, return them from other functions, and store them in variables." }
+    ]
+  },
+  {
+    "id": 10,
+    "group": "Functions & Pythonic Style",
+    "order": 16,
+    "title": "List Comprehension",
+    "prompt": "Using a list comprehension, create a list called `squares` containing the square of each number from 1 to 5.\n\nExpected result: [1, 4, 9, 16, 25]",
+    "starterCode": "# Write your list comprehension below\n",
+    "tests": [
+      "assert isinstance(squares, list), 'squares should be a list'",
+      "assert squares == [1, 4, 9, 16, 25], 'Expected [1, 4, 9, 16, 25]'"
+    ],
+    "answer": "squares = [x**2 for x in range(1, 6)]",
+    "pythonicTip": "List comprehensions are the Pythonic way to transform one list into another. They are more concise and faster than a for loop with .append().",
+    "conceptSummary": { "title": "What is a list comprehension?", "description": "A concise one-line syntax for building a new list by transforming or filtering an existing iterable." },
+    "languageNotes": [
+      { "language": "Java", "note": "IntStream.rangeClosed(1, 5).map(x -> x * x).boxed().collect(Collectors.toList()) — same idea, drastically more verbose." },
+      { "language": "C++", "note": "No direct equivalent. You'd use a loop or std::transform. No built-in one-liner exists." },
+      { "language": "JavaScript", "note": "[1,2,3,4,5].map(x => x ** 2) — similar spirit to list comprehensions, different syntax." },
+      { "language": "Interview tip", "note": "List comprehensions signal idiomatic Python. Using a for loop with .append() works but reads as Python-with-Java-habits." }
+    ]
+  },
+  {
+    "id": 11,
+    "group": "Functions & Pythonic Style",
+    "order": 17,
+    "title": "Enumerate",
+    "prompt": "A list called `colors` has been defined.\n\nUse `enumerate()` to create a list called `indexed` containing tuples that pair each index with its color.\n\nExpected result: [(0, 'red'), (1, 'green'), (2, 'blue')]",
+    "starterCode": "colors = ['red', 'green', 'blue']\n# Write your code below\n",
+    "tests": [
+      "assert isinstance(indexed, list), 'indexed should be a list'",
+      "assert indexed == [(0, 'red'), (1, 'green'), (2, 'blue')], \"Expected [(0, 'red'), (1, 'green'), (2, 'blue')]\""
+    ],
+    "answer": "indexed = [(index, color) for index, color in enumerate(colors)]",
+    "pythonicTip": "Always use enumerate() when you need both the index and the value. Never use range(len(collection)) to achieve the same thing.",
+    "conceptSummary": { "title": "What is enumerate()?", "description": "A built-in that wraps an iterable and yields (index, value) pairs — so you always have the position and the item at the same time." },
+    "languageNotes": [
+      { "language": "Java", "note": "No built-in equivalent — use for (int i = 0; i < colors.size(); i++) and access colors.get(i) manually." },
+      { "language": "C++", "note": "Same story — no range-based enumerate until C++23 (std::views::enumerate). Most codebases still use a manual index counter." },
+      { "language": "Key difference", "note": "enumerate() is a lazy generator — it yields (index, value) tuples one at a time without building a new list in memory. Efficient on large collections." }
+    ]
+  },
+  {
+    "id": 12,
+    "group": "Functions & Pythonic Style",
+    "order": 18,
+    "title": "Multiple Assignment and Swap",
+    "prompt": "Two variables `a = 5` and `b = 10` have been defined.\n\nSwap their values using Python's multiple assignment — no temporary variable needed. Then unpack the tuple `point = (3, 7)` into separate variables `x` and `y`.",
+    "starterCode": "a = 5\nb = 10\n# Swap a and b below\n\npoint = (3, 7)\n# Unpack point into x and y below\n",
+    "tests": [
+      "assert a == 10, 'a should be 10 after the swap'",
+      "assert b == 5, 'b should be 5 after the swap'",
+      "assert x == 3, 'x should be 3'",
+      "assert y == 7, 'y should be 7'"
+    ],
+    "answer": "a, b = b, a\nx, y = point",
+    "pythonicTip": "Python evaluates the right side fully before assigning — a, b = b, a is an atomic swap with no temp variable. Tuple unpacking works on any iterable and is used constantly in two-pointer and coordinate problems.",
+    "conceptSummary": { "title": "What is tuple unpacking?", "description": "Assigning multiple variables at once from an iterable. Python evaluates the right side first, then assigns — making in-place swaps possible." },
+    "languageNotes": [
+      { "language": "Java / C++", "note": "int temp = a; a = b; b = temp; — a temp variable is required. Python's atomic swap eliminates this boilerplate entirely." },
+      { "language": "JavaScript", "note": "[a, b] = [b, a] — ES6 destructuring assignment. Same concept as Python's tuple unpacking." },
+      { "language": "Interview tip", "note": "Swapping with a, b = b, a is idiomatic Python. Using a temp variable works but signals non-Pythonic habits to interviewers." }
+    ]
+  },
+  {
+    "id": 13,
+    "group": "Functions & Pythonic Style",
+    "order": 19,
+    "title": "List and String Slicing",
+    "prompt": "A list `nums = [0, 1, 2, 3, 4, 5]` and a string `word = 'python'` have been defined.\n\nCreate `first_half` containing the first 3 elements of `nums`. Create `reversed_word` by reversing `word` using slice syntax — no built-in `reversed()` function.",
+    "starterCode": "nums = [0, 1, 2, 3, 4, 5]\nword = 'python'\n# Write your code below\n",
+    "tests": [
+      "assert first_half == [0, 1, 2], 'first_half should be [0, 1, 2]'",
+      "assert reversed_word == 'nohtyp', \"reversed_word should be 'nohtyp'\""
+    ],
+    "answer": "first_half = nums[:3]\nreversed_word = word[::-1]",
+    "pythonicTip": "s[::-1] is the idiomatic way to reverse a string or list. The slice syntax [start:end:step] — all three parts optional — is used for subarrays, palindrome checks, and substrings.",
+    "conceptSummary": { "title": "What is slicing?", "description": "Extracting a portion of a sequence using [start:end:step]. Returns a new object — it does not modify the original." },
+    "languageNotes": [
+      { "language": "Java", "note": "Arrays.copyOfRange(arr, 0, 3) for arrays. String.substring(0, 3) for strings. No step parameter exists." },
+      { "language": "C++", "note": "std::vector::assign or std::string::substr — verbose, no step. Python slicing with step is unique among mainstream languages." },
+      { "language": "Interview tip", "note": "word[::-1] is the fastest way to reverse a string in Python. For palindrome checks: s == s[::-1]. Know this pattern cold." }
+    ]
+  },
+  {
+    "id": 19,
+    "group": "Functions & Pythonic Style",
+    "order": 20,
+    "title": "Custom Sorting with sorted() and key=",
+    "prompt": "A list `intervals = [[3, 6], [1, 4], [2, 5]]` and `words = ['banana', 'fig', 'apple', 'kiwi']` have been defined.\n\nSort `intervals` by the start of each interval (first element) — store in `sorted_intervals`. Sort `words` by word length — store in `by_length`.",
+    "starterCode": "intervals = [[3, 6], [1, 4], [2, 5]]\nwords = ['banana', 'fig', 'apple', 'kiwi']\n# Write your code below\n",
+    "tests": [
+      "assert sorted_intervals == [[1, 4], [2, 5], [3, 6]], 'Sort intervals by first element'",
+      "assert by_length == ['fig', 'kiwi', 'apple', 'banana'], 'Sort words by length'"
+    ],
+    "answer": "sorted_intervals = sorted(intervals, key=lambda x: x[0])\nby_length = sorted(words, key=len)",
+    "pythonicTip": "Use sorted(iterable, key=...) with a lambda or built-in function for custom sort order. This is essential for interval merging problems — always sort by start time first.",
+    "conceptSummary": { "title": "What is the key= parameter in sorted()?", "description": "A function applied to each element before comparison. sorted() uses the return value to determine order, not the original element." },
+    "languageNotes": [
+      { "language": "Java", "note": "list.sort(Comparator.comparing(x -> x[0])) or Collections.sort(list, (a, b) -> a[0] - b[0]). More verbose." },
+      { "language": "C++", "note": "std::sort(v.begin(), v.end(), [](auto& a, auto& b){ return a[0] < b[0]; }) — lambda comparator." },
+      { "language": "Interview tip", "note": "sorted() returns a new list. list.sort() sorts in-place and returns None. Use sorted() when you want to preserve the original or chain it in an expression." }
+    ]
+  },
+  {
+    "id": 22,
+    "group": "Functions & Pythonic Style",
+    "order": 21,
+    "title": "any() and all() for Validation",
+    "prompt": "Given `nums = [2, 4, 6, 8, 10]`:\n\n- Use `all()` to check if every number is even — store in `all_even`\n- Use `any()` to check if any number is greater than 9 — store in `any_large`\n- Use `any()` to check if any number is negative — store in `any_negative`",
+    "starterCode": "nums = [2, 4, 6, 8, 10]\n# Write your code below\n",
+    "tests": [
+      "assert all_even == True, 'All numbers in nums are even'",
+      "assert any_large == True, '10 is greater than 9'",
+      "assert any_negative == False, 'No negative numbers in nums'"
+    ],
+    "answer": "all_even = all(n % 2 == 0 for n in nums)\nany_large = any(n > 9 for n in nums)\nany_negative = any(n < 0 for n in nums)",
+    "pythonicTip": "Use all() and any() with generator expressions instead of writing loops with flag variables. They short-circuit — all() stops at the first False, any() stops at the first True.",
+    "conceptSummary": { "title": "What are any() and all()?", "description": "Built-ins that test conditions across an iterable. any() returns True if at least one element passes. all() returns True only if every element passes." },
+    "languageNotes": [
+      { "language": "Java", "note": "stream.allMatch(n -> n % 2 == 0) and stream.anyMatch(n -> n > 9) — Java 8+ streams. Same short-circuit behavior." },
+      { "language": "C++", "note": "std::all_of and std::any_of from <algorithm> — same idea, more verbose syntax." },
+      { "language": "Key difference", "note": "Python's any() and all() accept generator expressions — no intermediate list is created. Memory-efficient even on large datasets." }
+    ]
+  },
+  {
+    "id": 29,
+    "group": "Functions & Pythonic Style",
+    "order": 22,
+    "title": "Memoization with @lru_cache",
+    "prompt": "Write a recursive function `fib` that computes the nth Fibonacci number. Decorate it with `@lru_cache(maxsize=None)` to cache results.\n\n- `fib(0)` returns `0`\n- `fib(1)` returns `1`\n- `fib(n)` = `fib(n-1)` + `fib(n-2)`",
+    "starterCode": "from functools import lru_cache\n# Write your function below\n",
+    "tests": [
+      "assert fib(0) == 0, 'fib(0) should be 0'",
+      "assert fib(1) == 1, 'fib(1) should be 1'",
+      "assert fib(10) == 55, 'fib(10) should be 55'",
+      "assert fib(30) == 832040, 'fib(30) should be 832040'"
+    ],
+    "answer": "@lru_cache(maxsize=None)\ndef fib(n):\n    if n <= 1:\n        return n\n    return fib(n - 1) + fib(n - 2)",
+    "pythonicTip": "@lru_cache converts a recursive function into a memoized one with a single line. It is the fastest way to write top-down DP in Python — used in Climbing Stairs, Coin Change, House Robber, and most DP problems.",
+    "conceptSummary": { "title": "What is memoization?", "description": "Caching the results of expensive function calls so they are not recomputed. Turns exponential naive recursion into O(n) by storing each subproblem result once." },
+    "languageNotes": [
+      { "language": "Java", "note": "Manual HashMap<Integer, Integer> memo — check containsKey(n) before computing, then store the result. No decorator equivalent." },
+      { "language": "C++", "note": "std::unordered_map<int, int> memo — same manual approach. No language-level memoization decorator." },
+      { "language": "Key difference", "note": "@lru_cache is built into the standard library. Java and C++ require you to implement caching logic manually — Python saves 4–6 lines per memoized function." }
+    ]
+  },
+  {
+    "id": 20,
+    "group": "Operators",
+    "order": 23,
+    "title": "Integer Division // and Modulo %",
+    "prompt": "Given `n = 17` and `divisor = 5`:\n\n- Compute the integer quotient using floor division — store in `quotient`\n- Compute the remainder — store in `remainder`\n- Compute the midpoint between `lo = 0` and `hi = 9` using floor division — store in `mid`",
+    "starterCode": "n = 17\ndivisor = 5\nlo = 0\nhi = 9\n# Write your code below\n",
+    "tests": [
+      "assert quotient == 3, 'quotient should be 3 (17 // 5)'",
+      "assert remainder == 2, 'remainder should be 2 (17 % 5)'",
+      "assert mid == 4, 'mid should be 4 ((0 + 9) // 2)'"
+    ],
+    "answer": "quotient = n // divisor\nremainder = n % divisor\nmid = (lo + hi) // 2",
+    "pythonicTip": "Use // for midpoints in binary search: mid = (lo + hi) // 2. Use % for detecting even/odd (n % 2 == 0) and cycling indices. Both appear in dozens of interview problems.",
+    "conceptSummary": { "title": "What are // and %?", "description": "// is floor division — divides and rounds toward negative infinity. % is modulo — returns the remainder. Together they decompose any integer division." },
+    "languageNotes": [
+      { "language": "Java / C++", "note": "/ between integers truncates toward zero. % is the same. Python's // always floors: -7 // 2 == -4 in Python, but -7 / 2 == -3 in Java/C++." },
+      { "language": "Key difference", "note": "Python's // always rounds toward negative infinity. Java and C++ truncate toward zero. They differ for negative numbers." },
+      { "language": "Interview tip", "note": "The pattern lo, hi = 0, len(nums)-1; mid = (lo + hi) // 2 is the foundation of all binary search implementations." }
+    ]
+  },
+  {
+    "id": 21,
+    "group": "Operators",
+    "order": 24,
+    "title": "Bitwise Operators: AND, OR, XOR, Shift",
+    "prompt": "Given `a = 0b1010` (10) and `b = 0b1100` (12):\n\n- Store `a & b` in `and_result`\n- Store `a | b` in `or_result`\n- Store `a ^ b` in `xor_result`\n- Store `a >> 1` (right shift by 1) in `shifted`",
+    "starterCode": "a = 0b1010  # 10 in decimal\nb = 0b1100  # 12 in decimal\n# Write your code below\n",
+    "tests": [
+      "assert and_result == 0b1000, 'AND keeps only bits set in both — result is 8'",
+      "assert or_result == 0b1110, 'OR sets bits present in either — result is 14'",
+      "assert xor_result == 0b0110, 'XOR sets bits present in exactly one — result is 6'",
+      "assert shifted == 0b0101, 'Right shift by 1 divides by 2 — result is 5'"
+    ],
+    "answer": "and_result = a & b\nor_result = a | b\nxor_result = a ^ b\nshifted = a >> 1",
+    "pythonicTip": "XOR (^) is the key operator in bit manipulation problems: n ^ n == 0 and n ^ 0 == n. This is how Single Number finds the unpaired element in O(n) time and O(1) space — no hash map needed.",
+    "conceptSummary": { "title": "What are bitwise operators?", "description": "Operators that work on individual bits of integers. & (AND), | (OR), ^ (XOR), ~ (NOT), << (left shift), >> (right shift)." },
+    "languageNotes": [
+      { "language": "Java / C++", "note": "Identical operators: &, |, ^, ~, <<, >>. Java also has >>> (unsigned right shift). Python has no unsigned shift." },
+      { "language": "Key difference", "note": "Python integers are arbitrary precision — no overflow. Shifting past a 32-bit boundary is fine. In C++, it is undefined behavior." },
+      { "language": "Interview tip", "note": "Know: n & (n-1) clears the lowest set bit (used in Counting Bits). n & 1 checks odd/even. n >> 1 halves the number." }
+    ]
+  },
+  {
+    "id": 23,
+    "group": "Object-Oriented",
+    "order": 25,
+    "title": "Define a Class with __init__",
+    "prompt": "Define a class called `ListNode` that represents a singly linked list node. It should have:\n- A `val` parameter defaulting to `0`\n- A `next` parameter defaulting to `None`\n\nThen create an instance called `node` with `val=5`.",
+    "starterCode": "# Define the ListNode class below\n",
+    "tests": [
+      "assert node.val == 5, 'node.val should be 5'",
+      "assert node.next is None, 'node.next should default to None'",
+      "assert ListNode().val == 0, 'Default val should be 0'",
+      "assert ListNode(3).val == 3, 'ListNode(3).val should be 3'"
+    ],
+    "answer": "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\nnode = ListNode(5)",
+    "pythonicTip": "Use default parameter values (val=0, next=None) to make constructors flexible. This exact ListNode definition is what LeetCode provides for linked list problems — recognizing it instantly saves setup time.",
+    "conceptSummary": { "title": "What is a class?", "description": "A blueprint for creating objects. __init__ is the constructor — it runs when you create an instance and sets up the object's initial state via self." },
+    "languageNotes": [
+      { "language": "Java", "note": "class ListNode { int val; ListNode next; ListNode() {} ListNode(int val) { this.val = val; } } — requires explicit field declarations and constructors." },
+      { "language": "C++", "note": "struct ListNode { int val; ListNode* next; ListNode(int x) : val(x), next(nullptr) {} }; — structs are commonly used for nodes in C++." },
+      { "language": "Key difference", "note": "Python's self is always declared as the first parameter and is passed implicitly when you call a method. Java/C++ use this implicitly without declaring it." }
+    ]
+  },
+  {
+    "id": 24,
+    "group": "Algorithms & Patterns",
+    "order": 26,
+    "title": "Stack Operations with a List",
+    "prompt": "Python lists work as stacks out of the box.\n\nCreate an empty list called `stack`. Push `1`, `2`, `3` onto it. Then pop the top element and store it in `top`. Finally, peek at the new top element (without removing it) and store it in `peek_val`.",
+    "starterCode": "# Write your stack code below\n",
+    "tests": [
+      "assert isinstance(stack, list), 'stack should be a list'",
+      "assert top == 3, 'The last pushed value (3) should be popped first'",
+      "assert peek_val == 2, 'After popping 3, the top should be 2'",
+      "assert stack == [1, 2], 'After the pop, stack should be [1, 2]'"
+    ],
+    "answer": "stack = []\nstack.append(1)\nstack.append(2)\nstack.append(3)\ntop = stack.pop()\npeek_val = stack[-1]",
+    "pythonicTip": "Use a plain list as your stack — .append() to push and .pop() to pop (both O(1)). Peek with stack[-1] without removing. This pattern solves Valid Parentheses, Min Stack, and Daily Temperatures.",
+    "conceptSummary": { "title": "What is a stack?", "description": "A last-in, first-out (LIFO) data structure. The last element pushed is the first one popped — like a stack of plates." },
+    "languageNotes": [
+      { "language": "Java", "note": "Use ArrayDeque<Integer> as a stack (.push() and .pop()) — the legacy Stack class is slower and not recommended." },
+      { "language": "C++", "note": "std::stack<int> wraps a deque by default. .push() and .pop() for push/pop; .top() to peek." },
+      { "language": "Key difference", "note": "Python has no built-in Stack class. A list is idiomatic and efficient — append/pop on the right end are both O(1) amortized." }
+    ]
+  },
+  {
+    "id": 25,
+    "group": "Algorithms & Patterns",
+    "order": 27,
+    "title": "Infinity for Comparisons and DP",
+    "prompt": "Use `float('inf')` and `float('-inf')` to initialize comparison trackers.\n\nGiven `costs = [8, 3, 7, 1, 5]`:\n- Find the minimum value using `float('inf')` as the starting point — store in `min_cost`\n- Find the maximum value using `float('-inf')` as the starting point — store in `max_profit`\n\nUse a loop for both.",
+    "starterCode": "costs = [8, 3, 7, 1, 5]\n# Write your code below\n",
+    "tests": [
+      "assert min_cost == 1, 'min_cost should be 1'",
+      "assert max_profit == 8, 'max_profit should be 8'"
+    ],
+    "answer": "min_cost = float('inf')\nfor cost in costs:\n    min_cost = min(min_cost, cost)\n\nmax_profit = float('-inf')\nfor cost in costs:\n    max_profit = max(max_profit, cost)",
+    "pythonicTip": "Initialize min trackers to float('inf') and max trackers to float('-inf') — the first real value always wins the comparison. This appears in Best Time to Buy and Sell Stock, Dijkstra, and DP table initialization.",
+    "conceptSummary": { "title": "What is float('inf')?", "description": "Python's representation of positive infinity. Any real number is less than float('inf') and greater than float('-inf') — perfect neutral starting values for min/max tracking." },
+    "languageNotes": [
+      { "language": "Java", "note": "Integer.MAX_VALUE and Integer.MIN_VALUE — bounded by 32-bit int limits. Watch for overflow when adding to MAX_VALUE." },
+      { "language": "C++", "note": "INT_MAX and INT_MIN from <climits>. Same overflow risk when doing arithmetic." },
+      { "language": "Key difference", "note": "Python's float('inf') is truly infinite — float('inf') + 1 is still float('inf'). Java/C++ ints would silently overflow." }
+    ]
+  },
+  {
+    "id": 26,
+    "group": "Algorithms & Patterns",
+    "order": 28,
+    "title": "Min Heap with heapq",
+    "prompt": "Import `heapq`. Create an empty list called `heap`. Push the values `5`, `1`, `3`, `2`, `4` onto it using `heapq.heappush()`. Then pop the two smallest values and store them in `first_min` and `second_min`.",
+    "starterCode": "import heapq\n# Write your code below\n",
+    "tests": [
+      "assert first_min == 1, 'first_min should be 1 (the smallest value)'",
+      "assert second_min == 2, 'second_min should be 2 (the second smallest)'",
+      "assert len(heap) == 3, 'heap should have 3 elements remaining'"
+    ],
+    "answer": "heap = []\nheapq.heappush(heap, 5)\nheapq.heappush(heap, 1)\nheapq.heappush(heap, 3)\nheapq.heappush(heap, 2)\nheapq.heappush(heap, 4)\nfirst_min = heapq.heappop(heap)\nsecond_min = heapq.heappop(heap)",
+    "pythonicTip": "Python's heapq is a min heap. For a max heap, negate values on push and negate again on pop. heapq is used in Top K Frequent Elements, Kth Largest Element, Merge K Sorted Lists, and Task Scheduler.",
+    "conceptSummary": { "title": "What is a heap?", "description": "A complete binary tree stored as an array. A min heap guarantees the smallest element is always at the root — O(log n) push and pop, O(1) peek." },
+    "languageNotes": [
+      { "language": "Java", "note": "PriorityQueue<Integer> pq = new PriorityQueue<>() — min heap by default. Use Collections.reverseOrder() for a max heap." },
+      { "language": "C++", "note": "std::priority_queue<int> is a MAX heap by default. For min: std::priority_queue<int, std::vector<int>, std::greater<int>>." },
+      { "language": "Key difference", "note": "heapq operates on a plain Python list — heapq.heappush(heap, val). The list satisfies the heap property after each operation." }
+    ]
+  },
+  {
+    "id": 27,
+    "group": "Algorithms & Patterns",
+    "order": 29,
+    "title": "Binary Search Implementation",
+    "prompt": "A sorted list `nums = [1, 3, 5, 7, 9, 11, 13]` has been defined.\n\nWrite a function called `binary_search` that takes `nums` and `target` and returns the index of `target` if found, or `-1` if not found. Use the lo/hi/mid pattern.",
+    "starterCode": "nums = [1, 3, 5, 7, 9, 11, 13]\n# Write your binary_search function below\n",
+    "tests": [
+      "assert binary_search(nums, 7) == 3, 'Index of 7 is 3'",
+      "assert binary_search(nums, 1) == 0, 'Index of 1 is 0'",
+      "assert binary_search(nums, 13) == 6, 'Index of 13 is 6'",
+      "assert binary_search(nums, 6) == -1, '6 is not in nums — return -1'"
+    ],
+    "answer": "def binary_search(nums, target):\n    lo, hi = 0, len(nums) - 1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if nums[mid] == target:\n            return mid\n        elif nums[mid] < target:\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    return -1",
+    "pythonicTip": "Memorize: lo, hi = 0, len(nums)-1; while lo <= hi; mid = (lo+hi)//2. This is the base for Search in Rotated Sorted Array, Find Minimum in Rotated Array, and Median of Two Sorted Arrays.",
+    "conceptSummary": { "title": "What is binary search?", "description": "Finds a target in a sorted array by repeatedly halving the search space. O(log n) time — much faster than O(n) linear search." },
+    "languageNotes": [
+      { "language": "Java", "note": "Arrays.binarySearch(arr, target) for the standard case. For custom logic, implement manually — same lo/hi/mid pattern." },
+      { "language": "C++", "note": "std::binary_search() returns bool. Use std::lower_bound() to get the iterator position." },
+      { "language": "Interview tip", "note": "The condition is while lo <= hi (not lo < hi). This off-by-one is the most common binary search bug in interviews." }
+    ]
+  },
+  {
+    "id": 28,
+    "group": "Algorithms & Patterns",
+    "order": 30,
+    "title": "BFS Traversal with Deque",
+    "prompt": "An adjacency list `graph` and a `start` node have been defined.\n\nPerform a breadth-first search (BFS) starting from `start`. Collect visited nodes in order into a list called `visited`.",
+    "starterCode": "from collections import deque\ngraph = {\n    'A': ['B', 'C'],\n    'B': ['D'],\n    'C': ['D', 'E'],\n    'D': [],\n    'E': []\n}\nstart = 'A'\n# Write your BFS below\n",
+    "tests": [
+      "assert visited[0] == 'A', 'BFS should start at A'",
+      "assert set(visited) == {'A', 'B', 'C', 'D', 'E'}, 'All nodes should be visited'",
+      "assert visited.index('B') < visited.index('D'), 'B should be visited before D (level order)'",
+      "assert visited.index('C') < visited.index('E'), 'C should be visited before E (level order)'"
+    ],
+    "answer": "visited = []\nseen = set()\nqueue = deque([start])\nseen.add(start)\nwhile queue:\n    node = queue.popleft()\n    visited.append(node)\n    for neighbor in graph[node]:\n        if neighbor not in seen:\n            seen.add(neighbor)\n            queue.append(neighbor)",
+    "pythonicTip": "BFS always uses a deque for O(1) dequeue. Track visited nodes in a set for O(1) membership. This exact template solves Number of Islands, Clone Graph, Word Ladder, and Rotting Oranges.",
+    "conceptSummary": { "title": "What is BFS?", "description": "Breadth-first search explores all neighbors at the current depth before going deeper. It finds the shortest path in unweighted graphs." },
+    "languageNotes": [
+      { "language": "Java", "note": "Queue<String> queue = new ArrayDeque<>(); — same pattern. Use queue.offer() to enqueue and queue.poll() to dequeue." },
+      { "language": "C++", "note": "std::queue<string> — same FIFO semantics. queue.push(start); queue.front(); queue.pop()." },
+      { "language": "Interview tip", "note": "Memorize: deque + seen set + while queue: node = queue.popleft(). This three-part pattern handles all BFS graph problems." }
+    ]
+  }
+]
