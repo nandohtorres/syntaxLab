@@ -1,13 +1,16 @@
 import { ThemeContextProvider } from '@/context/ThemeContext'
 import { ProgressContextProvider } from '@/context/ProgressContext'
 import MainPage from '@/pages/MainPage'
+import ErrorBoundary from '@/components/ErrorBoundary'
 
 export default function App() {
   return (
-    <ThemeContextProvider>
-      <ProgressContextProvider>
-        <MainPage />
-      </ProgressContextProvider>
-    </ThemeContextProvider>
+    <ErrorBoundary>
+      <ThemeContextProvider>
+        <ProgressContextProvider>
+          <MainPage />
+        </ProgressContextProvider>
+      </ThemeContextProvider>
+    </ErrorBoundary>
   )
 }

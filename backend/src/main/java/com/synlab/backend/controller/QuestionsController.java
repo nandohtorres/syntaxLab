@@ -1,6 +1,8 @@
 package com.synlab.backend.controller;
 
+import com.synlab.backend.model.ErrorResponse;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,12 +19,20 @@ public class QuestionsController {
     private static final String QUESTIONS_FILE_PATH = "questions.json";
 
     @GetMapping("/questions")
-    public ResponseEntity<String> getAllQuestions() throws IOException {
-        ClassPathResource questionsResource = new ClassPathResource(QUESTIONS_FILE_PATH);
-        String questionsJson = questionsResource.getContentAsString(StandardCharsets.UTF_8);
+    public ResponseEntity<?> getAllQuestions() {
+        try {
+            ClassPathResource questionsResource = new ClassPathResource(QUESTIONS_FILE_PATH);
+            String questionsJson = questionsResource.getContentAsString(StandardCharsets.UTF_8);
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(questionsJson);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(questionsJson);
+        } catch (IOException e) {
+            ErrorResponse errorResponse = ErrorResponse.of(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Failed to load questions — please try again later"
+            );
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
     }
 }
