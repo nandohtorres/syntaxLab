@@ -7,6 +7,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import Popover from '@mui/material/Popover'
 import Backdrop from '@mui/material/Backdrop'
@@ -38,7 +39,9 @@ export default function MainPage() {
   const [poppedIds, setPoppedIds] = useState(new Set())
   const [popInfoAnchor, setPopInfoAnchor] = useState(null)
   const [selectedEmblem, setSelectedEmblem] = useState('🚀')
+  const [runFeedback, setRunFeedback] = useState(null) // null | 'correct' | 'incorrect'
   const closeTimerRef = useRef(null)
+  const feedbackTimerRef = useRef(null)
   const initialQuestionSelectedRef = useRef(false)
 
   const EMBLEMS = [
@@ -61,6 +64,7 @@ export default function MainPage() {
   function handleTestPopClick() {
     setSelectedQuestion(TEST_QUESTION)
     setTestRunResult(null)
+    setRunFeedback(null)
     setAwaitingPopIds(prev => new Set(prev).add(TEST_QUESTION.id))
     setPoppedIds(prev => { const next = new Set(prev); next.delete(TEST_QUESTION.id); return next })
   }
@@ -68,6 +72,7 @@ export default function MainPage() {
   const handleQuestionSelect = useCallback((question) => {
     setSelectedQuestion(question)
     setTestRunResult(null)
+    setRunFeedback(null)
   }, [])
 
   // Runs once when questions first load from the API — selects the first incomplete question.
@@ -89,6 +94,10 @@ export default function MainPage() {
 
     const result = await runTestsAgainstUserCode(pyodide, userCode, selectedQuestion.tests)
     setTestRunResult(result)
+
+    clearTimeout(feedbackTimerRef.current)
+    setRunFeedback(result.passed ? 'correct' : 'incorrect')
+    feedbackTimerRef.current = setTimeout(() => setRunFeedback(null), 1500)
 
     if (result.passed) {
       markQuestionAsComplete(selectedQuestion.id)
@@ -168,7 +177,19 @@ export default function MainPage() {
 
           {/* Right Panel — code editor and run button */}
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <Box sx={{ flex: 1, overflow: 'hidden', borderRadius: 1, position: 'relative' }}>
+            <Box sx={{
+              flex: 1, overflow: 'hidden', borderRadius: 1, position: 'relative',
+              outline: runFeedback === 'correct' ? '2px solid #4caf50' : runFeedback === 'incorrect' ? '2px solid #f44336' : '2px solid transparent',
+              transition: 'outline-color 0.15s',
+              animation: runFeedback === 'incorrect' ? 'shake 0.4s ease' : 'none',
+              '@keyframes shake': {
+                '0%, 100%': { transform: 'translateX(0)' },
+                '20%': { transform: 'translateX(-6px)' },
+                '40%': { transform: 'translateX(6px)' },
+                '60%': { transform: 'translateX(-4px)' },
+                '80%': { transform: 'translateX(4px)' },
+              },
+            }}>
               <CodeEditor code={userCode} onCodeChange={(code) => setUserCodeMap(prev => ({ ...prev, [selectedQuestion.id]: code }))} />
               {selectedQuestion && awaitingPopIds.has(selectedQuestion.id) && (
                 <PopButton key={selectedQuestion.id} onPopped={handlePopComplete} emblem={selectedEmblem} />
@@ -247,6 +268,7 @@ export default function MainPage() {
                     variant="outlined"
                     color="secondary"
                     onClick={handlePopComplete}
+                    startIcon={<CheckCircleIcon sx={{ color: '#4caf50' }} />}
                     endIcon={<ArrowForwardIcon />}
                   >
                     Next Question
@@ -258,6 +280,7 @@ export default function MainPage() {
                     variant="contained"
                     onClick={handleRunCode}
                     disabled={!selectedQuestion || isRunningTests || !pyodide}
+                    color={runFeedback === 'incorrect' ? 'error' : 'primary'}
                     startIcon={
                       isRunningTests
                         ? <CircularProgress size={16} color="inherit" />
