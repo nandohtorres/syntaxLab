@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Divider from '@mui/material/Divider'
@@ -21,6 +21,8 @@ import { useQuestions } from '@/hooks/useQuestions'
 import { usePyodide } from '@/hooks/usePyodide'
 import { useProgressContext } from '@/context/ProgressContext'
 import { runTestsAgainstUserCode } from '@/utils/testRunner'
+
+const TEST_QUESTION = { id: '__test__', title: '🧪 Test Pop Button', prompt: 'This is a test question.', starterCode: '', tests: [], answer: '', pythonicTip: '', group: '', order: 0 }
 
 export default function MainPage() {
   const { questions, isLoading: isLoadingQuestions, fetchError } = useQuestions()
@@ -54,8 +56,6 @@ export default function MainPage() {
     closeTimerRef.current = setTimeout(() => setPopInfoAnchor(null), 120)
   }
 
-  const TEST_QUESTION = { id: '__test__', title: '🧪 Test Pop Button', prompt: 'This is a test question.', starterCode: '', tests: [], answer: '', pythonicTip: '', group: '', order: 0 }
-
   function handleTestPopClick() {
     setSelectedQuestion(TEST_QUESTION)
     setUserCode('')
@@ -64,17 +64,19 @@ export default function MainPage() {
     setPoppedIds(prev => { const next = new Set(prev); next.delete(TEST_QUESTION.id); return next })
   }
 
-  useEffect(() => {
-    if (questions.length === 0) return
-    const firstIncomplete = questions.find(q => !isQuestionComplete(q.id)) ?? questions[0]
-    handleQuestionSelect(firstIncomplete)
-  }, [questions])
-
-  function handleQuestionSelect(question) {
+  const handleQuestionSelect = useCallback((question) => {
     setSelectedQuestion(question)
     setUserCode(question.starterCode)
     setTestRunResult(null)
-  }
+  }, [])
+
+  useEffect(() => {
+    if (questions.length === 0) return
+    const firstIncomplete = questions.find(q => !isQuestionComplete(q.id)) ?? questions[0]
+    setSelectedQuestion(firstIncomplete)
+    setUserCode(firstIncomplete.starterCode)
+    setTestRunResult(null)
+  }, [questions, isQuestionComplete])
 
   async function handleRunCode() {
     if (!pyodide || !selectedQuestion) return
@@ -107,7 +109,6 @@ export default function MainPage() {
   }
 
   const isInitialLoading = isLoadingQuestions || isLoadingPyodide
-  const loadingStatusMessage = isLoadingPyodide ? 'Loading Python runtime...' : 'Loading questions...'
   const errorMessage = fetchError || loadError
 
   if (errorMessage) {
@@ -179,7 +180,7 @@ export default function MainPage() {
                     sx={{
                       display: 'flex', alignItems: 'center', gap: 0.5,
                       px: 1, py: 0.5, borderRadius: 1.5, cursor: 'default',
-                      border: '1px solid', borderColor: Boolean(popInfoAnchor) ? 'primary.main' : 'divider',
+                      border: '1px solid', borderColor: popInfoAnchor ? 'primary.main' : 'divider',
                       transition: 'border-color 0.2s',
                     }}
                   >

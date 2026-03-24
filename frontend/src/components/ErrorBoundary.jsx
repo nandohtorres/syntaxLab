@@ -1,4 +1,7 @@
 import { Component } from 'react'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
 
 export default class ErrorBoundary extends Component {
   constructor(props) {
@@ -10,13 +13,22 @@ export default class ErrorBoundary extends Component {
     return { hasError: true }
   }
 
+  handleReset() {
+    this.setState({ hasError: false })
+  }
+
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{ padding: '2rem', textAlign: 'center' }}>
-          <h2>Something went wrong.</h2>
-          <p>Please refresh the page to try again.</p>
-        </div>
+        <Box sx={{ padding: '2rem', textAlign: 'center' }}>
+          <Typography variant="h5" gutterBottom>Something went wrong.</Typography>
+          <Typography variant="body1" sx={{ mb: 2 }}>
+            An unexpected error occurred. You can try again or refresh the page.
+          </Typography>
+          <Button variant="contained" onClick={() => this.handleReset()}>
+            Try again
+          </Button>
+        </Box>
       )
     }
 

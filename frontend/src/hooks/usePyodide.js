@@ -10,6 +10,10 @@ export function usePyodide() {
   useEffect(() => {
     async function loadPyodideRuntime() {
       try {
+        // @vite-ignore is required here because Vite cannot statically analyse a dynamic
+        // import whose path is a runtime variable (PYODIDE_CDN_URL). Without it, Vite
+        // throws a build error. Pyodide must be loaded from its CDN at runtime — it cannot
+        // be bundled — so a dynamic import with a variable URL is the only option.
         const { loadPyodide } = await import(/* @vite-ignore */ PYODIDE_CDN_URL)
         pyodideInstanceRef.current = await loadPyodide()
         setIsLoading(false)

@@ -24,6 +24,13 @@ export default defineConfig([
     },
     rules: {
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      // react-hooks/set-state-in-effect is disabled because initialising component
+      // state in response to fetched data (e.g. selecting the first question when
+      // questions load) is a valid and intentional useEffect pattern in this codebase.
+      // The rule was added in eslint-plugin-react-hooks v7 and is widely considered
+      // too strict for data-initialisation use cases. Re-evaluate if cascading render
+      // performance issues are ever observed.
+      'react-hooks/set-state-in-effect': 'off',
     },
   },
 ])
