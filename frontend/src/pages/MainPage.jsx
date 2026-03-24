@@ -30,7 +30,8 @@ export default function MainPage() {
   const { markQuestionAsComplete, isQuestionComplete } = useProgressContext()
 
   const [selectedQuestion, setSelectedQuestion] = useState(null)
-  const [userCode, setUserCode] = useState('')
+  const [userCodeMap, setUserCodeMap] = useState({})
+  const userCode = selectedQuestion ? (userCodeMap[selectedQuestion.id] ?? selectedQuestion.starterCode) : ''
   const [testRunResult, setTestRunResult] = useState(null)
   const [isRunningTests, setIsRunningTests] = useState(false)
   const [awaitingPopIds, setAwaitingPopIds] = useState(new Set())
@@ -38,6 +39,7 @@ export default function MainPage() {
   const [popInfoAnchor, setPopInfoAnchor] = useState(null)
   const [selectedEmblem, setSelectedEmblem] = useState('🚀')
   const closeTimerRef = useRef(null)
+  const initialQuestionSelectedRef = useRef(false)
 
   const EMBLEMS = [
     { emoji: '🚀', label: 'Rocket' },
@@ -58,7 +60,6 @@ export default function MainPage() {
 
   function handleTestPopClick() {
     setSelectedQuestion(TEST_QUESTION)
-    setUserCode('')
     setTestRunResult(null)
     setAwaitingPopIds(prev => new Set(prev).add(TEST_QUESTION.id))
     setPoppedIds(prev => { const next = new Set(prev); next.delete(TEST_QUESTION.id); return next })
@@ -66,15 +67,17 @@ export default function MainPage() {
 
   const handleQuestionSelect = useCallback((question) => {
     setSelectedQuestion(question)
-    setUserCode(question.starterCode)
     setTestRunResult(null)
   }, [])
 
+  // Runs once when questions first load from the API — selects the first incomplete question.
+  // initialQuestionSelectedRef prevents this from re-running when isQuestionComplete changes
+  // (e.g. after completing a question), which would skip the pop animation and reset the editor.
   useEffect(() => {
-    if (questions.length === 0) return
+    if (questions.length === 0 || initialQuestionSelectedRef.current) return
+    initialQuestionSelectedRef.current = true
     const firstIncomplete = questions.find(q => !isQuestionComplete(q.id)) ?? questions[0]
     setSelectedQuestion(firstIncomplete)
-    setUserCode(firstIncomplete.starterCode)
     setTestRunResult(null)
   }, [questions, isQuestionComplete])
 
@@ -166,7 +169,7 @@ export default function MainPage() {
           {/* Right Panel — code editor and run button */}
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             <Box sx={{ flex: 1, overflow: 'hidden', borderRadius: 1, position: 'relative' }}>
-              <CodeEditor code={userCode} onCodeChange={setUserCode} />
+              <CodeEditor code={userCode} onCodeChange={(code) => setUserCodeMap(prev => ({ ...prev, [selectedQuestion.id]: code }))} />
               {selectedQuestion && awaitingPopIds.has(selectedQuestion.id) && (
                 <PopButton key={selectedQuestion.id} onPopped={handlePopComplete} emblem={selectedEmblem} />
               )}
