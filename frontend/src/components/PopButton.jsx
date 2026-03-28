@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { keyframes } from '@mui/system'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 const edgeWobble = keyframes`
   0%   { border-radius: 6px 2px 8px 2px / 2px 8px 2px 6px; }
@@ -43,6 +44,7 @@ function getLabel(progress) {
 }
 
 export default function PopButton({ onPopped, emblem = '🚀' }) {
+  const isMobile = useMediaQuery('(max-width:600px)')
   const [maxLevel] = useState(() => Math.floor(Math.random() * 3) + 6) // random 6–8
   const [popLevel, setPopLevel] = useState(0)
   const [isPopping, setIsPopping] = useState(false)
@@ -82,8 +84,8 @@ export default function PopButton({ onPopped, emblem = '🚀' }) {
   const glowSize = 6 + progress * 36
   const wobbleSpeed = Math.max(0.18, 1.2 - progress * 1.05)
   const flashSpeed = Math.max(0.3, 1.4 - progress * 1.1)
-  const rocketSize = 7.5 + progress * 7    // 7.5rem → 14.5rem
-  const labelSize = 2.5 + progress * 1     // 2.5rem → 3.5rem
+  const rocketSize = isMobile ? 4 + progress * 4 : 7.5 + progress * 7    // mobile: 4–8rem, desktop: 7.5–14.5rem
+  const labelSize  = isMobile ? 1.4 + progress * 0.6 : 2.5 + progress * 1 // mobile: 1.4–2rem, desktop: 2.5–3.5rem
 
   return (
     <Box
