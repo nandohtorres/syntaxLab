@@ -34,8 +34,8 @@ function getLevelColor(progress) {
   return '#4fc3f7'
 }
 
-function getLabel(progress, emblem) {
-  if (progress === 0)   return `${emblem} Click to Launch!`
+function getLabel(progress) {
+  if (progress === 0)   return 'Click to Launch!'
   if (progress < 0.35)  return 'Ignition...'
   if (progress < 0.6)   return 'Fueling up...'
   if (progress < 0.85)  return '3... 2... 1...'
@@ -43,7 +43,7 @@ function getLabel(progress, emblem) {
 }
 
 export default function PopButton({ onPopped, emblem = '🚀' }) {
-  const maxLevelRef = useRef(Math.floor(Math.random() * 3) + 6) // random 6–8
+  const [maxLevel] = useState(() => Math.floor(Math.random() * 3) + 6) // random 6–8
   const [popLevel, setPopLevel] = useState(0)
   const [isPopping, setIsPopping] = useState(false)
   const lastClickTimeRef = useRef(null)
@@ -65,25 +65,25 @@ export default function PopButton({ onPopped, emblem = '🚀' }) {
   function handleClick() {
     if (isPoppingRef.current) return
     lastClickTimeRef.current = Date.now()
-    const next = Math.min(maxLevelRef.current, popLevelRef.current + 1)
+    const next = Math.min(maxLevel, popLevelRef.current + 1)
     popLevelRef.current = next
     setPopLevel(next)
 
-    if (next >= maxLevelRef.current) {
+    if (next >= maxLevel) {
       isPoppingRef.current = true
       setIsPopping(true)
       setTimeout(() => onPopped(), 750)
     }
   }
 
-  const progress = popLevel / maxLevelRef.current
+  const progress = popLevel / maxLevel
   const color = getLevelColor(progress)
   const borderWidth = 2 + progress * 4
   const glowSize = 6 + progress * 36
   const wobbleSpeed = Math.max(0.18, 1.2 - progress * 1.05)
   const flashSpeed = Math.max(0.3, 1.4 - progress * 1.1)
-  const rocketSize = 2.5 + progress * 5    // 2.5rem → 7.5rem
-  const labelSize = 0.85 + progress * 0.45 // 0.85rem → 1.3rem
+  const rocketSize = 7.5 + progress * 7    // 7.5rem → 14.5rem
+  const labelSize = 2.5 + progress * 1     // 2.5rem → 3.5rem
 
   return (
     <Box
@@ -138,16 +138,15 @@ export default function PopButton({ onPopped, emblem = '🚀' }) {
         />
       )}
 
-      {/* Centered label — rocket + text stacked */}
+      {/* Emoji — centered in top 70% of container so text has room at bottom */}
       <Box
         sx={{
           position: 'absolute',
-          inset: 0,
+          top: 0, left: 0, right: 0, bottom: '30%',
           display: 'flex',
-          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 1,
+          overflow: 'hidden',
           pointerEvents: 'none',
         }}
       >
@@ -162,6 +161,21 @@ export default function PopButton({ onPopped, emblem = '🚀' }) {
         >
           {emblem}
         </Typography>
+      </Box>
+
+      {/* Text anchored at bottom 30% zone */}
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: '4%', left: 0, right: 0,
+          height: '30%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          pointerEvents: 'none',
+          px: 2,
+        }}
+      >
         <Typography
           sx={{
             color,
@@ -169,11 +183,12 @@ export default function PopButton({ onPopped, emblem = '🚀' }) {
             fontSize: `${labelSize}rem`,
             textShadow: `0 0 ${8 + progress * 20}px ${color}cc`,
             letterSpacing: '0.04em',
+            textAlign: 'center',
             transition: 'font-size 0.12s ease, color 0.2s ease, text-shadow 0.15s ease',
             userSelect: 'none',
           }}
         >
-          {getLabel(progress, emblem)}
+          {getLabel(progress)}
         </Typography>
       </Box>
     </Box>

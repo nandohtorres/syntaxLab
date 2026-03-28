@@ -12,6 +12,7 @@ const EDITOR_OPTIONS = {
   wordWrap: 'on',
   tabSize: 4,
   automaticLayout: true,
+  lineNumbersMinChars: 2,
 }
 
 export default function CodeEditor({ code, onCodeChange }) {
