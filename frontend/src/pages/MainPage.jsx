@@ -231,6 +231,7 @@ export default function MainPage() {
     setSelectedQuestion(question)
     setTestRunResult(null)
     setRunFeedback(null)
+    setPoppedIds(prev => { const next = new Set(prev); next.delete(question.id); return next })
   }, [])
 
   // Runs once when questions first load from the API — selects the first incomplete question.
