@@ -28,6 +28,7 @@ export default function CodeEditor({ code, onCodeChange }) {
       value={code}
       onChange={onCodeChange}
       options={EDITOR_OPTIONS}
+      onMount={(editor) => editor.focus()}
     />
   )
 }
