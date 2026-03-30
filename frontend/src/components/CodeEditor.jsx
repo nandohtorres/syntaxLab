@@ -13,6 +13,7 @@ const EDITOR_OPTIONS = {
   tabSize: 4,
   automaticLayout: true,
   lineNumbersMinChars: 2,
+  contextmenu: false,
 }
 
 export default function CodeEditor({ code, onCodeChange }) {

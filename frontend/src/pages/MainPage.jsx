@@ -71,8 +71,14 @@ export default function MainPage() {
   const { markQuestionAsComplete, isQuestionComplete } = useProgressContext()
 
   const [selectedQuestion, setSelectedQuestion] = useState(null)
-  const [userCodeMap, setUserCodeMap] = useState({})
+  const [userCodeMap, setUserCodeMap] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('synlab_code') || '{}') } catch { return {} }
+  })
   const userCode = selectedQuestion ? (userCodeMap[selectedQuestion.id] ?? selectedQuestion.starterCode) : ''
+
+  useEffect(() => {
+    localStorage.setItem('synlab_code', JSON.stringify(userCodeMap))
+  }, [userCodeMap])
   const [testRunResult, setTestRunResult] = useState(null)
   const [isRunningTests, setIsRunningTests] = useState(false)
   const [awaitingPopIds, setAwaitingPopIds] = useState(new Set())
