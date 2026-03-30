@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx}": ["eslint --fix"]
+    "src/**/*.{js,jsx}": [
+      "eslint --fix"
+    ]
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -18,6 +20,7 @@
     "@monaco-editor/react": "^4.7.0",
     "@mui/icons-material": "^7.3.9",
     "@mui/material": "^7.3.9",
+    "@sentry/react": "^10.46.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
