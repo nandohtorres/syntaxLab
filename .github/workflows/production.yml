@@ -22,15 +22,10 @@ jobs:
 
   deploy-backend:
     runs-on: ubuntu-latest
+    container: ghcr.io/railwayapp/cli:latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          java-version: 21
-          distribution: temurin
-      - run: cd backend && ./mvnw clean package -DskipTests
-      - uses: bervProject/railway-deploy@main
+      - name: Deploy to Railway
+        run: railway up --service=syntaxLab
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        with:
-          service: syntaxLab
