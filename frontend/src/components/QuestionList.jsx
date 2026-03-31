@@ -28,8 +28,8 @@ export default function QuestionList({ questions, selectedQuestionId, onQuestion
   }, {})
 
   return (
-    <Box sx={{ overflowY: 'auto', maxHeight: 280 }}>
-      {testItem && (
+    <Box sx={{ overflowY: 'auto', height: '100%' }}>
+      {import.meta.env.DEV && testItem && (
         <ListItemButton
           selected={selectedQuestionId === testItem.id}
           onClick={onTestItemClick}

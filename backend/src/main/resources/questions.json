@@ -3,7 +3,7 @@
     "id": 1,
     "group": "Variables & Strings",
     "order": 1,
-    "title": "f-String Formatting",
+    "title": "Say Hello with Your Name",
     "prompt": "A variable called `name` has been defined with the value `'Alice'`.\n\nCreate a new variable called `greeting` using an f-string that produces the text: `Hello, Alice!`",
     "starterCode": "name = 'Alice'\n# Write your code below\n",
     "tests": [
@@ -22,7 +22,7 @@
     "id": 14,
     "group": "Variables & Strings",
     "order": 2,
-    "title": "String join() and split()",
+    "title": "Join and Split Words",
     "prompt": "A list `words = ['the', 'quick', 'brown', 'fox']` has been defined.\n\n- Join the words with spaces into a string called `sentence`\n- Split `sentence` back into a list called `word_list`\n- Join the words with hyphens into a string called `hyphenated`",
     "starterCode": "words = ['the', 'quick', 'brown', 'fox']\n# Write your code below\n",
     "tests": [
@@ -43,7 +43,7 @@
     "id": 2,
     "group": "Data Structures",
     "order": 3,
-    "title": "Create a List",
+    "title": "Make Your First List",
     "prompt": "Create a list called `numbers` containing the integers 1 through 5 in order.",
     "starterCode": "# Write your code below\n",
     "tests": [
@@ -63,7 +63,7 @@
     "id": 3,
     "group": "Data Structures",
     "order": 4,
-    "title": "Create a Dictionary",
+    "title": "Store Info in a Dictionary",
     "prompt": "Create a dictionary called `person` with three keys: `name` (a string), `age` (an integer), and `city` (a string). Use any values you like.",
     "starterCode": "# Write your code below\n",
     "tests": [
@@ -89,7 +89,7 @@
     "id": 4,
     "group": "Data Structures",
     "order": 5,
-    "title": "Create a Tuple",
+    "title": "Save Coordinates in a Tuple",
     "prompt": "Create a tuple called `coords` containing exactly 3 numeric values representing x, y, and z coordinates.",
     "starterCode": "# Write your code below\n",
     "tests": [
@@ -110,7 +110,7 @@
     "id": 5,
     "group": "Data Structures",
     "order": 6,
-    "title": "Create a Set and Check Membership",
+    "title": "Remove Duplicates with a Set",
     "prompt": "A list `nums = [1, 2, 2, 3, 4, 4, 5]` has been defined.\n\nCreate a set called `unique_nums` from it. Then check if `3` is in the set — store the boolean result in `has_three`.",
     "starterCode": "nums = [1, 2, 2, 3, 4, 4, 5]\n# Write your code below\n",
     "tests": [
@@ -131,7 +131,7 @@
     "id": 15,
     "group": "Data Structures",
     "order": 7,
-    "title": "Safe Dictionary Access with .get()",
+    "title": "Look Up a Value Safely",
     "prompt": "A frequency map `freq = {'a': 3, 'b': 1}` has been defined.\n\nUse `.get()` to safely retrieve the count for the key `'c'`, defaulting to `0` if not found — store it in `c_count`. Then compute the new count for `'a'` (current value + 1) using `.get()` — store it in `a_new_count`.",
     "starterCode": "freq = {'a': 3, 'b': 1}\n# Write your code below\n",
     "tests": [
@@ -151,7 +151,7 @@
     "id": 16,
     "group": "Data Structures",
     "order": 8,
-    "title": "defaultdict for Grouping",
+    "title": "Group Words by First Letter",
     "prompt": "A list of words has been defined. Group them by their first letter using a `defaultdict(list)` — store the result in a variable called `grouped`.",
     "starterCode": "from collections import defaultdict\nwords = ['apple', 'ant', 'banana', 'avocado', 'blueberry']\n# Write your code below\n",
     "tests": [
@@ -172,7 +172,7 @@
     "id": 17,
     "group": "Data Structures",
     "order": 9,
-    "title": "Count Frequencies with Counter",
+    "title": "Count How Often Things Appear",
     "prompt": "A list `nums = [1, 2, 2, 3, 3, 3, 4]` has been defined.\n\nUse `Counter` to count how many times each number appears — store the result in `freq`. Then store the most common number in `most_common_num`.",
     "starterCode": "from collections import Counter\nnums = [1, 2, 2, 3, 3, 3, 4]\n# Write your code below\n",
     "tests": [
@@ -195,7 +195,7 @@
     "id": 18,
     "group": "Data Structures",
     "order": 10,
-    "title": "Deque as a Queue",
+    "title": "Use a Queue",
     "prompt": "Import `deque` from collections. Create a deque called `queue`. Enqueue the numbers `1`, `2`, `3` using `.append()`. Then dequeue the first element using `.popleft()` and store it in `first_out`.",
     "starterCode": "from collections import deque\n# Write your code below\n",
     "tests": [
@@ -216,7 +216,7 @@
     "id": 30,
     "group": "Data Structures",
     "order": 11,
-    "title": "2D List (Grid / Matrix)",
+    "title": "Create a Grid",
     "prompt": "Create a 3x3 grid called `grid` initialized to all zeros using a list comprehension. Then set `grid[1][2]` to `5`. Store the number of rows in `num_rows` and the number of columns in `num_cols`.",
     "starterCode": "# Write your code below\n",
     "tests": [
@@ -240,7 +240,7 @@
     "id": 6,
     "group": "Control Flow",
     "order": 12,
-    "title": "For Loop Over a List",
+    "title": "Loop Through a List",
     "prompt": "A list called `fruits` has been defined containing three fruit names.\n\nWrite a for loop that builds a new list called `uppercased` where each fruit name is converted to uppercase.",
     "starterCode": "fruits = ['apple', 'banana', 'mango']\n# Write your for loop below\n",
     "tests": [
@@ -260,7 +260,7 @@
     "id": 7,
     "group": "Control Flow",
     "order": 13,
-    "title": "While Loop",
+    "title": "Count with a While Loop",
     "prompt": "Write a while loop that counts from 1 to 5, appending each number to a list called `counted`.\n\nExpected result: [1, 2, 3, 4, 5]",
     "starterCode": "# Write your while loop below\n",
     "tests": [
@@ -280,7 +280,7 @@
     "id": 8,
     "group": "Control Flow",
     "order": 14,
-    "title": "If / Else Statement",
+    "title": "Pass or Fail?",
     "prompt": "A variable called `score` has been set to 75.\n\nWrite an if/else block that assigns the string `'Pass'` to a variable called `result` if score is 60 or above, otherwise assign `'Fail'`.",
     "starterCode": "score = 75\n# Write your if/else below\n",
     "tests": [
@@ -299,7 +299,7 @@
     "id": 9,
     "group": "Functions & Pythonic Style",
     "order": 15,
-    "title": "Define a Function",
+    "title": "Write Your First Function",
     "prompt": "Write a function called `add` that accepts two parameters, `a` and `b`, and returns their sum.",
     "starterCode": "# Write your function below\n",
     "tests": [
@@ -321,7 +321,7 @@
     "id": 10,
     "group": "Functions & Pythonic Style",
     "order": 16,
-    "title": "List Comprehension",
+    "title": "Build a List in One Line",
     "prompt": "Using a list comprehension, create a list called `squares` containing the square of each number from 1 to 5.\n\nExpected result: [1, 4, 9, 16, 25]",
     "starterCode": "# Write your list comprehension below\n",
     "tests": [
@@ -342,7 +342,7 @@
     "id": 11,
     "group": "Functions & Pythonic Style",
     "order": 17,
-    "title": "Enumerate",
+    "title": "Loop with an Index",
     "prompt": "A list called `colors` has been defined.\n\nUse `enumerate()` to create a list called `indexed` containing tuples that pair each index with its color.\n\nExpected result: [(0, 'red'), (1, 'green'), (2, 'blue')]",
     "starterCode": "colors = ['red', 'green', 'blue']\n# Write your code below\n",
     "tests": [
@@ -362,7 +362,7 @@
     "id": 12,
     "group": "Functions & Pythonic Style",
     "order": 18,
-    "title": "Multiple Assignment and Swap",
+    "title": "Swap Two Variables",
     "prompt": "Two variables `a = 5` and `b = 10` have been defined.\n\nSwap their values using Python's multiple assignment — no temporary variable needed. Then unpack the tuple `point = (3, 7)` into separate variables `x` and `y`.",
     "starterCode": "a = 5\nb = 10\n# Swap a and b below\n\npoint = (3, 7)\n# Unpack point into x and y below\n",
     "tests": [
@@ -384,7 +384,7 @@
     "id": 13,
     "group": "Functions & Pythonic Style",
     "order": 19,
-    "title": "List and String Slicing",
+    "title": "Slice Lists and Strings",
     "prompt": "A list `nums = [0, 1, 2, 3, 4, 5]` and a string `word = 'python'` have been defined.\n\nCreate `first_half` containing the first 3 elements of `nums`. Create `reversed_word` by reversing `word` using slice syntax — no built-in `reversed()` function.",
     "starterCode": "nums = [0, 1, 2, 3, 4, 5]\nword = 'python'\n# Write your code below\n",
     "tests": [
@@ -404,7 +404,7 @@
     "id": 19,
     "group": "Functions & Pythonic Style",
     "order": 20,
-    "title": "Custom Sorting with sorted() and key=",
+    "title": "Sort a List Your Way",
     "prompt": "A list `intervals = [[3, 6], [1, 4], [2, 5]]` and `words = ['banana', 'fig', 'apple', 'kiwi']` have been defined.\n\nSort `intervals` by the start of each interval (first element) — store in `sorted_intervals`. Sort `words` by word length — store in `by_length`.",
     "starterCode": "intervals = [[3, 6], [1, 4], [2, 5]]\nwords = ['banana', 'fig', 'apple', 'kiwi']\n# Write your code below\n",
     "tests": [
@@ -424,7 +424,7 @@
     "id": 22,
     "group": "Functions & Pythonic Style",
     "order": 21,
-    "title": "any() and all() for Validation",
+    "title": "Check If Any or All Pass",
     "prompt": "Given `nums = [2, 4, 6, 8, 10]`:\n\n- Use `all()` to check if every number is even — store in `all_even`\n- Use `any()` to check if any number is greater than 9 — store in `any_large`\n- Use `any()` to check if any number is negative — store in `any_negative`",
     "starterCode": "nums = [2, 4, 6, 8, 10]\n# Write your code below\n",
     "tests": [
@@ -445,7 +445,7 @@
     "id": 29,
     "group": "Functions & Pythonic Style",
     "order": 22,
-    "title": "Memoization with @lru_cache",
+    "title": "Speed Up Recursion with Caching",
     "prompt": "Write a recursive function `fib` that computes the nth Fibonacci number. Decorate it with `@lru_cache(maxsize=None)` to cache results.\n\n- `fib(0)` returns `0`\n- `fib(1)` returns `1`\n- `fib(n)` = `fib(n-1)` + `fib(n-2)`",
     "starterCode": "from functools import lru_cache\n# Write your function below\n",
     "tests": [
@@ -467,7 +467,7 @@
     "id": 20,
     "group": "Operators",
     "order": 23,
-    "title": "Integer Division // and Modulo %",
+    "title": "Divide and Find the Remainder",
     "prompt": "Given `n = 17` and `divisor = 5`:\n\n- Compute the integer quotient using floor division — store in `quotient`\n- Compute the remainder — store in `remainder`\n- Compute the midpoint between `lo = 0` and `hi = 9` using floor division — store in `mid`",
     "starterCode": "n = 17\ndivisor = 5\nlo = 0\nhi = 9\n# Write your code below\n",
     "tests": [
@@ -488,7 +488,7 @@
     "id": 21,
     "group": "Operators",
     "order": 24,
-    "title": "Bitwise Operators: AND, OR, XOR, Shift",
+    "title": "Work with Bits",
     "prompt": "Given `a = 0b1010` (10) and `b = 0b1100` (12):\n\n- Store `a & b` in `and_result`\n- Store `a | b` in `or_result`\n- Store `a ^ b` in `xor_result`\n- Store `a >> 1` (right shift by 1) in `shifted`",
     "starterCode": "a = 0b1010  # 10 in decimal\nb = 0b1100  # 12 in decimal\n# Write your code below\n",
     "tests": [
@@ -510,7 +510,7 @@
     "id": 23,
     "group": "Object-Oriented",
     "order": 25,
-    "title": "Define a Class with __init__",
+    "title": "Build a Simple Class",
     "prompt": "Define a class called `ListNode` that represents a singly linked list node. It should have:\n- A `val` parameter defaulting to `0`\n- A `next` parameter defaulting to `None`\n\nThen create an instance called `node` with `val=5`.",
     "starterCode": "# Define the ListNode class below\n",
     "tests": [
@@ -532,7 +532,7 @@
     "id": 24,
     "group": "Algorithms & Patterns",
     "order": 26,
-    "title": "Stack Operations with a List",
+    "title": "Use a List as a Stack",
     "prompt": "Python lists work as stacks out of the box.\n\nCreate an empty list called `stack`. Push `1`, `2`, `3` onto it. Then pop the top element and store it in `top`. Finally, peek at the new top element (without removing it) and store it in `peek_val`.",
     "starterCode": "# Write your stack code below\n",
     "tests": [
@@ -554,7 +554,7 @@
     "id": 25,
     "group": "Algorithms & Patterns",
     "order": 27,
-    "title": "Infinity for Comparisons and DP",
+    "title": "Find the Min and Max",
     "prompt": "Use `float('inf')` and `float('-inf')` to initialize comparison trackers.\n\nGiven `costs = [8, 3, 7, 1, 5]`:\n- Find the minimum value using `float('inf')` as the starting point — store in `min_cost`\n- Find the maximum value using `float('-inf')` as the starting point — store in `max_profit`\n\nUse a loop for both.",
     "starterCode": "costs = [8, 3, 7, 1, 5]\n# Write your code below\n",
     "tests": [
@@ -574,7 +574,7 @@
     "id": 26,
     "group": "Algorithms & Patterns",
     "order": 28,
-    "title": "Min Heap with heapq",
+    "title": "Find Smallest Values with a Heap",
     "prompt": "Import `heapq`. Create an empty list called `heap`. Push the values `5`, `1`, `3`, `2`, `4` onto it using `heapq.heappush()`. Then pop the two smallest values and store them in `first_min` and `second_min`.",
     "starterCode": "import heapq\n# Write your code below\n",
     "tests": [
@@ -595,7 +595,7 @@
     "id": 27,
     "group": "Algorithms & Patterns",
     "order": 29,
-    "title": "Binary Search Implementation",
+    "title": "Write Binary Search",
     "prompt": "A sorted list `nums = [1, 3, 5, 7, 9, 11, 13]` has been defined.\n\nWrite a function called `binary_search` that takes `nums` and `target` and returns the index of `target` if found, or `-1` if not found. Use the lo/hi/mid pattern.",
     "starterCode": "nums = [1, 3, 5, 7, 9, 11, 13]\n# Write your binary_search function below\n",
     "tests": [
@@ -617,7 +617,7 @@
     "id": 28,
     "group": "Algorithms & Patterns",
     "order": 30,
-    "title": "BFS Traversal with Deque",
+    "title": "Explore a Graph with BFS",
     "prompt": "An adjacency list `graph` and a `start` node have been defined.\n\nPerform a breadth-first search (BFS) starting from `start`. Collect visited nodes in order into a list called `visited`.",
     "starterCode": "from collections import deque\ngraph = {\n    'A': ['B', 'C'],\n    'B': ['D'],\n    'C': ['D', 'E'],\n    'D': [],\n    'E': []\n}\nstart = 'A'\n# Write your BFS below\n",
     "tests": [

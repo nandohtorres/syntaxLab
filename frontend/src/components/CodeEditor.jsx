@@ -6,12 +6,14 @@ const DARK_EDITOR_THEME = 'vs-dark'
 const LIGHT_EDITOR_THEME = 'light'
 
 const EDITOR_OPTIONS = {
-  fontSize: 14,
+  fontSize: 16,
   minimap: { enabled: false },
   scrollBeyondLastLine: false,
   wordWrap: 'on',
   tabSize: 4,
   automaticLayout: true,
+  lineNumbersMinChars: 2,
+  contextmenu: false,
 }
 
 export default function CodeEditor({ code, onCodeChange }) {
@@ -27,6 +29,7 @@ export default function CodeEditor({ code, onCodeChange }) {
       value={code}
       onChange={onCodeChange}
       options={EDITOR_OPTIONS}
+      onMount={(editor) => editor.focus()}
     />
   )
 }

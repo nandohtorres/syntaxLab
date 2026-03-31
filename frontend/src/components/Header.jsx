@@ -15,7 +15,7 @@ export default function Header() {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
       <Typography variant="h5" fontWeight="bold" letterSpacing={1}>
-        SynLab
+        SyntaxLab
       </Typography>
       <Tooltip title={themeToggleTooltipLabel}>
         <IconButton onClick={toggleThemeMode} size="small">

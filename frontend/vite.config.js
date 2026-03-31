@@ -1,9 +1,16 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    sentryVitePlugin({
+      org: 'fernandotorresproject',
+      project: 'syntaxlab',
+    }),
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -11,5 +18,8 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+  },
+  build: {
+    sourcemap: 'hidden',
   },
 })
