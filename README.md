@@ -3,13 +3,28 @@
 An online IDE for learning Python syntax through simple, practical exercises.
 Designed for beginners who want to learn idiomatic Python fast.
 
-🌐 **Live Demo:** _coming soon_
+🌐 **Live Demo:** [syntaxlab.work](https://syntaxlab.work)
 
 ---
 
 ## Screenshot
 
 _coming soon_
+
+---
+
+## Features
+
+- **30 exercises** across 7 topic groups: Variables & Strings, Data Structures, Control Flow, Functions & Pythonic Style, Operators, Object-Oriented, Algorithms & Patterns
+- **Python runs entirely in the browser** via Pyodide (WebAssembly) — no server-side code execution
+- **Monaco Editor** (the same editor that powers VS Code)
+- **Instant feedback** — pass/fail on every test assertion
+- **Progress tracking** — completion state saved to localStorage, persists on refresh
+- **Pythonic tips** and concept summaries on every question
+- **Show Answer** — reveals the correct solution when stuck
+- **Dark / light mode** toggle
+- **Draggable split panels** — resize the question list, prompt, and editor to your preference
+- **Error tracking** via Sentry
 
 ---
 
@@ -23,6 +38,11 @@ _coming soon_
 | Python Execution | Pyodide (WebAssembly — runs entirely in the browser) |
 | Backend | Java 21, Spring Boot 3.5, Maven |
 | Question Storage | JSON (PostgreSQL planned) |
+| Containerization | Docker |
+| Frontend Hosting | Vercel |
+| Backend Hosting | Railway |
+| CI/CD | GitHub Actions |
+| Error Tracking | Sentry |
 
 ---
 
@@ -44,7 +64,7 @@ cd syntaxLab
 cd backend
 ./mvnw spring-boot:run
 ```
-Backend runs at `http://localhost:8080`
+Backend runs at `http://localhost:8080`. Wait for `Started SynlabApplication` before starting the frontend.
 
 ### 3. Run the frontend
 ```bash
@@ -81,13 +101,20 @@ syntaxLab/
 └── backend/          # Spring Boot REST API
     └── src/main/
         ├── java/com/synlab/backend/
-        │   ├── config/       # Spring configuration
+        │   ├── config/       # Spring configuration + rate limiting
         │   ├── controller/   # REST controllers
         │   ├── exception/    # Global error handling
-        │   └── model/        # Java records
+        │   ├── model/        # Java records
+        │   └── service/      # Business logic
         └── resources/
             └── questions.json  # Question bank (30 questions)
 ```
+
+---
+
+## Architecture
+
+Python code runs **entirely in the browser** via Pyodide. The backend never receives or executes user-submitted code — it only serves questions via `GET /api/questions`. See [ARCHITECTURE.md](./ARCHITECTURE.md) for full details.
 
 ---
 

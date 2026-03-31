@@ -3,3 +3,7 @@ AiFeedback/
 CLAUDE.md
 node_modules/
 package-lock.json
+
+# Personal files
+*.pdf
+job_application_responses.txt
