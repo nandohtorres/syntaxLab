@@ -103,6 +103,14 @@ The backend is a thin content API. Spring Boot gives a well-understood operation
 
 Monaco is the editor engine behind VS Code. For learners who will eventually use a professional IDE, Monaco provides the closest possible preview of that experience — same keybindings, same syntax highlighting model, same autocomplete behavior. CodeMirror is lighter and more embeddable, but the marginal bundle size of Monaco is worth the familiarity benefit for the target audience.
 
+### Official Railway CLI container for CI/CD, not `bervProject/railway-deploy`
+
+The GitHub Actions backend deploy step uses Railway's official CLI Docker container (`ghcr.io/railwayapp/cli:latest`) rather than the community `bervProject/railway-deploy` action.
+
+The `bervProject` action was the original choice but was abandoned after repeated failures: it pins Railway CLI at v3.11.4 (hardcoded, never updates), does not work with Railway's current project token format, and is unmaintained. Switching to the official container resolved all token and deployment issues.
+
+The local Maven build step (`./mvnw clean package`) was also removed from the CI pipeline as a result. `railway up` uploads source code to Railway, which then builds the Docker image on its own infrastructure using the `backend/Dockerfile`. Building the JAR locally in CI was redundant work — Railway was rebuilding it anyway via the Dockerfile.
+
 ---
 
 ## 5. Data Flow
