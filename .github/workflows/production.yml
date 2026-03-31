@@ -30,6 +30,7 @@ jobs:
           distribution: temurin
       - run: cd backend && ./mvnw clean package -DskipTests
       - uses: bervProject/railway-deploy@main
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         with:
-          railway_token: ${{ secrets.RAILWAY_TOKEN }}
           service: syntaxLab
