@@ -103,6 +103,30 @@ The backend is a thin content API. Spring Boot gives a well-understood operation
 
 Monaco is the editor engine behind VS Code. For learners who will eventually use a professional IDE, Monaco provides the closest possible preview of that experience — same keybindings, same syntax highlighting model, same autocomplete behavior. CodeMirror is lighter and more embeddable, but the marginal bundle size of Monaco is worth the familiarity benefit for the target audience.
 
+### questions.json validated and cached at startup, not on every request
+
+`QuestionsService` loads and validates `questions.json` once during application startup via `@PostConstruct`, then caches the result in memory. Every subsequent request to `GET /api/questions` is served from the cached `List<Question>` — no file I/O per request.
+
+Validation checks all required fields on every question (id, group, order, title, prompt, starterCode, tests, answer). If any field is missing or blank, the application refuses to start and logs exactly which question and field failed. Optional enrichment fields (`pythonicTip`, `conceptSummary`, `languageNotes`) are not required — the UI handles nulls and future questions may omit them.
+
+This approach was chosen over per-request validation for two reasons: (1) startup failure is a stronger signal than a runtime 500 — a broken questions file is a deployment error, not a transient one; (2) the questions file never changes at runtime, so caching is free correctness without added complexity.
+
+The typed model layer (`Question`, `ConceptSummary`, `LanguageNote` records in `model/`) was introduced alongside this change. Previously the service returned a raw JSON string and the controller declared `ResponseEntity<String>`. Now the controller returns `ResponseEntity<List<Question>>` and Spring's Jackson integration serializes the typed list — giving compile-time safety on the response contract and enabling Swagger to generate an accurate schema.
+
+### Swagger/OpenAPI docs via springdoc-openapi
+
+`springdoc-openapi-starter-webmvc-ui` is added to `pom.xml`. It auto-configures Swagger UI at `/swagger-ui.html` and the raw OpenAPI spec at `/api-docs` with no additional configuration class required.
+
+`QuestionsController` is annotated with `@Tag` and `@Operation` to give the Swagger UI meaningful descriptions. This was added primarily as a portfolio signal — an undocumented API looks incomplete to reviewers — and as a free contract document for any future frontend or third-party consumer.
+
+### Official Railway CLI container for CI/CD, not `bervProject/railway-deploy`
+
+The GitHub Actions backend deploy step uses Railway's official CLI Docker container (`ghcr.io/railwayapp/cli:latest`) rather than the community `bervProject/railway-deploy` action.
+
+The `bervProject` action was the original choice but was abandoned after repeated failures: it pins Railway CLI at v3.11.4 (hardcoded, never updates), does not work with Railway's current project token format, and is unmaintained. Switching to the official container resolved all token and deployment issues.
+
+The local Maven build step (`./mvnw clean package`) was also removed from the CI pipeline as a result. `railway up` uploads source code to Railway, which then builds the Docker image on its own infrastructure using the `backend/Dockerfile`. Building the JAR locally in CI was redundant work — Railway was rebuilding it anyway via the Dockerfile.
+
 ---
 
 ## 5. Data Flow

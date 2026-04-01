@@ -17,7 +17,7 @@ export function useQuestions() {
         }
 
         const questionsData = await response.json()
-        const questionsSortedByOrder = questionsData.sort((a, b) => a.order - b.order)
+        const questionsSortedByOrder = [...questionsData].sort((a, b) => a.order - b.order)
         setQuestions(questionsSortedByOrder)
       } catch (error) {
         setFetchError(error.message)

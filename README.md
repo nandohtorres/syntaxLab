@@ -5,6 +5,17 @@ Designed for beginners who want to learn idiomatic Python fast.
 
 🌐 **Live Demo:** [syntaxlab.work](https://syntaxlab.work)
 
+![React](https://img.shields.io/badge/React_18-61DAFB?logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
+![MUI](https://img.shields.io/badge/MUI-007FFF?logo=mui&logoColor=white)
+![Java](https://img.shields.io/badge/Java_21-ED8B00?logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot_3.5-6DB33F?logo=springboot&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?logo=vercel&logoColor=white)
+![Railway](https://img.shields.io/badge/Railway-0B0D0E?logo=railway&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?logo=githubactions&logoColor=white)
+![Sentry](https://img.shields.io/badge/Sentry-362D59?logo=sentry&logoColor=white)
+
 ---
 
 ## Screenshot
@@ -109,6 +120,12 @@ syntaxLab/
         └── resources/
             └── questions.json  # Question bank (30 questions)
 ```
+
+---
+
+## API Docs
+
+Swagger UI is available on staging (`develop` branch) at `/swagger-ui.html`. Disabled in production.
 
 ---
 
