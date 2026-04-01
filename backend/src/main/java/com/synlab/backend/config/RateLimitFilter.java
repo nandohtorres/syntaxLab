@@ -1,5 +1,7 @@
 package com.synlab.backend.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.synlab.backend.model.ErrorResponse;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import jakarta.servlet.FilterChain;
@@ -20,16 +22,23 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RateLimitFilter extends OncePerRequestFilter {
 
     private static final int MAX_REQUESTS_PER_MINUTE = 100;
-    private static final String RATE_LIMIT_EXCEEDED_MESSAGE =
-            "{\"status\":429,\"message\":\"Too many requests — please slow down.\",\"timestamp\":\"%s\"}";
 
     private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
+    private final ObjectMapper objectMapper;
+
+    public RateLimitFilter(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String clientIp = request.getRemoteAddr();
+        String forwarded = request.getHeader("X-Forwarded-For");
+        String clientIp = (forwarded != null && !forwarded.isBlank())
+                ? forwarded.substring(forwarded.lastIndexOf(',') + 1).trim()
+                : request.getRemoteAddr();
+
         Bucket bucket = buckets.computeIfAbsent(clientIp, ip -> newBucket());
 
         if (bucket.tryConsume(1)) {
@@ -38,7 +47,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
             response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.getWriter().write(
-                    RATE_LIMIT_EXCEEDED_MESSAGE.formatted(java.time.Instant.now())
+                    objectMapper.writeValueAsString(ErrorResponse.of(429, "Too many requests — please slow down."))
             );
         }
     }

@@ -10,8 +10,11 @@ public class CorsConfig implements WebMvcConfigurer {
 
     private static final String API_PATH_PATTERN = "/api/**";
 
-    @Value("${allowed.origins}")
-    private String allowedOrigins;
+    private final String allowedOrigins;
+
+    public CorsConfig(@Value("${allowed.origins}") String allowedOrigins) {
+        this.allowedOrigins = allowedOrigins;
+    }
 
     @Override
     public void addCorsMappings(CorsRegistry corsRegistry) {
