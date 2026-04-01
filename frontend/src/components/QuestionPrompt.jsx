@@ -92,7 +92,7 @@ export default function QuestionPrompt({ question }) {
                 How other languages do this
               </Typography>
               {question.languageNotes.map((item, index) => (
-                <Box key={index} sx={{ mt: index === 0 ? 0.5 : 1.5 }}>
+                <Box key={item.language} sx={{ mt: index === 0 ? 0.5 : 1.5 }}>
                   <Typography
                     variant="caption"
                     sx={{ fontWeight: 700, color: 'primary.main', textTransform: 'uppercase', letterSpacing: 0.5, display: 'block' }}

@@ -31,6 +31,14 @@ import { runTestsAgainstUserCode } from '@/utils/testRunner'
 
 const TEST_QUESTION = { id: '__test__', title: '🧪 Test Pop Button', prompt: 'This is a test question.', starterCode: '', tests: [], answer: '', pythonicTip: '', group: '', order: 0 }
 
+const EMBLEMS = [
+  { emoji: '🚀', label: 'Rocket' },
+  { emoji: '🎈', label: 'Balloon' },
+  { emoji: '🫧', label: 'Bubble' },
+  { emoji: '💣', label: 'Bomb' },
+  { emoji: '⭐', label: 'Star' },
+]
+
 // direction: 'col' for left-right drag handles, 'row' for up-down drag handles.
 function DragHandlePill({ direction }) {
   const isCol = direction === 'col'
@@ -196,6 +204,7 @@ export default function MainPage() {
 
   useEffect(() => {
     return () => {
+      clearTimeout(feedbackTimerRef.current)
       if (dragMoveHandlerRef.current) document.removeEventListener('mousemove', dragMoveHandlerRef.current)
       if (dragEndHandlerRef.current) document.removeEventListener('mouseup', dragEndHandlerRef.current)
       if (vDragMoveHandlerRef.current) {
@@ -216,14 +225,6 @@ export default function MainPage() {
       }
     }
   }, [])
-
-  const EMBLEMS = [
-    { emoji: '🚀', label: 'Rocket' },
-    { emoji: '🎈', label: 'Balloon' },
-    { emoji: '🫧', label: 'Bubble' },
-    { emoji: '💣', label: 'Bomb' },
-    { emoji: '⭐', label: 'Star' },
-  ]
 
   function handleTestPopClick() {
     setSelectedQuestion(TEST_QUESTION)
@@ -490,7 +491,7 @@ export default function MainPage() {
 
               {/* Editor */}
               <Box sx={{ ...editorOutlineSx }}>
-                <CodeEditor code={userCode} onCodeChange={(code) => setUserCodeMap(prev => ({ ...prev, [selectedQuestion.id]: code }))} />
+                <CodeEditor code={userCode} onCodeChange={(code) => { if (!selectedQuestion) return; setUserCodeMap(prev => ({ ...prev, [selectedQuestion.id]: code })) }} />
                 {selectedQuestion && awaitingPopIds.has(selectedQuestion.id) && (
                   <PopButton key={selectedQuestion.id} onPopped={handlePopComplete} emblem={selectedEmblem} />
                 )}
@@ -568,7 +569,7 @@ export default function MainPage() {
             {/* Right Panel — code editor and run button */}
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
               <Box sx={{ ...editorOutlineSx }}>
-                <CodeEditor code={userCode} onCodeChange={(code) => setUserCodeMap(prev => ({ ...prev, [selectedQuestion.id]: code }))} />
+                <CodeEditor code={userCode} onCodeChange={(code) => { if (!selectedQuestion) return; setUserCodeMap(prev => ({ ...prev, [selectedQuestion.id]: code })) }} />
                 {selectedQuestion && awaitingPopIds.has(selectedQuestion.id) && (
                   <PopButton key={selectedQuestion.id} onPopped={handlePopComplete} emblem={selectedEmblem} />
                 )}

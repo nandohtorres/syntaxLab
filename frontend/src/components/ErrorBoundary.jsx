@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import { Component, Fragment } from 'react'
 import * as Sentry from '@sentry/react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -7,7 +7,7 @@ import Button from '@mui/material/Button'
 export default class ErrorBoundary extends Component {
   constructor(props) {
     super(props)
-    this.state = { hasError: false }
+    this.state = { hasError: false, resetKey: 0 }
   }
 
   static getDerivedStateFromError() {
@@ -19,7 +19,7 @@ export default class ErrorBoundary extends Component {
   }
 
   handleReset() {
-    this.setState({ hasError: false })
+    this.setState(prev => ({ hasError: false, resetKey: prev.resetKey + 1 }))
   }
 
   render() {
@@ -37,6 +37,6 @@ export default class ErrorBoundary extends Component {
       )
     }
 
-    return this.props.children
+    return <Fragment key={this.state.resetKey}>{this.props.children}</Fragment>
   }
 }

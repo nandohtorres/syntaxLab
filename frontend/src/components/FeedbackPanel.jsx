@@ -37,8 +37,8 @@ export default function FeedbackPanel({ testRunResult, isRunning }) {
   return (
     <Box sx={{ mt: 2 }}>
       <Stack spacing={0.5}>
-        {testRunResult.results.map((result, index) => (
-          <Alert key={index} severity={result.passed ? 'success' : 'error'} sx={{ py: 0.25 }}>
+        {testRunResult.results.map((result) => (
+          <Alert key={result.message} severity={result.passed ? 'success' : 'error'} sx={{ py: 0.25 }}>
             <Typography variant="caption">{result.message}</Typography>
           </Alert>
         ))}
