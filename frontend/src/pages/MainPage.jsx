@@ -90,7 +90,6 @@ export default function MainPage() {
   const [testRunResult, setTestRunResult] = useState(null)
   const [isRunningTests, setIsRunningTests] = useState(false)
   const [awaitingPopIds, setAwaitingPopIds] = useState(new Set())
-  const [poppedIds, setPoppedIds] = useState(new Set())
   const [popInfoAnchor, setPopInfoAnchor] = useState(null)
   const [selectedEmblem, setSelectedEmblem] = useState('🚀')
   const [runFeedback, setRunFeedback] = useState(null) // null | 'correct' | 'incorrect'
@@ -231,14 +230,12 @@ export default function MainPage() {
     setTestRunResult(null)
     setRunFeedback(null)
     setAwaitingPopIds(prev => new Set(prev).add(TEST_QUESTION.id))
-    setPoppedIds(prev => { const next = new Set(prev); next.delete(TEST_QUESTION.id); return next })
   }
 
   const handleQuestionSelect = useCallback((question) => {
     setSelectedQuestion(question)
     setTestRunResult(null)
     setRunFeedback(null)
-    setPoppedIds(prev => { const next = new Set(prev); next.delete(question.id); return next })
   }, [])
 
   // Runs once when questions first load from the API — selects the first incomplete question.
@@ -267,9 +264,7 @@ export default function MainPage() {
 
     if (result.passed) {
       markQuestionAsComplete(selectedQuestion.id)
-      if (!poppedIds.has(selectedQuestion.id)) {
-        setAwaitingPopIds(prev => new Set(prev).add(selectedQuestion.id))
-      }
+      setAwaitingPopIds(prev => new Set(prev).add(selectedQuestion.id))
     }
 
     setIsRunningTests(false)
@@ -277,7 +272,6 @@ export default function MainPage() {
 
   function handlePopComplete() {
     const questionId = selectedQuestion.id
-    setPoppedIds(prev => new Set(prev).add(questionId))
     setAwaitingPopIds(prev => { const next = new Set(prev); next.delete(questionId); return next })
 
     const currentIndex = questions.findIndex(q => q.id === questionId)
