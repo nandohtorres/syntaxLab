@@ -28,7 +28,7 @@ graph TD
 
     subgraph SpringBoot ["Spring Boot REST API (port 8080)"]
         Controller["QuestionsController\nGET /api/questions"]
-        Service["QuestionsService\n(loads + parses JSON)"]
+        Service["QuestionsService\n(@PostConstruct: validates + caches)"]
         JSON["questions.json\n(classpath resource)"]
 
         Controller --> Service
@@ -119,6 +119,23 @@ The typed model layer (`Question`, `ConceptSummary`, `LanguageNote` records in `
 
 `QuestionsController` is annotated with `@Tag` and `@Operation` to give the Swagger UI meaningful descriptions. This was added primarily as a portfolio signal — an undocumented API looks incomplete to reviewers — and as a free contract document for any future frontend or third-party consumer.
 
+### Branch strategy: `develop` = staging, `main` = production
+
+Two long-lived branches map directly to two deployment environments:
+
+| Branch | Environment | Frontend | Backend |
+|---|---|---|---|
+| `develop` | Staging | Vercel Preview deploy | Railway `syntaxLab` service |
+| `main` | Production | Vercel Production deploy | Railway `syntaxLab` service |
+
+Every feature is developed on a short-lived branch off `develop`, merged to `develop` via PR, validated on staging, then promoted to `main` via a second PR. No direct commits to `main`.
+
+GitHub Actions runs two separate workflow files:
+- `.github/workflows/staging.yml` — triggers on push to `develop`, deploys frontend and backend to staging
+- `.github/workflows/production.yml` — triggers on push to `main`, deploys frontend and backend to production
+
+Railway's native GitHub auto-deploy integration is **disconnected** at the service level (Source → Branch disconnected). GitHub Actions is the sole deploy mechanism to prevent double-deploys.
+
 ### Official Railway CLI container for CI/CD, not `bervProject/railway-deploy`
 
 The GitHub Actions backend deploy step uses Railway's official CLI Docker container (`ghcr.io/railwayapp/cli:latest`) rather than the community `bervProject/railway-deploy` action.
@@ -170,7 +187,24 @@ These are hard invariants. Violating them requires an explicit architectural dec
 
 ---
 
-## 7. Future Roadmap Hooks
+## 7. AI Tooling Configuration
+
+### Context optimization
+
+A `.claudeignore` file at the project root prevents Claude from scanning irrelevant paths during file reads and glob searches:
+
+- `node_modules/`, `frontend/dist/`, `frontend/build/` — dependency and build output
+- `backend/target/` — Maven build artifacts
+- `*.log`, `npm-debug.log*` — runtime logs
+- `coverage/` — test coverage output
+
+**Important for debugging:** these paths are invisible to Claude's normal file tools. If a bug involves build artifacts, logs, or compiled output, read those files explicitly by path — do not assume they are absent just because no scan returned them.
+
+`CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=50` is set in `~/.claude/settings.json` — context compaction triggers at 50% fullness instead of the default 95%.
+
+---
+
+## 8. Future Roadmap Hooks
 
 The codebase is structured to keep these migrations cheap.
 

@@ -18,9 +18,11 @@ Designed for beginners who want to learn idiomatic Python fast.
 
 ---
 
-## Screenshot
+## Screenshots
 
-_coming soon_
+| Dark Mode | Light Mode |
+|---|---|
+| ![Dark Mode](./synlabDarkMode.png) | ![Light Mode](./synlabLightMode.png) |
 
 ---
 

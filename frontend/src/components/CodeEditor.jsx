@@ -1,5 +1,8 @@
-import Editor from '@monaco-editor/react'
+import Editor, { loader } from '@monaco-editor/react'
+import * as monaco from 'monaco-editor'
 import { useThemeContext } from '@/context/ThemeContext'
+
+loader.config({ monaco })
 
 const EDITOR_LANGUAGE = 'python'
 const DARK_EDITOR_THEME = 'vs-dark'
