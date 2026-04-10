@@ -118,6 +118,14 @@ export default function MainPage() {
   const feedbackTimerRef = useRef(null)
   const initialQuestionSelectedRef = useRef(false)
 
+  // Always-fresh refs for values used inside async callbacks (avoids stale closures)
+  const selectedQuestionRef = useRef(selectedQuestion)
+  const isQuestionCompleteRef = useRef(isQuestionComplete)
+  useEffect(() => {
+    selectedQuestionRef.current = selectedQuestion
+    isQuestionCompleteRef.current = isQuestionComplete
+  })
+
   // Store handlers in refs so the same function reference is used for both
   // addEventListener and removeEventListener — plain functions recreated each render
   // would cause removeEventListener to silently fail, leaking the listeners.
@@ -271,12 +279,12 @@ export default function MainPage() {
   }
 
   function handlePopComplete() {
-    const questionId = selectedQuestion.id
+    const questionId = selectedQuestionRef.current.id
     setAwaitingPopIds(prev => { const next = new Set(prev); next.delete(questionId); return next })
 
     const currentIndex = questions.findIndex(q => q.id === questionId)
     const remaining = [...questions.slice(currentIndex + 1), ...questions.slice(0, currentIndex)]
-    const nextQuestion = remaining.find(q => !isQuestionComplete(q.id)) ?? null
+    const nextQuestion = remaining.find(q => !isQuestionCompleteRef.current(q.id)) ?? remaining[0] ?? null
     if (nextQuestion) handleQuestionSelect(nextQuestion)
   }
 
