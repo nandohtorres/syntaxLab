@@ -1,6 +1,6 @@
 import { ThemeContextProvider } from '@/context/ThemeContext'
 import { ProgressContextProvider } from '@/context/ProgressContext'
-import MainPage from '@/pages/MainPage'
+import SitePage from '@/pages/SitePage'
 import ErrorBoundary from '@/components/ErrorBoundary'
 
 export default function App() {
@@ -8,7 +8,7 @@ export default function App() {
     <ErrorBoundary>
       <ThemeContextProvider>
         <ProgressContextProvider>
-          <MainPage />
+          <SitePage />
         </ProgressContextProvider>
       </ThemeContextProvider>
     </ErrorBoundary>

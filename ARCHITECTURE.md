@@ -177,11 +177,18 @@ These are hard invariants. Violating them requires an explicit architectural dec
 
 **The backend never executes user code.** Not in a subprocess, not via a library, not via reflection. If a future feature request would require the server to evaluate Python, that request changes the security model and must be treated as a new architectural decision.
 
-**SynLab is a single-page application.** There are no server-rendered pages, no dynamic routes served by the backend, and no frontend routing beyond the single main page today. Adding new pages means adding React Router routes, not backend views.
+**SynLab is a single-page application.** `SitePage` selects Original practice,
+Python Path or Interview prep through URL fragments (`#practice`, `#python`,
+`#interview`). Hash navigation keeps links reloadable on the existing static host
+without server rewrites or a routing dependency. A future requirement for nested
+path routes can justify a router; backend-rendered views are not needed here.
 
 **There is no authentication today.** No endpoints are protected, no sessions exist, and no user identity is assumed. Features that require identity — leaderboards, progress sync, custom exercises — are explicitly out of scope until auth infrastructure is added.
 
-**`questions.json` is the source of truth for question content.** No question data is stored in a database yet. The admin workflow for adding or editing questions is: edit the JSON file, redeploy. This is intentional and is not a bug.
+**`questions.json` is the source of truth for Original practice content.** The new
+Python Path and Interview prep content ships in the static frontend modules under
+`frontend/mockups/python-path/`. No question data is stored in a database yet.
+Content changes require a frontend or backend deployment according to their source.
 
 **The question list is non-destructive.** Users can open any question in any order. There are no locked questions, no prerequisite gates, and no time limits. The `order` field is a recommendation, not enforcement.
 
