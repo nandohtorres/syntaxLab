@@ -1,8 +1,11 @@
-import { writeFileSync, mkdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import assert from 'node:assert/strict'
 import { lessons, stats } from '../content/index.js'
 import { tracks, problemIndex } from '../content/catalog.js'
+import curriculum from '../content/curriculum.json' with { type: 'json' }
+
+assert.deepEqual(curriculum, JSON.parse(readFileSync(new URL('../../../../docs/python-blind75-curriculum.json', import.meta.url))), 'The deployable curriculum must match the design inventory')
 
 assert.equal(stats.blind75,75)
 assert.deepEqual(new Set(lessons.filter(x=>x.track==='blind75').map(x=>x.problemId)),new Set(problemIndex.map(x=>x.id)))

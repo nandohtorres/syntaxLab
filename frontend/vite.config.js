@@ -14,6 +14,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      '@practice': path.resolve(__dirname, './mockups/python-path'),
     },
   },
   server: {

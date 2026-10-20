@@ -6,7 +6,8 @@ The standalone workspace at `frontend/mockups/python-path/` is functional with
 208 editor exercises: 95 foundations, 32 pattern drills, six scripts and all 75
 original Blind 75 problems. Includes navigation/search, multi-file workspaces,
 checks, hints/solutions, ten-rep summaries, review/progress, notes, local saving
-and backup/restore. Original website integration/UI consolidation stays deferred.
+and backup/restore. Main-site tabs are now implemented; wider UI consolidation
+remains deferred.
 
 Validation: 208/208 reference solutions and 438 checks in native Python, all
 starters fail; 208/208 references in real browser Pyodide; progress tests and
@@ -36,7 +37,19 @@ layout. Interview-only visits work without loading the Python CDN runtime.
 
 ## Remaining by deliberate scope
 
-Original-site tab integration, account sync, whole-site UI consolidation and
+Account sync, whole-site UI consolidation and
 bundle/runtime performance optimization are deferred. Interview answers are
 self-reviewed; coding exercises use authored fixtures, not the entire external
 LeetCode judge. No push, deployment, model call or cloud operation performed.
+
+## Main-site integration prepared (2026-10-20)
+
+The normal frontend now exposes Original practice, Python Path and Interview prep
+through shared fragment-based navigation. Integration is no longer deferred.
+The existing 30-question page and its progress remain available. Each new section
+loads separately, and visited editors preserve state when switching tabs. The
+original and new editors share a bundled Monaco worker configuration.
+
+Publishing status is tracked separately from implementation: the change must
+pass the existing develop/main release flow before it is public. See
+`docs/python-path-site-integration.md` for validation and release details.

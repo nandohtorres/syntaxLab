@@ -1,0 +1,1260 @@
+{
+  "schema_version": 4,
+  "status": "design-only",
+  "created": "2026-10-19",
+  "track_id": "python-foundations-blind75",
+  "inventory": "Original Blind 75; unique problem IDs; not Grind 75 or LeetCode 75",
+  "sources": {
+    "author": "https://www.techinterviewhandbook.org/best-practice-questions/",
+    "original_list_linked_by_author": "https://leetcode.com/discuss/post/460599/blind-75-leetcode-questions-by-krishnade-9xev/",
+    "earlier_author_article": "https://www.freecodecamp.org/news/coding-interviews-for-dummies-5e048933b82b/"
+  },
+  "source_notes": "Membership cross-checked against the author-linked categorized list. Titles use normalized current names; no difficulty labels copied. Array/DP titles cross-reference the author handbook; Binary/Linked List/Matrix titles the earlier author article; remaining titles the author-linked list. Ordering and drill descriptions are original design choices.",
+  "foundation_units": [
+    {
+      "id": "F01",
+      "title": "Start a Python program",
+      "requires": []
+    },
+    {
+      "id": "F02",
+      "title": "Variables and types",
+      "requires": [
+        "F01"
+      ]
+    },
+    {
+      "id": "F03",
+      "title": "Expressions",
+      "requires": [
+        "F02"
+      ]
+    },
+    {
+      "id": "F04",
+      "title": "Strings",
+      "requires": [
+        "F03"
+      ]
+    },
+    {
+      "id": "F05",
+      "title": "Decisions",
+      "requires": [
+        "F03"
+      ]
+    },
+    {
+      "id": "F06",
+      "title": "Repetition",
+      "requires": [
+        "F05"
+      ]
+    },
+    {
+      "id": "F07",
+      "title": "Containers",
+      "requires": [
+        "F04",
+        "F06"
+      ]
+    },
+    {
+      "id": "F08",
+      "title": "Functions",
+      "requires": [
+        "F07"
+      ]
+    },
+    {
+      "id": "F09",
+      "title": "Classes and methods",
+      "requires": [
+        "F08"
+      ]
+    },
+    {
+      "id": "F10",
+      "title": "Files and modules",
+      "requires": [
+        "F08"
+      ]
+    },
+    {
+      "id": "F11",
+      "title": "Debugging and checks",
+      "requires": [
+        "F08",
+        "F10"
+      ],
+      "scope_note": "Introduce try/except, validation and expected failure handling as well as debugging; basic scripts do not require classes."
+    },
+    {
+      "id": "F12",
+      "title": "Interview Python",
+      "requires": [
+        "F08",
+        "F11"
+      ]
+    },
+    {
+      "id": "F13",
+      "title": "Recursion",
+      "requires": [
+        "F08",
+        "F11"
+      ]
+    }
+  ],
+  "problem_modules": [
+    {
+      "id": "P01",
+      "title": "Sets and dictionaries",
+      "requires_foundations": [
+        "F07",
+        "F08"
+      ],
+      "requires_modules": [],
+      "micro_skills": [
+        "membership",
+        "counting",
+        "complement lookup",
+        "stable grouping"
+      ]
+    },
+    {
+      "id": "P02",
+      "title": "Array scans and running state",
+      "requires_foundations": [
+        "F06",
+        "F08"
+      ],
+      "requires_modules": [],
+      "micro_skills": [
+        "running minimum",
+        "running best",
+        "prefix and suffix products"
+      ]
+    },
+    {
+      "id": "P03",
+      "title": "Stacks",
+      "requires_foundations": [
+        "F07",
+        "F08"
+      ],
+      "requires_modules": [],
+      "micro_skills": [
+        "push/pop",
+        "match a closing symbol",
+        "empty-stack handling"
+      ]
+    },
+    {
+      "id": "P04",
+      "title": "Two pointers and palindrome expansion",
+      "requires_foundations": [
+        "F04",
+        "F06",
+        "F08"
+      ],
+      "requires_modules": [
+        "P02"
+      ],
+      "micro_skills": [
+        "move indices",
+        "explain a safe elimination",
+        "expand around a center"
+      ]
+    },
+    {
+      "id": "P05",
+      "title": "Binary search",
+      "requires_foundations": [
+        "F06",
+        "F08",
+        "F12"
+      ],
+      "requires_modules": [
+        "P02"
+      ],
+      "micro_skills": [
+        "midpoint",
+        "discard a range",
+        "prove progress",
+        "handle missing target"
+      ]
+    },
+    {
+      "id": "P06",
+      "title": "Sliding windows",
+      "requires_foundations": [
+        "F04",
+        "F07",
+        "F08"
+      ],
+      "requires_modules": [
+        "P01",
+        "P04"
+      ],
+      "micro_skills": [
+        "add/remove counts",
+        "define window validity",
+        "update the best interval"
+      ]
+    },
+    {
+      "id": "P07",
+      "title": "Linked structures",
+      "requires_foundations": [
+        "F09",
+        "F11"
+      ],
+      "requires_modules": [
+        "P04"
+      ],
+      "micro_skills": [
+        "object identity",
+        "save next reference",
+        "relink",
+        "dummy node",
+        "slow/fast pointers"
+      ]
+    },
+    {
+      "id": "P08",
+      "title": "Matrices",
+      "requires_foundations": [
+        "F07",
+        "F08",
+        "F11"
+      ],
+      "requires_modules": [],
+      "micro_skills": [
+        "row/column bounds",
+        "independent rows",
+        "coordinate transforms",
+        "visited cells"
+      ]
+    },
+    {
+      "id": "P09",
+      "title": "Trees and BSTs",
+      "requires_foundations": [
+        "F09",
+        "F12",
+        "F13"
+      ],
+      "requires_modules": [],
+      "micro_skills": [
+        "base case",
+        "combine child results",
+        "traversals",
+        "ancestor bounds",
+        "reconstruction"
+      ]
+    },
+    {
+      "id": "P10",
+      "title": "Graphs",
+      "requires_foundations": [
+        "F09",
+        "F12",
+        "F13"
+      ],
+      "requires_modules": [
+        "P01",
+        "P08",
+        "P09"
+      ],
+      "micro_skills": [
+        "adjacency",
+        "seen set",
+        "components",
+        "cycle state",
+        "indegree",
+        "topological order"
+      ]
+    },
+    {
+      "id": "P11",
+      "title": "Backtracking and tries",
+      "requires_foundations": [
+        "F09",
+        "F13"
+      ],
+      "requires_modules": [
+        "P08",
+        "P09"
+      ],
+      "micro_skills": [
+        "choose/explore/undo",
+        "copy a path",
+        "prefix nodes",
+        "terminal marker"
+      ]
+    },
+    {
+      "id": "P12",
+      "title": "Heaps",
+      "requires_foundations": [
+        "F09",
+        "F12"
+      ],
+      "requires_modules": [
+        "P01",
+        "P07"
+      ],
+      "micro_skills": [
+        "push/pop",
+        "bounded heap",
+        "tie-breakers",
+        "two balanced heaps"
+      ]
+    },
+    {
+      "id": "P13",
+      "title": "Intervals",
+      "requires_foundations": [
+        "F07",
+        "F08",
+        "F12"
+      ],
+      "requires_modules": [
+        "P02"
+      ],
+      "micro_skills": [
+        "sort by endpoint",
+        "define overlap",
+        "merge",
+        "count active intervals"
+      ]
+    },
+    {
+      "id": "P14",
+      "title": "DP and greedy reasoning",
+      "requires_foundations": [
+        "F08",
+        "F12",
+        "F13"
+      ],
+      "requires_modules": [
+        "P02",
+        "P08"
+      ],
+      "micro_skills": [
+        "state meaning",
+        "base cases",
+        "transitions",
+        "evaluation order",
+        "reachability invariant"
+      ]
+    },
+    {
+      "id": "P15",
+      "title": "Bits",
+      "requires_foundations": [
+        "F03",
+        "F06",
+        "F08"
+      ],
+      "requires_modules": [],
+      "micro_skills": [
+        "binary place values",
+        "shifts",
+        "masks",
+        "XOR",
+        "explicit 32-bit boundaries"
+      ]
+    }
+  ],
+  "problems": [
+    {
+      "id": 1,
+      "title": "Two Sum",
+      "original_category": "Array",
+      "module_id": "P01",
+      "preparation_drill": "Look up a complement before inserting the current index",
+      "url": "https://leetcode.com/problems/two-sum/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 121,
+      "title": "Best Time to Buy and Sell Stock",
+      "original_category": "Array",
+      "module_id": "P02",
+      "preparation_drill": "Maintain the minimum seen before evaluating today's gain",
+      "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 217,
+      "title": "Contains Duplicate",
+      "original_category": "Array",
+      "module_id": "P01",
+      "preparation_drill": "Check membership then add a value to a set",
+      "url": "https://leetcode.com/problems/contains-duplicate/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 238,
+      "title": "Product of Array Except Self",
+      "original_category": "Array",
+      "module_id": "P02",
+      "preparation_drill": "Compute prefix and suffix products with zero cases",
+      "url": "https://leetcode.com/problems/product-of-array-except-self/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 53,
+      "title": "Maximum Subarray",
+      "original_category": "Array",
+      "module_id": "P02",
+      "preparation_drill": "Choose between extending a running sum and starting again",
+      "url": "https://leetcode.com/problems/maximum-subarray/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 152,
+      "title": "Maximum Product Subarray",
+      "original_category": "Array",
+      "module_id": "P02",
+      "preparation_drill": "Track both minimum and maximum products after a negative",
+      "url": "https://leetcode.com/problems/maximum-product-subarray/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 153,
+      "title": "Find Minimum in Rotated Sorted Array",
+      "original_category": "Array",
+      "module_id": "P05",
+      "preparation_drill": "Compare a midpoint with an endpoint to retain the minimum",
+      "url": "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 33,
+      "title": "Search in Rotated Sorted Array",
+      "original_category": "Array",
+      "module_id": "P05",
+      "preparation_drill": "Identify a sorted half and decide whether the target fits",
+      "url": "https://leetcode.com/problems/search-in-rotated-sorted-array/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 15,
+      "title": "3Sum",
+      "original_category": "Array",
+      "module_id": "P04",
+      "preparation_drill": "Find a pair after fixing one index and skip duplicates",
+      "url": "https://leetcode.com/problems/3sum/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 11,
+      "title": "Container With Most Water",
+      "original_category": "Array",
+      "module_id": "P04",
+      "preparation_drill": "Compute area and justify moving the shorter side",
+      "url": "https://leetcode.com/problems/container-with-most-water/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 371,
+      "title": "Sum of Two Integers",
+      "original_category": "Binary",
+      "module_id": "P15",
+      "preparation_drill": "Separate sum-without-carry and carry using a 32-bit mask",
+      "url": "https://leetcode.com/problems/sum-of-two-integers/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 191,
+      "title": "Number of 1 Bits",
+      "original_category": "Binary",
+      "module_id": "P15",
+      "preparation_drill": "Clear one set bit repeatedly and count iterations",
+      "url": "https://leetcode.com/problems/number-of-1-bits/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 338,
+      "title": "Counting Bits",
+      "original_category": "Binary",
+      "module_id": "P15",
+      "preparation_drill": "Reuse the bit count of a smaller integer",
+      "url": "https://leetcode.com/problems/counting-bits/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 268,
+      "title": "Missing Number",
+      "original_category": "Binary",
+      "module_id": "P15",
+      "preparation_drill": "Cancel paired values using XOR including the boundary index",
+      "url": "https://leetcode.com/problems/missing-number/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 190,
+      "title": "Reverse Bits",
+      "original_category": "Binary",
+      "module_id": "P15",
+      "preparation_drill": "Shift one input bit into an output accumulator exactly 32 times",
+      "url": "https://leetcode.com/problems/reverse-bits/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 70,
+      "title": "Climbing Stairs",
+      "original_category": "Dynamic Programming",
+      "module_id": "P14",
+      "preparation_drill": "Define ways-to-reach-step and initialize its base cases",
+      "url": "https://leetcode.com/problems/climbing-stairs/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 322,
+      "title": "Coin Change",
+      "original_category": "Dynamic Programming",
+      "module_id": "P14",
+      "preparation_drill": "Represent unreachable states and improve a minimum from prior amounts",
+      "url": "https://leetcode.com/problems/coin-change/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 300,
+      "title": "Longest Increasing Subsequence",
+      "original_category": "Dynamic Programming",
+      "module_id": "P14",
+      "preparation_drill": "Build a best-length-ending-here table before optimizing",
+      "url": "https://leetcode.com/problems/longest-increasing-subsequence/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 1143,
+      "title": "Longest Common Subsequence",
+      "original_category": "Dynamic Programming",
+      "module_id": "P14",
+      "preparation_drill": "Update a two-sequence table for matching and differing characters",
+      "url": "https://leetcode.com/problems/longest-common-subsequence/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 139,
+      "title": "Word Break",
+      "original_category": "Dynamic Programming",
+      "module_id": "P14",
+      "preparation_drill": "Mark a prefix reachable when its final word has a reachable start",
+      "url": "https://leetcode.com/problems/word-break/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 39,
+      "title": "Combination Sum",
+      "original_category": "Dynamic Programming",
+      "module_id": "P11",
+      "preparation_drill": "Append a choice recurse and undo while controlling reuse",
+      "url": "https://leetcode.com/problems/combination-sum/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 198,
+      "title": "House Robber",
+      "original_category": "Dynamic Programming",
+      "module_id": "P14",
+      "preparation_drill": "Choose between skipping a position and adding to a nonadjacent total",
+      "url": "https://leetcode.com/problems/house-robber/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 213,
+      "title": "House Robber II",
+      "original_category": "Dynamic Programming",
+      "module_id": "P14",
+      "preparation_drill": "Split a circular constraint into two valid linear cases",
+      "url": "https://leetcode.com/problems/house-robber-ii/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 91,
+      "title": "Decode Ways",
+      "original_category": "Dynamic Programming",
+      "module_id": "P14",
+      "preparation_drill": "Validate one-digit and two-digit transitions including zeros",
+      "url": "https://leetcode.com/problems/decode-ways/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 62,
+      "title": "Unique Paths",
+      "original_category": "Dynamic Programming",
+      "module_id": "P14",
+      "preparation_drill": "Initialize a grid border and combine top and left counts",
+      "url": "https://leetcode.com/problems/unique-paths/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 55,
+      "title": "Jump Game",
+      "original_category": "Dynamic Programming",
+      "module_id": "P14",
+      "preparation_drill": "Maintain the furthest reachable position and detect an unreachable gap",
+      "url": "https://leetcode.com/problems/jump-game/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 133,
+      "title": "Clone Graph",
+      "original_category": "Graph",
+      "module_id": "P10",
+      "preparation_drill": "Remember an original-to-clone mapping before exploring neighbors",
+      "url": "https://leetcode.com/problems/clone-graph/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 207,
+      "title": "Course Schedule",
+      "original_category": "Graph",
+      "module_id": "P10",
+      "preparation_drill": "Build indegrees and consume vertices with no remaining prerequisites",
+      "url": "https://leetcode.com/problems/course-schedule/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 417,
+      "title": "Pacific Atlantic Water Flow",
+      "original_category": "Graph",
+      "module_id": "P10",
+      "preparation_drill": "Traverse reverse reachability from a boundary using a seen set",
+      "url": "https://leetcode.com/problems/pacific-atlantic-water-flow/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 200,
+      "title": "Number of Islands",
+      "original_category": "Graph",
+      "module_id": "P10",
+      "preparation_drill": "Visit one component fully before increasing the component count",
+      "url": "https://leetcode.com/problems/number-of-islands/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 128,
+      "title": "Longest Consecutive Sequence",
+      "original_category": "Graph",
+      "module_id": "P01",
+      "preparation_drill": "Only expand from values that have no predecessor",
+      "url": "https://leetcode.com/problems/longest-consecutive-sequence/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 269,
+      "title": "Alien Dictionary",
+      "original_category": "Graph",
+      "module_id": "P10",
+      "preparation_drill": "Extract the first differing pair and reject an invalid prefix ordering",
+      "url": "https://leetcode.com/problems/alien-dictionary/",
+      "access_note": "Historically restricted; verify at authoring and provide an original local practice contract"
+    },
+    {
+      "id": 261,
+      "title": "Graph Valid Tree",
+      "original_category": "Graph",
+      "module_id": "P10",
+      "preparation_drill": "Check connectivity and detect a cycle without confusing a parent edge",
+      "url": "https://leetcode.com/problems/graph-valid-tree/",
+      "access_note": "Historically restricted; verify at authoring and provide an original local practice contract"
+    },
+    {
+      "id": 323,
+      "title": "Number of Connected Components in an Undirected Graph",
+      "original_category": "Graph",
+      "module_id": "P10",
+      "preparation_drill": "Build adjacency for all vertices including isolated ones",
+      "url": "https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/",
+      "access_note": "Historically restricted; verify at authoring and provide an original local practice contract"
+    },
+    {
+      "id": 57,
+      "title": "Insert Interval",
+      "original_category": "Interval",
+      "module_id": "P13",
+      "preparation_drill": "Separate intervals before overlapping with and after an insertion",
+      "url": "https://leetcode.com/problems/insert-interval/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 56,
+      "title": "Merge Intervals",
+      "original_category": "Interval",
+      "module_id": "P13",
+      "preparation_drill": "Sort starts and extend the last overlapping interval",
+      "url": "https://leetcode.com/problems/merge-intervals/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 435,
+      "title": "Non-overlapping Intervals",
+      "original_category": "Interval",
+      "module_id": "P13",
+      "preparation_drill": "Choose an interval endpoint that leaves room for later intervals",
+      "url": "https://leetcode.com/problems/non-overlapping-intervals/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 252,
+      "title": "Meeting Rooms",
+      "original_category": "Interval",
+      "module_id": "P13",
+      "preparation_drill": "Compare neighboring sorted intervals under explicit endpoint semantics",
+      "url": "https://leetcode.com/problems/meeting-rooms/",
+      "access_note": "Historically restricted; verify at authoring and provide an original local practice contract"
+    },
+    {
+      "id": 253,
+      "title": "Meeting Rooms II",
+      "original_category": "Interval",
+      "module_id": "P13",
+      "preparation_drill": "Count active meetings using sorted starts and ends",
+      "url": "https://leetcode.com/problems/meeting-rooms-ii/",
+      "access_note": "Historically restricted; verify at authoring and provide an original local practice contract"
+    },
+    {
+      "id": 206,
+      "title": "Reverse Linked List",
+      "original_category": "Linked List",
+      "module_id": "P07",
+      "preparation_drill": "Save the next node before reversing the current link",
+      "url": "https://leetcode.com/problems/reverse-linked-list/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 141,
+      "title": "Linked List Cycle",
+      "original_category": "Linked List",
+      "module_id": "P07",
+      "preparation_drill": "Advance slow and fast references and compare identity",
+      "url": "https://leetcode.com/problems/linked-list-cycle/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 21,
+      "title": "Merge Two Sorted Lists",
+      "original_category": "Linked List",
+      "module_id": "P07",
+      "preparation_drill": "Attach the smaller node using a dummy head and tail",
+      "url": "https://leetcode.com/problems/merge-two-sorted-lists/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 23,
+      "title": "Merge k Sorted Lists",
+      "original_category": "Linked List",
+      "module_id": "P12",
+      "preparation_drill": "Merge heap entries with a tie-breaker for equal node values",
+      "url": "https://leetcode.com/problems/merge-k-sorted-lists/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 19,
+      "title": "Remove Nth Node From End of List",
+      "original_category": "Linked List",
+      "module_id": "P07",
+      "preparation_drill": "Maintain a fixed pointer gap and handle removal of the head",
+      "url": "https://leetcode.com/problems/remove-nth-node-from-end-of-list/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 143,
+      "title": "Reorder List",
+      "original_category": "Linked List",
+      "module_id": "P07",
+      "preparation_drill": "Find a midpoint reverse the second half and weave references",
+      "url": "https://leetcode.com/problems/reorder-list/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 73,
+      "title": "Set Matrix Zeroes",
+      "original_category": "Matrix",
+      "module_id": "P08",
+      "preparation_drill": "Record rows and columns before applying mutations",
+      "url": "https://leetcode.com/problems/set-matrix-zeroes/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 54,
+      "title": "Spiral Matrix",
+      "original_category": "Matrix",
+      "module_id": "P08",
+      "preparation_drill": "Shrink four traversal boundaries without repeating a cell",
+      "url": "https://leetcode.com/problems/spiral-matrix/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 48,
+      "title": "Rotate Image",
+      "original_category": "Matrix",
+      "module_id": "P08",
+      "preparation_drill": "Trace a coordinate transform before implementing in-place swaps",
+      "url": "https://leetcode.com/problems/rotate-image/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 79,
+      "title": "Word Search",
+      "original_category": "Matrix",
+      "module_id": "P11",
+      "preparation_drill": "Mark a cell explore neighbors and undo the mark on return",
+      "url": "https://leetcode.com/problems/word-search/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 3,
+      "title": "Longest Substring Without Repeating Characters",
+      "original_category": "String",
+      "module_id": "P06",
+      "preparation_drill": "Shrink a window until the repeated character is removed",
+      "url": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 424,
+      "title": "Longest Repeating Character Replacement",
+      "original_category": "String",
+      "module_id": "P06",
+      "preparation_drill": "Relate window length and maximum frequency to replacement allowance",
+      "url": "https://leetcode.com/problems/longest-repeating-character-replacement/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 76,
+      "title": "Minimum Window Substring",
+      "original_category": "String",
+      "module_id": "P06",
+      "preparation_drill": "Track required multiplicities and shrink only while coverage holds",
+      "url": "https://leetcode.com/problems/minimum-window-substring/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 242,
+      "title": "Valid Anagram",
+      "original_category": "String",
+      "module_id": "P01",
+      "preparation_drill": "Build and compare character counts including repeated characters",
+      "url": "https://leetcode.com/problems/valid-anagram/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 49,
+      "title": "Group Anagrams",
+      "original_category": "String",
+      "module_id": "P01",
+      "preparation_drill": "Create an immutable grouping key and append to its bucket",
+      "url": "https://leetcode.com/problems/group-anagrams/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 20,
+      "title": "Valid Parentheses",
+      "original_category": "String",
+      "module_id": "P03",
+      "preparation_drill": "Match a closing delimiter to the most recent opening delimiter",
+      "url": "https://leetcode.com/problems/valid-parentheses/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 125,
+      "title": "Valid Palindrome",
+      "original_category": "String",
+      "module_id": "P04",
+      "preparation_drill": "Skip ignored characters and compare normalized endpoints",
+      "url": "https://leetcode.com/problems/valid-palindrome/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 5,
+      "title": "Longest Palindromic Substring",
+      "original_category": "String",
+      "module_id": "P04",
+      "preparation_drill": "Expand odd and even centers and retain the best span",
+      "url": "https://leetcode.com/problems/longest-palindromic-substring/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 647,
+      "title": "Palindromic Substrings",
+      "original_category": "String",
+      "module_id": "P04",
+      "preparation_drill": "Count each successful expansion around every center",
+      "url": "https://leetcode.com/problems/palindromic-substrings/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 271,
+      "title": "Encode and Decode Strings",
+      "original_category": "String",
+      "module_id": "P01",
+      "preparation_drill": "Parse explicit lengths instead of relying on a delimiter alone",
+      "url": "https://leetcode.com/problems/encode-and-decode-strings/",
+      "access_note": "Historically restricted; verify at authoring and provide an original local practice contract"
+    },
+    {
+      "id": 104,
+      "title": "Maximum Depth of Binary Tree",
+      "original_category": "Tree",
+      "module_id": "P09",
+      "preparation_drill": "Return zero for an empty node and combine child depths",
+      "url": "https://leetcode.com/problems/maximum-depth-of-binary-tree/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 100,
+      "title": "Same Tree",
+      "original_category": "Tree",
+      "module_id": "P09",
+      "preparation_drill": "Compare null structure and values recursively",
+      "url": "https://leetcode.com/problems/same-tree/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 226,
+      "title": "Invert Binary Tree",
+      "original_category": "Tree",
+      "module_id": "P09",
+      "preparation_drill": "Swap child references and process each subtree",
+      "url": "https://leetcode.com/problems/invert-binary-tree/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 124,
+      "title": "Binary Tree Maximum Path Sum",
+      "original_category": "Tree",
+      "module_id": "P09",
+      "preparation_drill": "Separate a returned one-branch gain from a global two-branch best",
+      "url": "https://leetcode.com/problems/binary-tree-maximum-path-sum/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 102,
+      "title": "Binary Tree Level Order Traversal",
+      "original_category": "Tree",
+      "module_id": "P09",
+      "preparation_drill": "Process exactly the current queue length for each level",
+      "url": "https://leetcode.com/problems/binary-tree-level-order-traversal/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 297,
+      "title": "Serialize and Deserialize Binary Tree",
+      "original_category": "Tree",
+      "module_id": "P09",
+      "preparation_drill": "Round-trip structure using explicit null markers",
+      "url": "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 572,
+      "title": "Subtree of Another Tree",
+      "original_category": "Tree",
+      "module_id": "P09",
+      "preparation_drill": "Combine a structural equality helper with a search over roots",
+      "url": "https://leetcode.com/problems/subtree-of-another-tree/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 105,
+      "title": "Construct Binary Tree from Preorder and Inorder Traversal",
+      "original_category": "Tree",
+      "module_id": "P09",
+      "preparation_drill": "Use a root position to partition left and right subtree ranges",
+      "url": "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 98,
+      "title": "Validate Binary Search Tree",
+      "original_category": "Tree",
+      "module_id": "P09",
+      "preparation_drill": "Carry ancestor bounds rather than checking only direct children",
+      "url": "https://leetcode.com/problems/validate-binary-search-tree/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 230,
+      "title": "Kth Smallest Element in a BST",
+      "original_category": "Tree",
+      "module_id": "P09",
+      "preparation_drill": "Use inorder traversal and count visited values",
+      "url": "https://leetcode.com/problems/kth-smallest-element-in-a-bst/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 235,
+      "title": "Lowest Common Ancestor of a Binary Search Tree",
+      "original_category": "Tree",
+      "module_id": "P09",
+      "preparation_drill": "Choose a subtree or stop when the target paths split",
+      "url": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 208,
+      "title": "Implement Trie (Prefix Tree)",
+      "original_category": "Tree",
+      "module_id": "P11",
+      "preparation_drill": "Create child nodes and distinguish a full word from a prefix",
+      "url": "https://leetcode.com/problems/implement-trie-prefix-tree/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 211,
+      "title": "Design Add and Search Words Data Structure",
+      "original_category": "Tree",
+      "module_id": "P11",
+      "preparation_drill": "Explore alternative trie children for a wildcard",
+      "url": "https://leetcode.com/problems/design-add-and-search-words-data-structure/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 212,
+      "title": "Word Search II",
+      "original_category": "Tree",
+      "module_id": "P11",
+      "preparation_drill": "Combine prefix pruning with visited-cell backtracking",
+      "url": "https://leetcode.com/problems/word-search-ii/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 347,
+      "title": "Top K Frequent Elements",
+      "original_category": "Heap",
+      "module_id": "P12",
+      "preparation_drill": "Count occurrences then maintain the selected candidates",
+      "url": "https://leetcode.com/problems/top-k-frequent-elements/",
+      "access_note": "Verify official access at authoring"
+    },
+    {
+      "id": 295,
+      "title": "Find Median from Data Stream",
+      "original_category": "Heap",
+      "module_id": "P12",
+      "preparation_drill": "Balance two heaps and preserve their ordering invariant",
+      "url": "https://leetcode.com/problems/find-median-from-data-stream/",
+      "access_note": "Verify official access at authoring"
+    }
+  ],
+  "updated": "2026-10-19",
+  "title": "Python Fluency for Engineering Interviews",
+  "primary_goal": "Read, trace, write, modify and explain ordinary Python; apply the shared foundation to practical scripts and the original Blind 75.",
+  "practice_modes": [
+    "read",
+    "trace",
+    "write",
+    "modify",
+    "explain"
+  ],
+  "applications": [
+    "foundations",
+    "scripts",
+    "blind75"
+  ],
+  "learning_objectives": [
+    "Read unfamiliar short Python and explain input, control flow, output and failure cases in plain English",
+    "Trace variable values, function returns and mutable state",
+    "Write a small script from a requirement using functions and files",
+    "Modify an existing script and check changed behavior",
+    "Use library documentation while understanding language syntax and operational assumptions",
+    "Reason about a Blind 75 problem independently of its Python implementation"
+  ],
+  "script_projects": [
+    {
+      "id": "S01",
+      "title": "Summarize an inventory",
+      "requires_foundations": [
+        "F07",
+        "F08"
+      ],
+      "requires_projects": [],
+      "contract": "Filter supplied service dictionaries and count by status",
+      "modification_drill": "Add a region filter and handle a missing status",
+      "execution": "Supplied fixtures and virtual files; no live external or cloud calls",
+      "practice_modes": [
+        "read",
+        "trace",
+        "write",
+        "modify",
+        "explain"
+      ]
+    },
+    {
+      "id": "S02",
+      "title": "Summarize a log file",
+      "requires_foundations": [
+        "F10",
+        "F11"
+      ],
+      "requires_projects": [
+        "S01"
+      ],
+      "contract": "Read a text fixture; count severities and malformed lines",
+      "modification_drill": "Filter warnings/errors while retaining the malformed-line count",
+      "execution": "Supplied fixtures and virtual files; no live external or cloud calls",
+      "practice_modes": [
+        "read",
+        "trace",
+        "write",
+        "modify",
+        "explain"
+      ]
+    },
+    {
+      "id": "S03",
+      "title": "Validate a configuration",
+      "requires_foundations": [
+        "F10",
+        "F11"
+      ],
+      "requires_projects": [
+        "S01"
+      ],
+      "contract": "Load supplied JSON and report required-field/type errors",
+      "modification_drill": "Distinguish missing fields from explicit false values",
+      "execution": "Supplied fixtures and virtual files; no live external or cloud calls",
+      "practice_modes": [
+        "read",
+        "trace",
+        "write",
+        "modify",
+        "explain"
+      ]
+    },
+    {
+      "id": "S04",
+      "title": "Produce a CSV report",
+      "requires_foundations": [
+        "F10",
+        "F11"
+      ],
+      "requires_projects": [
+        "S01"
+      ],
+      "contract": "Normalize supplied CSV rows and produce a summary",
+      "modification_drill": "Change grouping and handle empty or invalid numeric input",
+      "execution": "Supplied fixtures and virtual files; no live external or cloud calls",
+      "practice_modes": [
+        "read",
+        "trace",
+        "write",
+        "modify",
+        "explain"
+      ]
+    },
+    {
+      "id": "S05",
+      "title": "Assemble a reusable script",
+      "requires_foundations": [
+        "F10",
+        "F11"
+      ],
+      "requires_projects": [
+        "S03",
+        "S04"
+      ],
+      "contract": "Split a script into modules and introduce argument/logging/exit concepts",
+      "modification_drill": "Add an input path and a dry-run mode with no output writes",
+      "execution": "Supplied fixtures and virtual files; no live external or cloud calls",
+      "practice_modes": [
+        "read",
+        "trace",
+        "write",
+        "modify",
+        "explain"
+      ]
+    },
+    {
+      "id": "S06",
+      "title": "Read and adapt an API script",
+      "requires_foundations": [
+        "F10",
+        "F11"
+      ],
+      "requires_projects": [
+        "S03",
+        "S05"
+      ],
+      "contract": "Read a fake-client script and process supplied success/error/timeout/page fixtures",
+      "modification_drill": "Handle all pages and explain failed-page/retry tradeoffs without live calls",
+      "execution": "Supplied fixtures and virtual files; no live external or cloud calls",
+      "practice_modes": [
+        "read",
+        "trace",
+        "write",
+        "modify",
+        "explain"
+      ]
+    }
+  ],
+  "first_milestone": {
+    "title": "Use Python for a small ordinary program",
+    "evidence": [
+      "Explain an unfamiliar short script",
+      "Write and call a function",
+      "Read a supplied file and produce a result",
+      "Modify the program for one changed requirement"
+    ],
+    "advanced_algorithms_required": false,
+    "explanation_assessment": "Learner checklist/self-review; separate from automated code tests"
+  },
+  "default_experience": {
+    "format": "rapid-fire coding reps in Monaco",
+    "round_size": 10,
+    "round_mix": {
+      "due_review": 4,
+      "current_skill_variations": 4,
+      "short_application": 2
+    },
+    "mix_fallback": "Use taught beginner skills when review or application cards are unavailable",
+    "answer_formats": [
+      "write-snippet",
+      "complete-snippet",
+      "fix-snippet",
+      "modify-snippet",
+      "create-file"
+    ],
+    "feedback_flow": [
+      "write Python",
+      "explicit Run code",
+      "show specific execution/check feedback under editor",
+      "explicit Next rep"
+    ],
+    "wrong_answer_revisit_after_intervening_cards": {
+      "minimum": 2,
+      "maximum": 4
+    },
+    "authoring_targets_seconds": {
+      "ordinary_card": [
+        10,
+        30
+      ],
+      "tiny_writing": [
+        30,
+        60
+      ]
+    },
+    "authoring_targets_are_deadlines": false,
+    "auto_advance_default": false,
+    "coding_execution": "Only on explicit submit; warm runtime for coding rounds; show running state",
+    "longer_application_mode": "Clearly labelled script or full Blind 75 checkpoint; not the default daily card",
+    "progress_rule": "Track scaffold and hint assistance separately from independent code writing",
+    "feedback_detail": "One short explanation by default; longer explanation expandable",
+    "choice_quizzes": false
+  },
+  "prototype": {
+    "path": "frontend/mockups/python-path",
+    "scope": "First variable assignment exercise only",
+    "existing_app_changed": false,
+    "python_execution": "Real Pyodide 0.26.4 browser worker"
+  }
+}

@@ -10,7 +10,7 @@ try {
   const errors = [], cdn = []
   page.on('pageerror', event => { errors.push(event.message); console.log('Page error:', event.message) })
   page.on('request', request => { if (request.url().includes('jsdelivr.net')) cdn.push(request.url()) })
-  await page.goto('http://127.0.0.1:4315/#interview', { waitUntil: 'networkidle' })
+  await page.goto(process.env.PRACTICE_BASE_URL ?? 'http://127.0.0.1:4315/#interview', { waitUntil: 'networkidle' })
   await page.getByRole('heading', { name: 'Understand it. Explain it. Repeat it.' }).waitFor()
   await page.getByRole('heading', { name: 'Know what each language is for' }).waitFor()
   await page.getByLabel('Search interview topics').fill('SOLID')

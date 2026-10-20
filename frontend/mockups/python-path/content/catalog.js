@@ -1,4 +1,4 @@
-import manifest from '../../../../docs/python-blind75-curriculum.json' with { type: 'json' }
+import manifest from './curriculum.json' with { type: 'json' }
 
 export const foundationUnits = manifest.foundation_units
 export const patternModules = manifest.problem_modules

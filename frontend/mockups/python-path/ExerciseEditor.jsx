@@ -1,12 +1,8 @@
 import React, { useRef } from 'react'
 import { Box, Button, CircularProgress, Stack, Tab, Tabs, Typography } from '@mui/material'
-import Editor, { loader } from '@monaco-editor/react'
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
-import 'monaco-editor/esm/vs/basic-languages/python/python.contribution'
-import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker.js?worker'
+import Editor from '@monaco-editor/react'
+import './editorRuntime.js'
 
-globalThis.MonacoEnvironment = { getWorker: () => new EditorWorker() }
-loader.config({ monaco })
 export const mono = '"Cascadia Code", Consolas, monospace'
 export const definePracticeTheme = api => api.editor.defineTheme('synlab-practice', { base: 'vs-dark', inherit: true, rules: [{ token: 'comment', foreground: '64758c', fontStyle: 'italic' }], colors: { 'editor.background': '#101722', 'editor.foreground': '#d7e3f3', 'editorLineNumber.foreground': '#52657e', 'editorCursor.foreground': '#98e7c4' } })
 
@@ -37,7 +33,7 @@ export default function ExerciseEditor({ exercise, files, active, setActive, cha
         onChange={value => change(value ?? '')} theme="synlab-practice"
         beforeMount={definePracticeTheme}
         onMount={(instance, api) => { instance.addCommand(api.KeyMod.CtrlCmd | api.KeyCode.Enter, () => runAction.current()); instance.focus() }}
-        options={{ ariaLabel: 'Python code editor', fontFamily: mono, fontSize: 16, lineHeight: 27, minimap: { enabled: false }, tabSize: 4, automaticLayout: true, scrollBeyondLastLine: false, padding: { top: 15 }, quickSuggestions: false, suggestOnTriggerCharacters: false, wordBasedSuggestions: 'off', readOnly: status === 'running' }} />
+        options={{ ariaLabel: 'Python code editor', fontFamily: mono, fontSize: 16, lineHeight: 27, minimap: { enabled: false }, tabSize: 4, automaticLayout: true, occurrencesHighlight: 'off', scrollBeyondLastLine: false, padding: { top: 15 }, quickSuggestions: false, suggestOnTriggerCharacters: false, wordBasedSuggestions: 'off', readOnly: status === 'running' }} />
     </Box>
     <Stack direction="row" spacing={1} sx={{ p: 1.5, alignItems: 'center', borderTop: '1px solid', borderColor: 'divider' }}>
       <Button onClick={hint} size="small" sx={{ color: 'text.secondary' }}>Need a hint?</Button>

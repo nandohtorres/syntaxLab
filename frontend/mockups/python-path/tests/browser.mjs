@@ -9,12 +9,12 @@ const browser = await chromium.launch({ headless: true })
 try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1060 } })
   const errors = []
-  page.on('pageerror', error => errors.push(error.message))
-  await page.goto('http://127.0.0.1:4315/', { waitUntil: 'networkidle' })
+  page.on('pageerror', error => { errors.push(error.message); console.log('Page error:', error.stack) })
+  await page.goto(process.env.PRACTICE_BASE_URL ?? 'http://127.0.0.1:4315/', { waitUntil: 'networkidle' })
   await page.getByText('Python ready', { exact: true }).waitFor({ timeout: 65000 })
   console.log('UI runtime ready; checking all authored solutions')
-  const outcomes = await page.evaluate(async exercises => {
-    const worker = new Worker('/python.worker.js', { type: 'module' })
+  const outcomes = await page.evaluate(async ({ exercises, workerUrl }) => {
+    const worker = new Worker(workerUrl, { type: 'module' })
     await new Promise((resolve, reject) => {
       const timeout = setTimeout(() => reject(new Error('Worker initialization timed out')), 65000)
       worker.onmessage = ({ data }) => { clearTimeout(timeout); data.type === 'ready' ? resolve() : reject(new Error(JSON.stringify(data))) }
@@ -31,7 +31,7 @@ try {
     }
     worker.terminate()
     return results
-  }, lessons)
+  }, { exercises: lessons, workerUrl: process.env.PYTHON_WORKER_URL ?? '/python.worker.js' })
   writeFileSync(new URL('../.cache/browser-content-report.json', import.meta.url), JSON.stringify(outcomes, null, 2))
   assert.deepEqual(outcomes.filter(item => !item.passed), [], 'All reference solutions must pass real Pyodide')
   async function write(code) {

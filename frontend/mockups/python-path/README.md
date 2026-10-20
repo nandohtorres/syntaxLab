@@ -1,7 +1,8 @@
 ﻿# Python Path
 
-A functioning standalone learning section using the approved editor layout.
-The original website integration and wider UI redesign remain deferred.
+A functioning learning workspace using the approved editor layout, now integrated
+into the normal SyntaxLab frontend. The standalone preview below is still
+available for isolated development. Wider UI redesign remains deferred.
 
 From this worktree root:
 
@@ -65,7 +66,8 @@ next/search, multi-file creation and imports, saved drafts/notes after reload,
 hints, backup export/import, stop/recovery and mobile overflow/navigation.
 Six Node tests cover retention, assistance, review scheduling, duplicate results,
 retry selection and backup/path validation. The production build passes. These
-checks exercise the standalone section; the original application is unchanged.
+initial checks exercised the standalone section; production integration checks
+below also verify the original application and navigation between all sections.
 
 Based on Pyodide's [worker guide](https://pyodide.org/en/0.26.4/usage/webworker.html)
 and [virtual filesystem](https://pyodide.org/en/0.26.4/usage/file-system.html).
@@ -107,3 +109,19 @@ export/import and mobile overflow. Four interview screenshots sit beside the
 Python screenshots. Primary-source links and source snapshot hashes are recorded
 in the generated docs; regenerate them from the shared content with the command
 above so the app and printable sheet agree.
+
+## Main-site integration (2026-10-20)
+
+The normal SyntaxLab frontend now imports this workspace with three site tabs:
+Original practice, Python Path (`/#python`) and Interview prep (`/#interview`).
+Use the normal frontend build for publication; the standalone server above is
+still available for isolated development. Section components are lazy-loaded,
+visited editors remain mounted across tabs, and original progress keys are kept.
+See [integration and release notes](../../../docs/python-path-site-integration.md).
+
+Local preview and online storage are different browser origins. Export/import a
+backup if you want to carry existing local practice data onto the deployed site.
+The new sections retain their approved dark layout; original practice keeps its
+existing light/dark appearance controls. Whole-site visual consolidation remains
+separate work. Build and browser validation do not imply a public release until
+the publishing workflow has completed.
