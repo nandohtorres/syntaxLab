@@ -1,6 +1,7 @@
 ﻿import { createRequire } from 'node:module'
 import assert from 'node:assert/strict'
 import { writeFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { lessons } from '../content/index.js'
 const require = createRequire(import.meta.url)
 const { chromium } = require(process.env.PLAYWRIGHT_PACKAGE ?? 'C:/Users/ferna/cursor projects/side-projects/archibrief-cleanup-codex/frontend/node_modules/@playwright/test')
@@ -81,12 +82,12 @@ try {
   await page.getByRole('button', { name: 'Stop', exact: true }).click()
   await page.getByText('Run stopped', { exact: true }).waitFor()
   await page.getByText('Python ready', { exact: true }).waitFor({ timeout: 65000 })
-  await page.screenshot({ path: new URL('../preview-desktop.png', import.meta.url).pathname.replace(/^\/(\w:)/, '$1'), fullPage: true })
+  await page.screenshot({ path: fileURLToPath(new URL('../preview-desktop.png', import.meta.url)), fullPage: true })
   await page.setViewportSize({ width: 390, height: 844 })
   await page.getByRole('button', { name: 'Learning path', exact: true }).click()
   await page.getByRole('button', { name: /Due review/ }).last().waitFor()
   await page.keyboard.press('Escape')
-  await page.screenshot({ path: new URL('../preview-mobile.png', import.meta.url).pathname.replace(/^\/(\w:)/, '$1'), fullPage: true })
+  await page.screenshot({ path: fileURLToPath(new URL('../preview-mobile.png', import.meta.url)), fullPage: true })
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true)
   assert.deepEqual(errors, [])
   console.log(`PASS: ${outcomes.length} exercises in real Pyodide; editor, wrong/correct answer, next, search, multi-file creation/import, notes/drafts reload, hints, export/import, stop/recovery and mobile navigation.`)
