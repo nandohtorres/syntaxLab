@@ -69,3 +69,41 @@ checks exercise the standalone section; the original application is unchanged.
 
 Based on Pyodide's [worker guide](https://pyodide.org/en/0.26.4/usage/webworker.html)
 and [virtual filesystem](https://pyodide.org/en/0.26.4/usage/file-system.html).
+
+## Interview prep
+
+A second tab is now available at `http://127.0.0.1:4315/#interview`.
+It contains 29 ordered topics, 66 short typed-response drills and 22 correction/
+scope entries based on the supplied PDF and reusable study guide. Both sources
+were read in full and remain unchanged. Personal narratives and historical hiring
+claims are not copied into the app. The source documents are not served by Vite.
+
+Use Study sheet, then Start practice: type a short explanation, query or code
+fragment in Monaco, Check my recall (or Ctrl/Cmd+Enter), compare with the reference
+and tick criteria your original response already covered. Needs another rep
+queues a related prompt; self-rated recall has its own review schedule. Rounds
+summarize ten responses. This section does not execute answers or use an AI judge.
+It uses `synlab_interview_recall_v1`, separate from Python Path. Exports identify
+the section so a backup cannot accidentally overwrite the other section.
+Interview-only visits do not download the Python runtime.
+
+Printable artifacts:
+
+- [Cheat sheet with all 66 drills at the end](../../../docs/interview-prep-cheat-sheet.md)
+- [Corrections and verification sources](../../../docs/interview-prep-corrections.md)
+
+Additional checks:
+
+```powershell
+node frontend/mockups/python-path/tests/build-study-docs.mjs
+node --test frontend/mockups/python-path/tests/progress.test.mjs frontend/mockups/python-path/tests/interview.test.mjs
+node frontend/mockups/python-path/tests/interview-browser.mjs
+```
+
+Validation: ten Node tests pass; the interview browser workflow passes for
+search/study, blank response gating, keyboard reveal, rubric controls, missed
+reps, ten-response rounds, correction notes, saved drafts, section-specific
+export/import and mobile overflow. Four interview screenshots sit beside the
+Python screenshots. Primary-source links and source snapshot hashes are recorded
+in the generated docs; regenerate them from the shared content with the command
+above so the app and printable sheet agree.

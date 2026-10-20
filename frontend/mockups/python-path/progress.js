@@ -46,7 +46,10 @@ export function dueLessons(lessons, progress, now=Date.now()) {
 export function pickNext(pool, currentId, progress, queued=[], turn=0) {
   if (!pool.length) return null
   const due=queued.find(item=>item.turn<=turn && pool.some(exercise=>exercise.skillId===item.skillId))
-  if (due) return pool.find(exercise=>exercise.skillId===due.skillId && exercise.id!==currentId) ?? pool.find(exercise=>exercise.skillId===due.skillId)
+  if (due) {
+    const alternatives=pool.filter(exercise=>exercise.skillId===due.skillId && exercise.id!==(due.fromId ?? currentId))
+    return alternatives.find(exercise=>!progress.records[exercise.id]?.successes) ?? alternatives[0] ?? pool.find(exercise=>exercise.skillId===due.skillId)
+  }
   const index=pool.findIndex(exercise=>exercise.id===currentId)
   const ordered=[...pool.slice(index+1),...pool.slice(0,index+1)]
   return ordered.find(exercise=>!progress.records[exercise.id]?.successes) ?? ordered.find(exercise=>exercise.id!==currentId) ?? pool[0]
@@ -64,8 +67,9 @@ export function cleanFiles(files) {
   return Object.fromEntries(entries)
 }
 
-export function normalizeBackup(value, lessons) {
+export function normalizeBackup(value, lessons, kind = 'python-path') {
   if (!object(value) || value.version!==1 || !object(value.progress) || value.progress.version!==1) throw new Error('This is not a supported Python Path backup.')
+  if (value.kind && value.kind !== kind) throw new Error('This backup belongs to a different practice section.')
   const known=new Map(lessons.map(exercise=>[exercise.id,exercise]))
   const progress=blankProgress()
   const number=x=>typeof x==='number' && Number.isFinite(x) && x>=0
@@ -91,7 +95,7 @@ export function normalizeBackup(value, lessons) {
   for (const [id,note] of Object.entries(value.notes ?? {})) {
     if (known.has(id) && typeof note==='string') notes[id]=note.slice(0,3000)
   }
-  return {version:1,progress,drafts,notes,selectedId:known.has(value.selectedId)?value.selectedId:lessons[0].id}
+  return {version:1,kind,progress,drafts,notes,selectedId:known.has(value.selectedId)?value.selectedId:lessons[0].id}
 }
 
 export function loadSaved(storage, lessons) {

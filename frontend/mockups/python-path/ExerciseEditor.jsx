@@ -8,6 +8,7 @@ import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker.js?worker'
 globalThis.MonacoEnvironment = { getWorker: () => new EditorWorker() }
 loader.config({ monaco })
 export const mono = '"Cascadia Code", Consolas, monospace'
+export const definePracticeTheme = api => api.editor.defineTheme('synlab-practice', { base: 'vs-dark', inherit: true, rules: [{ token: 'comment', foreground: '64758c', fontStyle: 'italic' }], colors: { 'editor.background': '#101722', 'editor.foreground': '#d7e3f3', 'editorLineNumber.foreground': '#52657e', 'editorCursor.foreground': '#98e7c4' } })
 
 export function download(name, text, type = 'text/plain') {
   const url = URL.createObjectURL(new Blob([text], { type }))
@@ -34,7 +35,7 @@ export default function ExerciseEditor({ exercise, files, active, setActive, cha
       <Editor height="100%" path={`${exercise.id}/${active}`} value={files[active] ?? ''}
         language={active.endsWith('.py') ? 'python' : active.endsWith('.json') ? 'json' : 'plaintext'}
         onChange={value => change(value ?? '')} theme="synlab-practice"
-        beforeMount={api => api.editor.defineTheme('synlab-practice', { base: 'vs-dark', inherit: true, rules: [{ token: 'comment', foreground: '64758c', fontStyle: 'italic' }], colors: { 'editor.background': '#101722', 'editor.foreground': '#d7e3f3', 'editorLineNumber.foreground': '#52657e', 'editorCursor.foreground': '#98e7c4' } })}
+        beforeMount={definePracticeTheme}
         onMount={(instance, api) => { instance.addCommand(api.KeyMod.CtrlCmd | api.KeyCode.Enter, () => runAction.current()); instance.focus() }}
         options={{ ariaLabel: 'Python code editor', fontFamily: mono, fontSize: 16, lineHeight: 27, minimap: { enabled: false }, tabSize: 4, automaticLayout: true, scrollBeyondLastLine: false, padding: { top: 15 }, quickSuggestions: false, suggestOnTriggerCharacters: false, wordBasedSuggestions: 'off', readOnly: status === 'running' }} />
     </Box>

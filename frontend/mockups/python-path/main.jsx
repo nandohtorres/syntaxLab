@@ -1,7 +1,7 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { createTheme, ThemeProvider, CssBaseline } from '@mui/material'
-import PracticePreview from './PracticePreview.jsx'
+import PracticeWorkspace from './PracticeWorkspace.jsx'
 
 const theme = createTheme({
   palette: {
@@ -25,6 +25,6 @@ const theme = createTheme({
 createRoot(document.getElementById('root')).render(
   <ThemeProvider theme={theme}>
     <CssBaseline />
-    <PracticePreview />
+    <PracticeWorkspace />
   </ThemeProvider>,
 )

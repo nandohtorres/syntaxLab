@@ -36,6 +36,8 @@ test('duplicate result is idempotent and failures are immediately due',()=>{
 })
 test('a corrected skill returns after intervening reps as another variant',()=>{
   assert.equal(pickNext([base,b,c],'a',blankProgress(),[{skillId:'assign',turn:3}],3).id,'b')
+  const p=recordAttempt(blankProgress(),b,success('already-practiced'),start)
+  assert.equal(pickNext([base,b,c],'unrelated',p,[{skillId:'assign',fromId:'a',turn:3}],3).id,'c')
 })
 test('backup preserves drafts and rejects unsupported schemas and file traversal',()=>{
   const backup={version:1,progress:blankProgress(),drafts:{a:{'main.py':'retries=3'},b:{'../bad.py':'x=1'}},notes:{a:'why'},selectedId:'a'}

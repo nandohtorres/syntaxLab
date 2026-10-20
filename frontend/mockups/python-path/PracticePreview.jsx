@@ -16,7 +16,7 @@ function initialState() {
     return { saved: null, error: 'Saved practice data could not be read. Automatic saving is paused. Export the stored data before starting fresh.' }
   }
 }
-const empty = { version: 1, progress: blankProgress(), drafts: {}, notes: {}, selectedId: firstLesson.id }
+const empty = { version: 1, kind: 'python-path', progress: blankProgress(), drafts: {}, notes: {}, selectedId: firstLesson.id }
 
 export default function PracticePreview() {
   const [initial] = useState(initialState)
@@ -91,7 +91,7 @@ export default function PracticePreview() {
     } else {
       assisted.current = true
       helped.current = true
-      if (!retryQueue.current.some(item => item.skillId === exercise.skillId)) retryQueue.current.push({ skillId: exercise.skillId, turn: turn.current + 3 })
+      if (!retryQueue.current.some(item => item.skillId === exercise.skillId)) retryQueue.current.push({ skillId: exercise.skillId, fromId: exercise.id, turn: turn.current + 3 })
     }
   }
   function next() {
@@ -195,7 +195,7 @@ export default function PracticePreview() {
     </Dialog>
     <Dialog open={fileDialog} onClose={() => setFileDialog(false)} fullWidth maxWidth="xs"><DialogTitle>Create a workspace file</DialogTitle><DialogContent><TextField autoFocus fullWidth label="File name" value={fileName} onChange={event => setFileName(event.target.value)} error={!!fileError} helperText={fileError || 'For example: helpers.py'} sx={{ mt: 1 }} /></DialogContent><DialogActions><Button onClick={() => setFileDialog(false)}>Cancel</Button><Button onClick={addFile}>Create file</Button></DialogActions></Dialog>
     <Dialog open={resetDialog} onClose={() => setResetDialog(false)}><DialogTitle>Reset this exercise’s workspace?</DialogTitle><DialogContent>Your saved code for this exercise will be replaced by its starter files. Export a backup first if you want to keep it. Progress is kept. Hints or mistakes during this visit still count as assistance.</DialogContent><DialogActions><Button onClick={() => setResetDialog(false)}>Cancel</Button><Button onClick={() => { setData(current => ({ ...current, drafts: { ...current.drafts, [exercise.id]: exercise.initialFiles } })); assisted.current = helped.current; setActive(exercise.entry); clearResult(); setResetDialog(false) }}>Reset workspace</Button></DialogActions></Dialog>
-    <Dialog open={!!imported} onClose={() => setImported(null)}><DialogTitle>Replace Python Path data?</DialogTitle><DialogContent>This backup contains {Object.keys(imported?.drafts ?? {}).length} workspaces and {Object.keys(imported?.progress.records ?? {}).length} exercise records. Import replaces this section’s saved work. Export your current backup first.</DialogContent><DialogActions><Button onClick={() => setImported(null)}>Cancel</Button><Button onClick={() => { const nextExercise = byId.get(imported.selectedId); setData(imported); setActive(nextExercise.entry); setHint(0); setSolution(false); assisted.current = false; credited.current = false; clearResult(); setReviewMode(false); retryQueue.current = []; setRound({ completed: 0, independent: 0 }); setImported(null); setSaving(true); setStorageError('') }}>Replace with backup</Button></DialogActions></Dialog>
+    <Dialog open={!!imported} onClose={() => setImported(null)}><DialogTitle>Replace Python Path data?</DialogTitle><DialogContent>This backup contains {Object.keys(imported?.drafts ?? {}).length} workspaces and {Object.keys(imported?.progress.records ?? {}).length} exercise records. Import replaces this section’s saved work. Export your current backup first.</DialogContent><DialogActions><Button onClick={() => setImported(null)}>Cancel</Button><Button onClick={() => { const nextExercise = byId.get(imported.selectedId); setData(imported); setActive(nextExercise.entry); setHint(0); setSolution(false); helped.current = false; assisted.current = !!imported.drafts[nextExercise.id] && !!imported.progress.records[nextExercise.id]?.successes; credited.current = false; clearResult(); setReviewMode(false); retryQueue.current = []; setRound({ completed: 0, independent: 0 }); setImported(null); setSaving(true); setStorageError('') }}>Replace with backup</Button></DialogActions></Dialog>
     <Dialog open={roundDialog} onClose={() => setRoundDialog(false)}><DialogTitle>Ten more reps done.</DialogTitle><DialogContent>{round.completed} completed this session; {round.independent} passed without help on that visit. Retained status requires evidence across different days, plus different variations where available. Take a break or keep going.</DialogContent><DialogActions><Button onClick={() => setRoundDialog(false)}>Continue practice</Button></DialogActions></Dialog>
     <Dialog open={!!notice} onClose={() => setNotice('')}><DialogTitle>Practice update</DialogTitle><DialogContent>{notice}</DialogContent><DialogActions><Button onClick={() => setNotice('')}>Got it</Button></DialogActions></Dialog>
   </Box>
