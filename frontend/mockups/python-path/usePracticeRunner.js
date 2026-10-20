@@ -4,6 +4,8 @@ export default function usePracticeRunner() {
   const worker = useRef(null)
   const sequence = useRef(0)
   const timer = useRef(null)
+  const pending = useRef(null)
+  const busy = useRef(false)
   const [status, setStatus] = useState('loading')
   const [result, setResult] = useState(null)
   const [generation, setGeneration] = useState(0)
@@ -25,21 +27,31 @@ export default function usePracticeRunner() {
         setStatus('unavailable')
       } else if (data.id === sequence.current) {
         clearTimeout(timer.current)
+        busy.current = false
         setStatus('ready')
-        setResult(data.type === 'result' ? data.result : {
+        const outcome = data.type === 'result' ? data.result : {
           passed: false, title: 'Let’s try that again', message: 'The code could not finish. Reset the runner and try again.',
-        })
+        }
+        setResult(outcome)
+        pending.current?.(outcome)
+        pending.current = null
       }
     }
     instance.onerror = () => {
       clearTimeout(startup)
       clearTimeout(timer.current)
+      busy.current = false
+      pending.current?.(null)
+      pending.current = null
       setStatus('unavailable')
     }
     return () => {
       clearTimeout(startup)
       clearTimeout(timer.current)
       instance.terminate()
+      busy.current = false
+      pending.current?.(null)
+      pending.current = null
     }
   }, [generation])
 
@@ -47,6 +59,9 @@ export default function usePracticeRunner() {
     sequence.current += 1
     clearTimeout(timer.current)
     worker.current?.terminate()
+    busy.current = false
+    pending.current?.(null)
+    pending.current = null
     setStatus('loading')
     setGeneration(value => value + 1)
   }, [])
@@ -56,20 +71,19 @@ export default function usePracticeRunner() {
     restart()
   }, [restart])
 
-  const run = useCallback(code => {
-    if (status !== 'ready') return
-    if (code.length > 4000) {
-      setResult({ passed: false, title: 'Keep this rep small', message: 'This first exercise only needs a line or two.' })
-      return
-    }
+  const run = useCallback(payload => {
+    if (status !== 'ready' || busy.current) return Promise.resolve(null)
     setStatus('running')
     setResult(null)
     const id = ++sequence.current
-    worker.current.postMessage({ type: 'run', id, code })
+    busy.current = true
+    const completion = new Promise(resolve => { pending.current = resolve })
+    worker.current.postMessage({ type: 'run', id, ...payload })
     timer.current = setTimeout(() => {
       setResult({ passed: false, title: 'That run took too long', message: 'This rep should finish immediately. Check for an endless loop, then try again.' })
       restart()
     }, 5000)
+    return completion
   }, [restart, status])
 
   return { status, result, run, stop, restart, clearResult: () => setResult(null) }

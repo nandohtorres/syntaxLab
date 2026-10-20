@@ -1,207 +1,202 @@
-import React, { useEffect, useRef, useState } from 'react'
-import {
-  Box, Button, Chip, CircularProgress, Collapse, Dialog, DialogActions,
-  DialogContent, DialogTitle, Divider, IconButton, Stack, Tooltip, Typography,
-} from '@mui/material'
-import TerminalRoundedIcon from '@mui/icons-material/TerminalRounded'
-import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded'
-import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded'
-import RestartAltRoundedIcon from '@mui/icons-material/RestartAltRounded'
-import LightbulbOutlinedIcon from '@mui/icons-material/LightbulbOutlined'
-import CheckRoundedIcon from '@mui/icons-material/CheckRounded'
-import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded'
-import CodeRoundedIcon from '@mui/icons-material/CodeRounded'
-import StopRoundedIcon from '@mui/icons-material/StopRounded'
-import Editor, { loader } from '@monaco-editor/react'
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
-import 'monaco-editor/esm/vs/basic-languages/python/python.contribution'
-import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker.js?worker'
+﻿import React, { useEffect, useRef, useState } from 'react'
+import { Alert, Box, Button, Chip, Collapse, Dialog, DialogActions, DialogContent, DialogTitle, Drawer, Stack, TextField, Typography } from '@mui/material'
+import { lessons, byId, firstLesson } from './content/index.js'
+import { tracks } from './content/catalog.js'
+import { blankProgress, dueLessons, normalizeBackup, pickNext, recordAttempt, skillStatus, STORAGE_KEY, validFilePath } from './progress.js'
+import ExerciseEditor, { download, mono } from './ExerciseEditor.jsx'
+import FeedbackPanel from './FeedbackPanel.jsx'
+import PathSidebar from './PathSidebar.jsx'
 import usePracticeRunner from './usePracticeRunner.js'
 
-globalThis.MonacoEnvironment = { getWorker: () => new EditorWorker() }
-loader.config({ monaco })
-
-const mono = '"Cascadia Code", "Cascadia Mono", Consolas, monospace'
-const initialCode = '# Write your Python here\n'
-const path = ['Variables & values', 'Strings & expressions', 'Conditions & loops', 'Functions & methods', 'Files & small scripts', 'Blind 75 building blocks']
+function initialState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    return raw ? { saved: normalizeBackup(JSON.parse(raw), lessons), error: '' } : { saved: null, error: '' }
+  } catch {
+    return { saved: null, error: 'Saved practice data could not be read. Automatic saving is paused. Export the stored data before starting fresh.' }
+  }
+}
+const empty = { version: 1, progress: blankProgress(), drafts: {}, notes: {}, selectedId: firstLesson.id }
 
 export default function PracticePreview() {
-  const [code, setCode] = useState(initialCode)
-  const [hint, setHint] = useState(false)
+  const [initial] = useState(initialState)
+  const [data, setData] = useState(initial.saved ?? empty)
+  const [storageError, setStorageError] = useState(initial.error)
+  const [saving, setSaving] = useState(!initial.error)
+  const exercise = byId.get(data.selectedId) ?? firstLesson
+  const files = data.drafts[exercise.id] ?? exercise.initialFiles
+  const [active, setActive] = useState(exercise.entry)
+  const [hint, setHint] = useState(0)
   const [solution, setSolution] = useState(false)
-  const [complete, setComplete] = useState(false)
-  const editor = useRef(null)
-  const runAction = useRef(null)
+  const assisted = useRef(!!initial.saved?.drafts[exercise.id] && !!initial.saved?.progress.records[exercise.id]?.successes)
+  const helped = useRef(false)
+  const credited = useRef(false)
+  const [catalog, setCatalog] = useState(false)
+  const [search, setSearch] = useState('')
+  const [drawer, setDrawer] = useState(false)
+  const [reviewMode, setReviewMode] = useState(false)
+  const [notice, setNotice] = useState('')
+  const [fileDialog, setFileDialog] = useState(false)
+  const [fileName, setFileName] = useState('')
+  const [fileError, setFileError] = useState('')
+  const [resetDialog, setResetDialog] = useState(false)
+  const [imported, setImported] = useState(null)
+  const importInput = useRef(null)
+  const [round, setRound] = useState({ completed: 0, independent: 0 })
+  const [roundDialog, setRoundDialog] = useState(false)
+  const turn = useRef(0)
+  const retryQueue = useRef([])
   const { status, result, run, stop, restart, clearResult } = usePracticeRunner()
+  const busy = status === 'running'
+  const due = dueLessons(lessons, data.progress)
+  const learned = lessons.filter(item => data.progress.records[item.id]?.successes)
+  const variants = lessons.filter(item => item.skillId === exercise.skillId).length
   const passed = result?.passed === true
+
   useEffect(() => {
-    runAction.current = () => run(editor.current?.getValue() ?? code)
-  }, [code, run])
+    if (!saving) return
+    const timer = setTimeout(() => {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)) }
+      catch { setStorageError('Browser storage is full or unavailable. Export a backup to keep this session.'); setSaving(false) }
+    }, 350)
+    return () => clearTimeout(timer)
+  }, [data, saving])
 
-  function changeCode(value) {
-    setCode(value ?? '')
-    clearResult()
-  }
-
-  function reset() {
-    if (status === 'running') stop()
-    setCode(initialCode)
-    setHint(false)
+  function choose(next, reviewing = false) {
+    if (!next || busy) return
+    setData(current => ({ ...current, selectedId: next.id }))
+    setActive(next.entry)
+    setHint(0)
     setSolution(false)
+    assisted.current = !!data.drafts[next.id] && !!data.progress.records[next.id]?.successes
+    helped.current = false
+    credited.current = false
     clearResult()
-    setComplete(false)
-    editor.current?.focus()
+    setReviewMode(reviewing)
+    setDrawer(false)
+    setCatalog(false)
   }
+  function change(value) {
+    setData(current => ({ ...current, drafts: { ...current.drafts, [exercise.id]: { ...files, [active]: value } } }))
+    clearResult()
+  }
+  async function submit() {
+    const outcome = await run({ exercise, files })
+    if (!outcome || credited.current) return
+    const wasAssisted = assisted.current
+    setData(current => ({ ...current, progress: recordAttempt(current.progress, exercise, { id: crypto.randomUUID(), passed: outcome.passed, assisted: wasAssisted }) }))
+    if (outcome.passed) {
+      credited.current = true
+      setRound(current => ({ completed: current.completed + 1, independent: current.independent + (wasAssisted ? 0 : 1) }))
+    } else {
+      assisted.current = true
+      helped.current = true
+      if (!retryQueue.current.some(item => item.skillId === exercise.skillId)) retryQueue.current.push({ skillId: exercise.skillId, turn: turn.current + 3 })
+    }
+  }
+  function next() {
+    turn.current += 1
+    const pool = reviewMode ? due : lessons.filter(item => item.track === exercise.track)
+    const nextExercise = pickNext(pool, exercise.id, data.progress, retryQueue.current, turn.current)
+    if (nextExercise) {
+      retryQueue.current = retryQueue.current.filter(item => item.skillId !== nextExercise.skillId || item.turn > turn.current)
+      choose(nextExercise, reviewMode)
+    } else {
+      setNotice('You have completed the due review queue. Come back later, or choose another track.')
+      choose(lessons.find(item => !data.progress.records[item.id]?.successes) ?? firstLesson)
+    }
+    if (round.completed > 0 && round.completed % 10 === 0) setRoundDialog(true)
+  }
+  function startReview() {
+    if (due.length) choose(due[0], true)
+    else setNotice('No reviews are due yet. Independent passes return after 1, 3, 7 and 14 days; assisted passes return after 10 minutes. You can revisit any exercise in Browse.')
+  }
+  function addFile() {
+    if (!validFilePath(fileName)) { setFileError('Use a relative name such as helpers.py or data/input.json. No spaces or .. segments.'); return }
+    if (Object.hasOwn(files, fileName)) { setFileError('That file already exists.'); return }
+    if (Object.keys(files).length >= 20) { setFileError('This workspace supports up to 20 files.'); return }
+    setData(current => ({ ...current, drafts: { ...current.drafts, [exercise.id]: { ...files, [fileName]: '' } } }))
+    setActive(fileName); setFileDialog(false); clearResult()
+  }
+  async function importBackup(event) {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+    if (!file) return
+    try {
+      if (file.size > 32000000) throw new Error('Choose a backup smaller than 32 MB.')
+      setImported(normalizeBackup(JSON.parse(await file.text()), lessons))
+    } catch (error) { setNotice(error.message) }
+  }
+  const sidebar = <PathSidebar lessons={lessons} progress={data.progress} exercise={exercise} choose={choose} review={startReview} due={due.length} browse={() => setCatalog(true)} busy={busy} />
+  const trackTitle = tracks.find(track => track.id === exercise.track)?.title
+  const retained = new Set(lessons.filter(item => skillStatus(data.progress, item, lessons.filter(other => other.skillId === item.skillId).length) === 'Retained').map(item => item.skillId)).size
 
-  return (
-    <Box sx={{ minHeight: '100dvh', bgcolor: 'background.default' }}>
-      <Box component="header" sx={{ height: 78, borderBottom: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: { xs: 2.5, md: 5 } }}>
-        <Stack direction="row" alignItems="center" spacing={1.4}>
-          <Box sx={{ bgcolor: '#98e7c414', border: '1px solid #98e7c430', color: 'primary.main', borderRadius: 2, display: 'grid', placeItems: 'center', width: 36, height: 36 }}>
-            <TerminalRoundedIcon fontSize="small" />
-          </Box>
-          <Typography sx={{ fontSize: 20, fontWeight: 750, letterSpacing: '-0.7px' }}>SyntaxLab</Typography>
-          <Divider orientation="vertical" flexItem sx={{ mx: '12px !important', my: '8px !important', display: { xs: 'none', sm: 'block' } }} />
-          <Typography sx={{ fontSize: 13, color: 'text.secondary', display: { xs: 'none', sm: 'block' } }}>Python Path</Typography>
+  return <Box sx={{ minHeight: '100dvh', bgcolor: 'background.default' }}>
+    <Stack component="header" direction="row" sx={{ minHeight: 78, px: { xs: 2, md: 5 }, py: 1, borderBottom: '1px solid', borderColor: 'divider', alignItems: 'center', flexWrap: 'wrap', gap: 1.5 }}>
+      <Typography sx={{ fontSize: 21, fontWeight: 750 }}>SyntaxLab <Box component="span" sx={{ color: 'primary.main', fontWeight: 400 }}> / Python Path</Box></Typography>
+      <Box sx={{ flex: 1 }} />
+      <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>{learned.length}/208 practiced · {retained} skills retained</Typography>
+      <Button size="small" disabled={busy} onClick={() => setDrawer(true)} sx={{ display: { lg: 'none' } }}>Learning path</Button>
+    </Stack>
+    {storageError && <Alert severity="warning" action={<Stack direction="row"><Button size="small" onClick={() => download('python-path-unread-data.txt', localStorage.getItem(STORAGE_KEY) ?? '')}>Export stored data</Button><Button size="small" onClick={() => { setSaving(true); setStorageError('') }}>Save this session</Button></Stack>}>{storageError}</Alert>}
+    <Box sx={{ display: 'flex', maxWidth: 1560, mx: 'auto' }}>
+      <Box component="aside" aria-label="Learning path" sx={{ display: { xs: 'none', lg: 'block' }, borderRight: '1px solid', borderColor: 'divider' }}>{sidebar}</Box>
+      <Drawer open={drawer} onClose={() => setDrawer(false)}>{sidebar}</Drawer>
+      <Box component="main" sx={{ flex: 1, minWidth: 0, p: { xs: 2, sm: 4, md: 5 } }}>
+        <Stack direction="row" sx={{ alignItems: 'center', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+          <Typography sx={{ fontSize: 11, letterSpacing: 1.5, color: 'text.secondary' }}>{reviewMode ? 'DUE REVIEW' : trackTitle.toUpperCase()} / {exercise.unit}</Typography>
+          <Chip size="small" variant="outlined" label={skillStatus(data.progress, exercise, variants)} />
+          <Button size="small" disabled={busy} onClick={() => setCatalog(true)} sx={{ ml: 'auto' }}>Browse exercises</Button>
         </Stack>
-        <Chip label="First-exercise preview" size="small" variant="outlined" sx={{ color: 'text.secondary', borderColor: 'divider', fontSize: 11, height: 27 }} />
-      </Box>
-
-      <Box sx={{ display: 'flex', maxWidth: 1560, mx: 'auto' }}>
-        <Box component="aside" aria-label="Learning path" sx={{ width: 254, flexShrink: 0, minHeight: 'calc(100dvh - 78px)', borderRight: '1px solid', borderColor: 'divider', px: 3, py: 4, display: { xs: 'none', lg: 'flex' }, flexDirection: 'column' }}>
-          <Typography sx={{ fontSize: 10, letterSpacing: 2, fontWeight: 700, color: 'text.secondary', mb: 1.3 }}>YOUR WORKSPACE</Typography>
-          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 4 }}>
-            <CodeRoundedIcon sx={{ fontSize: 19, color: 'primary.main' }} />
-            <Typography sx={{ fontSize: 14, fontWeight: 600 }}>Daily practice</Typography>
-            <Box sx={{ width: 5, height: 5, bgcolor: 'primary.main', borderRadius: '50%', ml: 'auto !important' }} />
-          </Stack>
-          <Typography sx={{ fontSize: 10, letterSpacing: 2, fontWeight: 700, color: 'text.secondary', mb: 2 }}>THE PATH AHEAD</Typography>
-          <Stack spacing={0.8}>
-            {path.map((label, index) => (
-              <Box key={label} aria-current={index === 0 ? 'step' : undefined} sx={{ display: 'flex', alignItems: 'center', gap: 1.3, py: 1.3, px: 1.4, mx: -1.4, bgcolor: index === 0 ? '#98e7c40a' : 'transparent', borderRadius: 1.5, border: '1px solid', borderColor: index === 0 ? '#98e7c425' : 'transparent' }}>
-                <Typography sx={{ fontFamily: mono, fontSize: 11, color: index === 0 ? 'primary.main' : '#536176' }}>{String(index + 1).padStart(2, '0')}</Typography>
-                <Typography sx={{ fontSize: 12, color: index === 0 ? '#c7e8d9' : 'text.secondary', fontWeight: index === 0 ? 600 : 400 }}>{label}</Typography>
-              </Box>
-            ))}
-          </Stack>
-          <Box sx={{ mt: 'auto', pt: 7 }}>
-            <Box sx={{ width: 27, height: 2, bgcolor: 'primary.main', mb: 1.8, opacity: 0.5 }} />
-            <Typography sx={{ fontSize: 13, lineHeight: 1.8, color: 'text.secondary' }}>A little code.<br />Another rep.<br />More confidence.</Typography>
-          </Box>
+        <Typography component="h1" sx={{ fontSize: { xs: 28, sm: 36 }, fontWeight: 650, letterSpacing: '-1px', mb: 2 }}>{exercise.title}</Typography>
+        <Box sx={{ p: 2.5, mb: 2.5, bgcolor: '#141e2c', border: '1px solid #2a384c', borderRadius: 2 }}>
+          <Typography sx={{ color: 'primary.main', fontSize: 10, fontWeight: 700, letterSpacing: 2, mb: 1 }}>YOUR TASK</Typography>
+          <Typography sx={{ fontSize: 15, lineHeight: 1.8, whiteSpace: 'pre-wrap' }}>{exercise.prompt}</Typography>
+          {exercise.argv && <Typography sx={{ mt: 1, fontFamily: mono, fontSize: 12 }}>Runner arguments: python {exercise.entry} {exercise.argv.join(' ')}</Typography>}
+          {exercise.structures && <Typography sx={{ mt: 1, color: 'text.secondary', fontSize: 12 }}>Provided: ListNode(val, next), TreeNode(val, left, right), graph Node(val, neighbors), List, Optional, Counter, defaultdict, deque, heapq, math and lru_cache. Imports are also welcome.</Typography>}
+          {exercise.url && <Button component="a" href={exercise.url} target="_blank" rel="noopener noreferrer" size="small">Original problem</Button>}
         </Box>
-
-        <Box component="main" sx={{ flex: 1, minWidth: 0, p: { xs: 2.3, sm: 4, md: 5 }, pb: 2 }}>
-          <Stack direction="row" alignItems="center" spacing={1} sx={{ color: 'text.secondary', mb: 3.5 }}>
-            <Typography sx={{ fontSize: 11, letterSpacing: 1.1 }}>FOUNDATIONS</Typography>
-            <ChevronRightRoundedIcon sx={{ fontSize: 14 }} />
-            <Typography sx={{ fontSize: 11, letterSpacing: 1.1, color: '#c5d0df' }}>VARIABLES</Typography>
-            <Typography sx={{ ml: 'auto !important', fontFamily: mono, fontSize: 11, color: 'text.secondary' }}>REP 01</Typography>
-          </Stack>
-
-          <Typography component="h1" sx={{ fontSize: { xs: 29, sm: 37 }, fontWeight: 650, lineHeight: 1.25, letterSpacing: '-1.3px', mb: 1 }}>Give a value a name.</Typography>
-          <Typography sx={{ fontSize: 14, color: 'text.secondary', mb: 3.2 }}>Your first line of Python. Keep it simple.</Typography>
-
-          <Box sx={{ bgcolor: '#141e2c', border: '1px solid #2a384c', borderRadius: 2, py: 2.2, px: 2.5, mb: 2.8, display: 'flex', alignItems: 'flex-start', gap: 1.8 }}>
-            <Box sx={{ width: 25, height: 25, display: 'grid', placeItems: 'center', bgcolor: '#98e7c414', color: 'primary.main', borderRadius: 1, flexShrink: 0, mt: 0.1 }}><TerminalRoundedIcon sx={{ fontSize: 16 }} /></Box>
-            <Box>
-              <Typography sx={{ fontSize: 10, fontWeight: 700, letterSpacing: 1.8, color: 'primary.main', mb: 0.8 }}>YOUR TASK</Typography>
-              <Typography sx={{ fontSize: { xs: 14, sm: 16 }, lineHeight: 1.8 }}>Create a variable named <Box component="code" sx={{ fontFamily: mono, color: '#c3d6ff', bgcolor: '#21304a', borderRadius: 0.5, px: 0.7, py: 0.15 }}>retries</Box> and set it to the integer <Box component="code" sx={{ fontFamily: mono, color: '#f1d49c' }}>3</Box>.</Typography>
-            </Box>
+        {data.drafts[exercise.id] && data.progress.records[exercise.id]?.successes > 0 && <Typography sx={{ fontSize: 12, color: 'text.secondary', mb: 1 }}>Saved code is loaded. Reset the workspace for a fresh independent rep; rerunning a saved answer counts as assisted practice.</Typography>}
+        <ExerciseEditor exercise={exercise} files={files} active={Object.hasOwn(files, active) ? active : exercise.entry} setActive={setActive} change={change} addFile={() => { setFileName(''); setFileError(''); setFileDialog(true) }} reset={() => setResetDialog(true)} status={status} run={submit} stop={stop} hint={() => { setHint(value => Math.min(value + 1, exercise.hints.length + 1)); assisted.current = true; helped.current = true }} passed={passed} />
+        <Collapse in={hint > 0}>
+          <Box sx={{ p: 2, mt: 1.5, bgcolor: '#98e7c408', borderRadius: 2 }}>
+            <Typography sx={{ fontSize: 13, color: 'text.secondary', lineHeight: 1.8 }}>{exercise.note}</Typography>
+            {exercise.hints.slice(0, hint).map((text, index) => <Typography key={index} sx={{ fontSize: 13, mt: 1 }}>Hint {index + 1}: {text}</Typography>)}
+            <Button size="small" onClick={() => { setSolution(value => !value); assisted.current = true }}>{solution ? 'Hide worked solution' : 'Show worked solution'}</Button>
+            {solution && Object.entries(exercise.solutionFiles).map(([name, text]) => <Box key={name}><Typography sx={{ fontSize: 12, mt: 1 }}>{name}</Typography><Typography component="pre" sx={{ fontFamily: mono, fontSize: 13, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{text}</Typography></Box>)}
+            <Typography sx={{ fontSize: 11, color: 'text.secondary', mt: 1 }}>Hints, a revealed solution or a failed attempt make this visit assisted. A fresh rep is your next independent check.</Typography>
           </Box>
-
-          <Box sx={{ overflow: 'hidden', border: '1px solid', borderColor: passed ? '#98e7c475' : '#2c394b', borderRadius: 2.2, bgcolor: '#101722', transition: 'border-color 180ms' }}>
-            <Stack direction="row" alignItems="center" sx={{ height: 46, bgcolor: '#151e2b', borderBottom: '1px solid', borderColor: 'divider', px: 2 }}>
-              <Box sx={{ width: 7, height: 7, bgcolor: '#81b8ef', borderRadius: 0.5, mr: 1 }} />
-              <Typography sx={{ fontFamily: mono, fontSize: 12 }}>main.py</Typography>
-              <Typography sx={{ ml: 'auto', color: 'text.secondary', fontSize: 11 }}>Python</Typography>
-              <Tooltip title="Reset your code"><span><IconButton aria-label="Reset code" onClick={reset} disabled={status === 'running'} size="small" sx={{ ml: 1.3, color: 'text.secondary' }}><RestartAltRoundedIcon sx={{ fontSize: 18 }} /></IconButton></span></Tooltip>
-            </Stack>
-            <Box sx={{ height: { xs: 245, sm: 284 }, pt: 1.2, bgcolor: '#101722' }}>
-              <Editor
-                height="100%"
-                language="python"
-                path="first-rep.py"
-                value={code}
-                theme="synlab-practice"
-                onChange={changeCode}
-                loading={<Typography sx={{ p: 3, color: 'text.secondary', fontSize: 13 }}>Opening your editor…</Typography>}
-                beforeMount={api => api.editor.defineTheme('synlab-practice', {
-                  base: 'vs-dark', inherit: true,
-                  rules: [{ token: 'comment', foreground: '64758c', fontStyle: 'italic' }, { token: 'number', foreground: 'F1D49C' }],
-                  colors: { 'editor.background': '#101722', 'editor.foreground': '#d7e3f3', 'editorLineNumber.foreground': '#46566b', 'editorLineNumber.activeForeground': '#9aadbf', 'editor.lineHighlightBackground': '#151e2a', 'editorCursor.foreground': '#98e7c4', 'editor.selectionBackground': '#29495b' },
-                })}
-                onMount={(instance, api) => {
-                  editor.current = instance
-                  instance.setPosition({ lineNumber: 2, column: 1 })
-                  instance.addCommand(api.KeyMod.CtrlCmd | api.KeyCode.Enter, () => runAction.current?.())
-                  instance.focus()
-                }}
-                options={{ ariaLabel: 'Python code editor', fontFamily: mono, fontSize: 18, lineHeight: 32, minimap: { enabled: false }, scrollBeyondLastLine: false, lineNumbersMinChars: 3, padding: { top: 8 }, tabSize: 4, automaticLayout: true, folding: false, glyphMargin: false, renderLineHighlight: 'line', overviewRulerLanes: 0, hideCursorInOverviewRuler: true, scrollbar: { vertical: 'auto', horizontal: 'auto', verticalScrollbarSize: 6 }, suggestOnTriggerCharacters: false, quickSuggestions: false, wordBasedSuggestions: 'off', readOnly: status === 'running' }}
-              />
-            </Box>
-            <Stack direction="row" alignItems="center" sx={{ minHeight: 66, bgcolor: '#121c29', borderTop: '1px solid', borderColor: 'divider', px: { xs: 1.5, sm: 2.3 }, gap: 1 }}>
-              <Button size="small" startIcon={<LightbulbOutlinedIcon sx={{ fontSize: '17px !important' }} />} onClick={() => setHint(value => !value)} aria-expanded={hint} sx={{ color: 'text.secondary', fontSize: 12 }}>Need a hint?</Button>
-              <Box sx={{ flex: 1 }} />
-              <Typography sx={{ fontSize: 10, color: '#718199', fontFamily: mono, mr: 0.8, display: { xs: 'none', sm: 'block' } }}>Ctrl / ⌘ + Enter</Typography>
-              {status === 'running' ? (
-                <Button variant="outlined" size="small" startIcon={<StopRoundedIcon />} onClick={stop}>Stop</Button>
-              ) : (
-                <Button variant="contained" startIcon={status === 'loading' ? <CircularProgress size={14} color="inherit" /> : <PlayArrowRoundedIcon />} disabled={status !== 'ready'} onClick={() => runAction.current?.()} sx={{ minWidth: 112, px: 2.2, py: 0.8 }}>{status === 'loading' ? 'Loading…' : 'Run code'}</Button>
-              )}
-            </Stack>
-          </Box>
-
-          <Collapse in={hint}>
-            <Box sx={{ mt: 1.5, py: 1.6, px: 2, border: '1px solid #35432c', borderRadius: 1.5, bgcolor: '#b6c88708' }}>
-              <Typography sx={{ fontSize: 13, color: '#c8d2ba', lineHeight: 1.8 }}>Put the variable name on the left, one equals sign in the middle, and its value on the right. Numbers don’t need quotes.</Typography>
-              <Button size="small" onClick={() => setSolution(value => !value)} sx={{ fontSize: 11, color: '#a8b995', mt: 0.4 }}>{solution ? 'Hide example' : 'Show this rep’s solution'}</Button>
-              {solution && <Typography component="pre" sx={{ fontFamily: mono, fontSize: 14, mt: 1, mb: 0, color: 'primary.main' }}>retries = 3</Typography>}
-            </Box>
-          </Collapse>
-
-          <Box aria-live="polite" role="status" sx={{ mt: 2, minHeight: 126 }}>
-            {result ? (
-              <Box sx={{ p: 2.2, borderRadius: 2, border: '1px solid', borderColor: passed ? '#98e7c43d' : '#e8ba7938', bgcolor: passed ? '#98e7c408' : '#e8ba7907' }}>
-                <Stack direction="row" spacing={1.3} alignItems="flex-start">
-                  <Box sx={{ mt: '2px !important', color: passed ? 'primary.main' : '#e8ba79', fontFamily: mono }}>{passed ? <CheckRoundedIcon sx={{ fontSize: 21 }} /> : '↳'}</Box>
-                  <Box sx={{ flex: 1 }}>
-                    <Typography sx={{ fontSize: 14, fontWeight: 650, mb: 0.5, color: passed ? '#c7f2df' : '#f0d4b0' }}>{result.title}</Typography>
-                    <Typography sx={{ fontSize: 12, color: 'text.secondary', lineHeight: 1.8 }}>{result.message}</Typography>
-                    {result.output && <Typography component="pre" sx={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', fontFamily: mono, fontSize: 12, color: '#b9c6d7', mb: 0 }}>Output: {result.output}</Typography>}
-                    {result.checks?.length > 0 && <Stack direction="row" flexWrap="wrap" gap={1.5} sx={{ mt: 1.4 }}>{result.checks.map(check => <Typography key={check.label} sx={{ fontSize: 10, color: check.passed ? '#98e7c4' : '#c49f7a' }}>{check.passed ? '✓' : '○'} {check.label}</Typography>)}</Stack>}
-                  </Box>
-                </Stack>
-              </Box>
-            ) : (
-              <Box sx={{ px: 0.4, py: 1.2 }}>
-                <Typography sx={{ fontSize: 12, color: '#8290a4', mb: 0.6 }}>Write it. Run it. See what happens.</Typography>
-                <Typography sx={{ fontSize: 11, color: '#596b81' }}>Feedback appears here. You can try as many times as you like.</Typography>
-              </Box>
-            )}
-          </Box>
-
-          <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ pt: 1.8, borderTop: '1px solid', borderColor: 'divider', gap: 2 }}>
-            <Stack direction="row" alignItems="center" spacing={0.9}>
-              <Box sx={{ width: 5, height: 5, borderRadius: '50%', bgcolor: status === 'ready' || status === 'running' ? 'primary.main' : status === 'unavailable' ? '#e8ba79' : '#5e6b7c' }} />
-              <Typography sx={{ color: 'text.secondary', fontSize: 10 }}>{status === 'loading' ? 'Preparing Python…' : status === 'unavailable' ? 'Python couldn’t load' : status === 'running' ? 'Running your code…' : 'Python ready'}</Typography>
-              {status === 'unavailable' && <Button size="small" onClick={restart} sx={{ fontSize: 11 }}>Retry loading</Button>}
-            </Stack>
-            <Button variant={passed ? 'contained' : 'text'} disabled={!passed} onClick={() => setComplete(true)} endIcon={<ArrowForwardRoundedIcon sx={{ fontSize: '16px !important' }} />} sx={{ fontSize: 12, px: 2 }}>Next rep</Button>
-          </Stack>
-        </Box>
+        </Collapse>
+        <FeedbackPanel result={result} />
+        <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
+          <Typography sx={{ fontSize: 11, color: 'text.secondary' }}>{status === 'ready' ? 'Python ready' : status === 'unavailable' ? 'Python could not load' : status === 'running' ? 'Running your code' : 'Preparing Python runtime…'}</Typography>
+          {status === 'unavailable' && <Button onClick={restart}>Retry loading</Button>}
+          <Button disabled={!passed || busy} variant={passed ? 'contained' : 'text'} onClick={next}>Next rep →</Button>
+        </Stack>
+        <TextField label="Explain it in your own words (optional)" multiline minRows={2} fullWidth value={data.notes[exercise.id] ?? ''} onChange={event => setData(current => ({ ...current, notes: { ...current.notes, [exercise.id]: event.target.value.slice(0, 3000) } }))} helperText="Your own review note; not automatically graded. What does the code do, and why?" sx={{ mt: 3 }} />
+        <Stack direction="row" sx={{ mt: 3, gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
+          <Button size="small" onClick={() => download('python-path-backup.json', JSON.stringify(data, null, 2), 'application/json')}>Export backup</Button>
+          <Button size="small" disabled={busy} onClick={() => importInput.current.click()}>Import backup</Button>
+          <Box component="input" ref={importInput} type="file" accept="application/json,.json" onChange={importBackup} sx={{ display: 'none' }} aria-label="Import Python Path backup" />
+          <Typography sx={{ fontSize: 11, color: 'text.secondary' }}>Saved on this browser only. Export before switching devices. Python initially downloads from jsDelivr.</Typography>
+        </Stack>
       </Box>
-
-      <Dialog open={complete} onClose={() => setComplete(false)} maxWidth="xs" fullWidth PaperProps={{ sx: { p: 1, bgcolor: '#151e2b', border: '1px solid #344d43' } }}>
-        <DialogTitle sx={{ fontWeight: 650, letterSpacing: '-0.5px' }}>One line. First rep done.</DialogTitle>
-        <DialogContent>
-          <Typography sx={{ fontSize: 14, lineHeight: 1.9, color: 'text.secondary' }}>That’s the loop: a small task, real code, quick feedback, then another rep.</Typography>
-          <Typography sx={{ fontSize: 13, lineHeight: 1.9, mt: 2 }}>This preview ends here. The next exercise would ask you to change the value of an existing variable.</Typography>
-        </DialogContent>
-        <DialogActions sx={{ px: 2, pb: 2 }}>
-          <Button onClick={() => setComplete(false)} sx={{ color: 'text.secondary' }}>Back to my code</Button>
-          <Button variant="contained" onClick={reset}>Try again from blank</Button>
-        </DialogActions>
-      </Dialog>
     </Box>
-  )
+    <Dialog open={catalog} onClose={() => setCatalog(false)} fullWidth maxWidth="sm">
+      <DialogTitle>Choose your next rep</DialogTitle>
+      <DialogContent>
+        <TextField autoFocus fullWidth label="Search title, unit or track" value={search} onChange={event => setSearch(event.target.value)} sx={{ mt: 1, mb: 2 }} />
+        <Stack spacing={0.5}>{lessons.filter(item => `${item.title} ${item.unit} ${item.track}`.toLowerCase().includes(search.toLowerCase())).map(item => <Button key={item.id} disabled={busy} onClick={() => choose(item)} sx={{ justifyContent: 'space-between', textAlign: 'left', gap: 2 }}>
+          <Box><Typography sx={{ fontSize: 13 }}>{item.title}</Typography><Typography sx={{ fontSize: 10, color: 'text.secondary' }}>{item.track} / {item.unit}{item.variant ? ` / variation ${item.variant + 1}` : ''}</Typography></Box>
+          <Typography sx={{ fontSize: 11, whiteSpace: 'nowrap' }}>{data.progress.records[item.id]?.successes ? 'Practiced' : 'New'}</Typography>
+        </Button>)}</Stack>
+      </DialogContent>
+      <DialogActions><Button onClick={() => setCatalog(false)}>Close</Button></DialogActions>
+    </Dialog>
+    <Dialog open={fileDialog} onClose={() => setFileDialog(false)} fullWidth maxWidth="xs"><DialogTitle>Create a workspace file</DialogTitle><DialogContent><TextField autoFocus fullWidth label="File name" value={fileName} onChange={event => setFileName(event.target.value)} error={!!fileError} helperText={fileError || 'For example: helpers.py'} sx={{ mt: 1 }} /></DialogContent><DialogActions><Button onClick={() => setFileDialog(false)}>Cancel</Button><Button onClick={addFile}>Create file</Button></DialogActions></Dialog>
+    <Dialog open={resetDialog} onClose={() => setResetDialog(false)}><DialogTitle>Reset this exercise’s workspace?</DialogTitle><DialogContent>Your saved code for this exercise will be replaced by its starter files. Export a backup first if you want to keep it. Progress is kept. Hints or mistakes during this visit still count as assistance.</DialogContent><DialogActions><Button onClick={() => setResetDialog(false)}>Cancel</Button><Button onClick={() => { setData(current => ({ ...current, drafts: { ...current.drafts, [exercise.id]: exercise.initialFiles } })); assisted.current = helped.current; setActive(exercise.entry); clearResult(); setResetDialog(false) }}>Reset workspace</Button></DialogActions></Dialog>
+    <Dialog open={!!imported} onClose={() => setImported(null)}><DialogTitle>Replace Python Path data?</DialogTitle><DialogContent>This backup contains {Object.keys(imported?.drafts ?? {}).length} workspaces and {Object.keys(imported?.progress.records ?? {}).length} exercise records. Import replaces this section’s saved work. Export your current backup first.</DialogContent><DialogActions><Button onClick={() => setImported(null)}>Cancel</Button><Button onClick={() => { const nextExercise = byId.get(imported.selectedId); setData(imported); setActive(nextExercise.entry); setHint(0); setSolution(false); assisted.current = false; credited.current = false; clearResult(); setReviewMode(false); retryQueue.current = []; setRound({ completed: 0, independent: 0 }); setImported(null); setSaving(true); setStorageError('') }}>Replace with backup</Button></DialogActions></Dialog>
+    <Dialog open={roundDialog} onClose={() => setRoundDialog(false)}><DialogTitle>Ten more reps done.</DialogTitle><DialogContent>{round.completed} completed this session; {round.independent} passed without help on that visit. Retained status requires evidence across different days, plus different variations where available. Take a break or keep going.</DialogContent><DialogActions><Button onClick={() => setRoundDialog(false)}>Continue practice</Button></DialogActions></Dialog>
+    <Dialog open={!!notice} onClose={() => setNotice('')}><DialogTitle>Practice update</DialogTitle><DialogContent>{notice}</DialogContent><DialogActions><Button onClick={() => setNotice('')}>Got it</Button></DialogActions></Dialog>
+  </Box>
 }

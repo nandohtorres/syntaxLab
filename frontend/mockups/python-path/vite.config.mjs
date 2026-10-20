@@ -34,7 +34,7 @@ export default {
     host: '127.0.0.1',
     port: 4315,
     strictPort: true,
-    fs: { allow: [root, dependencies] },
+    fs: { allow: [root, dependencies, resolve(root, '../../../docs')] },
   },
   build: { outDir: 'dist', target: 'es2022' },
 }
