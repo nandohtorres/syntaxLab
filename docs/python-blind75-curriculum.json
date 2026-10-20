@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "status": "design-only",
   "created": "2026-10-19",
   "track_id": "python-foundations-blind75",
@@ -1208,7 +1208,7 @@
     "explanation_assessment": "Learner checklist/self-review; separate from automated code tests"
   },
   "default_experience": {
-    "format": "rapid-fire quiz cards",
+    "format": "rapid-fire coding reps in Monaco",
     "round_size": 10,
     "round_mix": {
       "due_review": 4,
@@ -1217,18 +1217,17 @@
     },
     "mix_fallback": "Use taught beginner skills when review or application cards are unavailable",
     "answer_formats": [
-      "choose-answer",
-      "predict-output",
-      "fill-gap",
-      "fix-one-line",
-      "write-tiny-snippet",
-      "choose-behavior"
+      "write-snippet",
+      "complete-snippet",
+      "fix-snippet",
+      "modify-snippet",
+      "create-file"
     ],
     "feedback_flow": [
-      "submit",
-      "show correctness",
-      "show correct answer and one short reason",
-      "explicit next action"
+      "write Python",
+      "explicit Run code",
+      "show specific execution/check feedback under editor",
+      "explicit Next rep"
     ],
     "wrong_answer_revisit_after_intervening_cards": {
       "minimum": 2,
@@ -1247,9 +1246,15 @@
     "authoring_targets_are_deadlines": false,
     "auto_advance_default": false,
     "coding_execution": "Only on explicit submit; warm runtime for coding rounds; show running state",
-    "noncoding_grading": "Local structured checks without Python startup",
     "longer_application_mode": "Clearly labelled script or full Blind 75 checkpoint; not the default daily card",
-    "progress_rule": "Choice recognition cannot satisfy a write-from-memory checkpoint",
-    "feedback_detail": "One short explanation by default; longer explanation expandable"
+    "progress_rule": "Track scaffold and hint assistance separately from independent code writing",
+    "feedback_detail": "One short explanation by default; longer explanation expandable",
+    "choice_quizzes": false
+  },
+  "prototype": {
+    "path": "frontend/mockups/python-path",
+    "scope": "First variable assignment exercise only",
+    "existing_app_changed": false,
+    "python_execution": "Real Pyodide 0.26.4 browser worker"
   }
 }

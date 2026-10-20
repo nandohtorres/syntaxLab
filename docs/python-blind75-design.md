@@ -1,7 +1,7 @@
 # Python Fluency for Engineering Interviews
 
 Design draft, 2026-10-19. Prepared for Fernando's personal job preparation.
-This defines a new SyntaxLab section; no application behavior is implemented.
+This defines a new SyntaxLab section. A standalone [first-exercise preview](../frontend/mockups/python-path/README.md) is implemented for feedback; the existing app is unchanged.
 
 ## Goal and boundary
 
@@ -16,67 +16,51 @@ available from memory, then use them in both applications. Blind 75 remains
 the fixed algorithm inventory; it is not the definition of Python proficiency.
 Neither track claims to cover an entire role's interview preparation.
 
-**Default experience: rapid-fire questions, rapid feedback, repeated reps.**
-Teach the course through tiny quiz cards rather than long lessons or projects.
-Scripts and full Blind 75 solutions are later application checkpoints assembled
-from the same skills; they are not the normal unit of daily practice.
+**Default experience: rapid-fire coding reps in a real code editor.**
+A short task sits above Monaco; the learner writes/runs Python, sees immediate
+specific feedback and advances to another small task. No multiple-choice cards,
+answer-choice buttons or text-answer quiz screens. Keep the editor central even
+when an exercise only needs one line. Scripts and full Blind 75 solutions are
+later application checkpoints assembled from the same skills.
 
 ## Rapid-fire interaction contract
 
-- One question, one concept, one answer action per card. Show a short snippet
-  only when needed; avoid a full IDE for a one-token answer.
-- Start with 10-card rounds, with Continue/More reps always available. Design
-  most cards for roughly 10-30 seconds and tiny writing tasks for 30-60 seconds;
-  these are authoring targets, not deadlines or measured performance claims.
-- Mix choose-an-answer, predict-output, fill-a-gap, fix-one-line, write-1-to-5-
-  lines and choose/explain-the-behavior questions. Increase actual writing as
-  the learner progresses so familiarity with choices does not replace recall.
-- Submit -> correct/incorrect -> correct answer plus one short reason -> Next.
-  Show feedback on the same card. Detailed explanation is expandable, not a
-  required screen between questions. Wrong answers give a specific correction
-  without a long lecture; revisit the skill after 2-4 intervening cards.
-- Keyboard shortcuts support choices, Submit and Next. Never advance on the
-  same key event that submitted, never advance before feedback can be read,
-  and never require clicking a celebration. Optional auto-advance is off.
-- Grade choice/structured responses locally without loading Python. Preload
-  the runtime for coding rounds; execute snippets only on explicit submission.
-  Show a running state when needed. Feedback speed is an implementation target,
-  not a promise that Python execution has zero startup or computation time.
-- Timing is optional and informational. No punishment for thinking slowly.
-  A hint/reveal remains available; an assisted pass does not become independent
-  recall. Shuffle answer positions and use meaningful distractors.
+- One small coding task and one new concept per rep. Examples: create a
+  variable, finish a function, fix a line, change an existing snippet or add a
+  file. Instructions are tasks, not multiple-choice questions.
+- Start with 10-rep rounds and unlimited More reps. Aim for roughly 10-30 seconds
+  for a one-line rep and 30-60 seconds for a tiny function; these are authoring
+  targets, not deadlines or measured performance claims.
+- Write -> Run code -> specific feedback below the editor -> explicit Next.
+  Preserve the submitted code for inspection; never auto-advance before feedback
+  can be read. Detailed explanations are optional expansions.
+- Use actual Python execution with fresh attempt state, plus syntax checks
+  where a lesson requires a particular construct. Never grade code with simple
+  answer-string matching or silently simulate an interpreter.
+- Preload Python while the learner reads and types. Run only on explicit action,
+  provide keyboard access, show loading/running states, and allow stopping.
+- Revisit mistakes after 2-4 intervening reps using fresh names/values. Hints and
+  worked solutions remain available without certifying independent recall.
+- Reading/tracing/explaining supports the coding task. For example, inspect a
+  supplied snippet, modify its assignment and run it; do not replace the editor
+  with a prediction quiz. Timing and celebrations are optional.
 
 ```text
-Python Path / Variables                                 4 / 10
+Python Path / Variables                                  REP 01
+Create a variable named retries and set it to the integer 3.
 
-Create a variable called retries with the value 3.
+main.py
+  1  # Write your Python here
+  2  |
 
-[ retries = 3                                      ]
-                                                  Check
-
-Correct. = assigns a value to a name.              Next ->
+Hint                                    Run code  [Ctrl/Cmd+Enter]
+Feedback appears here.                                  Next rep
 ```
 
-Example cards (authoring examples, not a shipped question bank):
-
-| Skill | Quick question | Feedback |
-|---|---|---|
-| Assignment | Write one line setting `retries` to `3` | `retries = 3`; `=` assigns |
-| Tracing | After `x = 2` then `x += 3`, what is `x`? | `5`; the existing value increases by 3 |
-| Strings | What does `'cloud'.upper()` return? | `'CLOUD'`; the method returns an uppercase string |
-| Functions | Fill the keyword: `___ greet(name):` | `def`; it introduces a function definition |
-| Return | A function only calls `print(4)`. What does it return? | `None`; printed output and return values differ |
-| Methods | Which first parameter receives the instance in a normal method? | Conventionally `self`; use it to access instance attributes |
-| Modules | Fill the import to call `helpers.clean`: `___ helpers` | `import`; the module name qualifies the function |
-| Files | Which mode creates/truncates a text file: `r`, `w`, or `a`? | `w`; warn explicitly that it replaces existing contents |
-| Problem building block | A value is already in `seen`. What can that establish in duplicate detection? | A duplicate was encountered; the set records prior values |
-
-Split file-creation practice into small actions too: name `main.py`, add one
-line, create `helpers.py`, write a helper, fill its import, predict output, fix
-a bad path. Later combine them in a multi-file checkpoint. Blind 75 rounds
-similarly drill one loop update, boundary case, data-structure choice or invariant
-before asking for a complete solution. Do not present a full hard problem as a
-30-second question.
+First exercise: a correct solution such as `retries = 3` passes. A string value,
+wrong integer, comparison instead of assignment, missing variable or syntax
+error receives a short targeted correction. Valid equivalent Python is accepted.
+Next ends this one-exercise preview; it does not claim the rest is implemented.
 
 The problem inventory is fixed in [python-blind75-curriculum.json](python-blind75-curriculum.json):
 75 unique LeetCode IDs, each with a teaching module and a preparation drill.
@@ -140,7 +124,7 @@ Review next: assignment, loop boundaries                 Review skills
 Foundations -> practical scripts AND small operations -> Blind 75 patterns
 ```
 
-The primary action starts a rapid-fire round, not a long chapter. The default
+The primary action starts rapid-fire coding reps, not quiz cards or a long chapter. The default
 starts at the beginning, with a voluntary placement check or
 direct lesson selection for topics already familiar. Recommendations guide
 the order; users can inspect any lesson without hard locks.
@@ -217,9 +201,9 @@ Read/trace prompts include short code not previously memorized; explanation
 uses a suggested checklist and self-review, not an automatic speaking grade.
 No microphone or speech-recognition feature is required to practice aloud.
 
-Allow unlimited **More reps** at each stage. A starting 10-card round can include
-four due-review cards, four variations of the current skill and two short
-application cards. Fill unavailable categories with appropriate beginner cards;
+Allow unlimited **More reps** at each stage. A starting 10-rep round can include
+four due-review reps, four variations of the current skill and two short
+application reps. Fill unavailable categories with appropriate beginner reps;
 never introduce untaught syntax just to satisfy the mix. The round gives a
 stopping point, not a requirement to grind forever; duration is user-controlled.
 
@@ -258,7 +242,7 @@ repeat script-only output. Reset files to supplied fixtures on a new attempt.
 
 ## Practical Scripts: a first-class application
 
-Each script is first decomposed into rapid read/trace/fill/fix/write cards. A
+Each script is first decomposed into small editor-based completion, repair, writing and modification reps. A
 complete implementation is an optional or milestone checkpoint, clearly shown
 as longer practice. Each script has read/trace tasks, small writing reps, a complete implementation,
 a changed requirement and an explain-it-aloud checkpoint. All data is supplied
@@ -312,7 +296,7 @@ remain separately visible in feedback.
 
 ## Blind 75 problem experience
 
-The default is quick component quizzes tied to the fixed problem inventory.
+The default is small editor-based coding reps tied to the fixed problem inventory.
 Full-problem mode is a separate, longer application session. Learning mode
 offers guided steps; independent mode presents an unlabelled
 problem. Each uses: clarify inputs/output -> work an example -> simple approach
@@ -360,9 +344,9 @@ Skill versions prevent an old easy exercise from certifying a revised skill.
 Show reading/tracing, writing, modification and explanation separately. Keep
 explanation self-review distinct from test-verified code outcomes. "Retained"
 applies to the practiced skill/mode, not an overall claim of interview readiness.
-Record card format as well as mode: multiple-choice recognition cannot satisfy
-a write-from-memory checkpoint. A brief explanation-choice card tests recognition;
-speaking an explanation aloud is a distinct self-reviewed action.
+Record whether code was written, completed, repaired or modified, and the amount
+of scaffold/hint support. Speaking an explanation aloud is a distinct
+self-reviewed action; it is not an automatically graded quiz.
 
 ## Integration shape and build order
 
@@ -379,9 +363,9 @@ file creation; it does not need an entire desktop IDE clone.
 
 Build in reviewable slices:
 
-1. Add section navigation, the rapid-fire card/feedback/next loop and F01-F03
-   authored question rounds with repeated variants. Include one round usable
-   without loading Python, then tiny code submissions with execution feedback.
+1. Add section navigation, the rapid-fire editor/feedback/next loop and F01-F03
+   authored coding reps with repeated variants. Include a complete first rep
+   with a real editor, tiny code submissions and actual Python feedback.
 2. Add F04-F08, S01 and read/trace/write/modify/explain practice. The first usable
    milestone is a short ordinary Python program, not a LeetCode score.
 3. Add F10-F11, S02-S04 and a virtual file workspace. Teach F09 methods alongside
