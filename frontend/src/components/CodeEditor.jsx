@@ -1,8 +1,6 @@
-import Editor, { loader } from '@monaco-editor/react'
-import * as monaco from 'monaco-editor'
+import Editor from '@monaco-editor/react'
+import '@practice/editorRuntime.js'
 import { useThemeContext } from '@/context/ThemeContext'
-
-loader.config({ monaco })
 
 const EDITOR_LANGUAGE = 'python'
 const DARK_EDITOR_THEME = 'vs-dark'
@@ -15,6 +13,8 @@ const EDITOR_OPTIONS = {
   wordWrap: 'on',
   tabSize: 4,
   automaticLayout: true,
+  // Monaco #5294: matching-word requests can reject during model/tab changes.
+  occurrencesHighlight: 'off',
   lineNumbersMinChars: 2,
   contextmenu: false,
 }
