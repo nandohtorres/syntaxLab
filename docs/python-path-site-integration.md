@@ -80,7 +80,9 @@ installation; set `PLAYWRIGHT_PACKAGE` to another installation when needed.
 
 The existing production workflow triggers on `main`; staging triggers on
 `develop`. Both deploy the frontend to Vercel and also run the existing Railway
-backend deployment. This integration changes no backend files or workflow jobs.
+backend deployment. This integration changes no backend files. The frontend
+deploy steps now pin Vercel CLI 47.2.2 (the minimum required by the endpoint) and
+use `--yes` for CI, after staging rejected the action's default CLI 25.1.0.
 Production source at `69a1b86` has the same frontend/backend baseline as this
 feature branch's `6e9a85b` starting point; checked against GitHub on 2026-10-20.
 
