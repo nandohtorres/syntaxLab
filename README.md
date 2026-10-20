@@ -28,9 +28,10 @@ Designed for beginners who want to learn idiomatic Python fast.
 
 ## Features
 
-Planned new section: [Python Foundations to Blind 75](docs/python-blind75-design.md).
-The design covers syntax, functions, methods and files through a fixed 75-problem
-curriculum. It is a design draft, not a feature available in the current app.
+Planned new section: [Python Fluency for Engineering Interviews](docs/python-blind75-design.md).
+The design builds reading, writing and explaining Python through foundations,
+practical scripts and the original Blind 75. It is a design draft, not a feature
+available in the current app.
 
 - **30 exercises** across 7 topic groups: Variables & Strings, Data Structures, Control Flow, Functions & Pythonic Style, Operators, Object-Oriented, Algorithms & Patterns
 - **Python runs entirely in the browser** via Pyodide (WebAssembly) — no server-side code execution

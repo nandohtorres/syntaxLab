@@ -1,34 +1,81 @@
-# Python Foundations to Blind 75
+# Python Fluency for Engineering Interviews
 
 Design draft, 2026-10-19. Prepared for Fernando's personal job preparation.
 This defines a new SyntaxLab section; no application behavior is implemented.
 
 ## Goal and boundary
 
-Learn to write Python comfortably, then use that language to reason about and
-solve the original Blind 75. Repeat small skills until they are available from
-memory, combine them, and revisit them inside complete problems. The target is
-an independent explanation and implementation, not memorizing 75 solutions.
+First become comfortable reading, explaining, writing and changing ordinary
+Python. Fernando has not worked directly with Python and needs usable language
+knowledge for either a software engineering or solutions architect interview.
+The course must produce useful scripting ability before advanced algorithms.
+
+Build one shared language foundation with two connected applications:
+**Practical Scripts** and **Blind 75**. Repeat small skills until they are
+available from memory, then use them in both applications. Blind 75 remains
+the fixed algorithm inventory; it is not the definition of Python proficiency.
+Neither track claims to cover an entire role's interview preparation.
 
 The problem inventory is fixed in [python-blind75-curriculum.json](python-blind75-curriculum.json):
 75 unique LeetCode IDs, each with a teaching module and a preparation drill.
-Small foundation exercises are original supporting drills, not additional
-interview problem sets. No substitution of Grind 75 or LeetCode 75. A changed
-title or access restriction must not silently replace a problem.
+Foundation exercises and practical scripts are original supporting work, not
+additional algorithm interview lists. No substitution of Grind 75 or LeetCode
+75. A changed title or access restriction must not silently replace a problem.
+
+## Observable learning objectives
+
+The initial outcome is being able to pick up Python when a task calls for it.
+The learner should be able to:
+
+- Read a short unfamiliar script aloud in plain English: its input, each major
+  operation, control flow, returned/output values and possible failures.
+- Trace variables through conditions, loops, function calls and mutations;
+  distinguish assigning a value, calling a function and invoking a method.
+- Write a small script from a requirement, create its files, run it, and
+  explain why its output is correct. Use documentation for unfamiliar library
+  APIs; do not confuse memorizing every API with knowing the language.
+- Change an existing script safely: add a filter, accept another input,
+  extract a helper, handle a bad record, or change the output format.
+- Describe basic operational choices: validate input, handle expected errors,
+  avoid hardcoded secrets, separate configuration, and avoid accidental writes.
+- For Blind 75, explain the algorithm independently of Python notation, then
+  implement it and reason about boundaries and time/space costs.
+
+Explain code's purpose and behavior, not just pronounce its punctuation.
+Example: for `counts[name] = counts.get(name, 0) + 1`, explain that the code
+retrieves the current count (zero for a new name), increments it and stores it.
+
+## Shared foundation, two applications
+
+```text
+Read Python <-> trace it <-> write it <-> change it <-> explain it
+                             |
+                   Shared language foundations
+                     /                     \
+          Practical Scripts             Blind 75
+          files, data, automation        structures, patterns, reasoning
+```
+
+Start with ordinary examples and small scripts. Introduce algorithm problems
+when their prerequisites are comfortable, without forcing completion of all
+75 to demonstrate useful Python. Recommend a balanced session after the shared
+basics; allow either application to be selected without declaring a final job
+title. Architecture/system-design and behavioral preparation are separate work.
 
 ## Section and screens
 
 Add **Python Path** to the header beside the existing exercise workspace.
-Within the section: **Continue**, **Foundations**, **Blind 75**, **Review**.
+Within the section: **Continue**, **Foundations**, **Scripts**, **Blind 75**, **Review**.
 The existing exercise list remains usable while this section is built.
 
 ```text
-Python Path                         Foundations | Blind 75 | Review
+Python Path                  Foundations | Scripts | Blind 75 | Review
 
-Continue: Functions / returning a value             Start practice
-Review next: assignment, loop boundaries             Review skills
+Continue: Functions / returning a value                  Start practice
+Apply it: summarize a supplied service inventory         Practice a script
+Review next: assignment, loop boundaries                 Review skills
 
-Foundations -> small coding operations -> patterns -> Blind 75 problems
+Foundations -> practical scripts AND small operations -> Blind 75 patterns
 ```
 
 The default starts at the beginning, with a voluntary placement check or
@@ -70,15 +117,16 @@ prerequisites. References below describe teaching scope, not completed lessons.
 | F07 Containers | Lists, tuples, dicts, sets; indexing, membership, `.get`, `.append`, `.pop`, aliasing and copies | Count repeated values in a dictionary |
 | F08 Functions | `def`, calling, parameters versus arguments, defaults, `return` versus `print`, scope, helpers, simple type hints | Write and call a function that handles several inputs |
 | F09 Classes and methods | `class`, instances, `self`, `__init__`, attributes, method calls, identity, `Solution`, node objects | Create a small class and invoke its method |
-| F10 Files and modules | Create/save `.py`, run a script, `import`/`from`, main guard, paths, `with open`, text/JSON read/write | Create a helper module and a separate importing script |
-| F11 Debugging and checks | Tracebacks, syntax/runtime/logic errors, assertions, actual versus expected, edge cases | Repair and test a broken function |
+| F10 Files and modules | Create/save `.py`, run a script, `import`/`from`, main guard, paths, `with open`, text/JSON/CSV read/write | Create a helper module and a separate importing script |
+| F11 Debugging and checks | Tracebacks, syntax/runtime/logic errors, `try`/`except`, validation, assertions, actual versus expected, edge cases | Repair a script and handle malformed input clearly |
 | F12 Interview Python | `sorted(key=...)`, unpacking, comprehensions after loops, `Counter`, `defaultdict`, `deque`, `heapq`; basic time/space costs | Choose and use the right container operation |
 | F13 Recursion | Base case, smaller subproblem, call stack, returned results, nested helpers, memoization | Trace then write a terminating recursive helper |
 
 Functions and methods are taught separately: a standalone function is called
 directly; an instance method is defined on a class and receives `self`. Introduce
 the LeetCode `Solution` wrapper after the learner can already write a function.
-Do not require inheritance, decorators, async, packaging or web frameworks.
+Do not require inheritance, advanced decorators, async, packaging or web
+frameworks. Basic scripts need functions and modules, not a class hierarchy.
 
 File creation has two explicit meanings: creating Python source files, and
 creating/reading data files from Python. Teach both. In-browser files live in
@@ -92,12 +140,19 @@ artificial prerequisite to an array problem.
 
 ## Every skill's repetition sequence
 
-1. Read a minimal explanation and an annotated example.
+1. Read a minimal explanation and an annotated example; explain its behavior.
 2. Complete one missing expression or line.
 3. Write the same operation from a plain-language prompt, without the example.
 4. Repair a common mistake or predict the output before running.
 5. Write a changed version with new inputs, names or a different requirement.
-6. Combine the skill with one already learned; revisit after a delay.
+6. Change a requirement, explain the change, and combine the skill with one
+   already learned; revisit after a delay.
+
+Alternate **Read**, **Trace**, **Write**, **Modify** and **Explain** exercises.
+A correct code submission must not stand in for evidence in all five modes.
+Read/trace prompts include short code not previously memorized; explanation
+uses a suggested checklist and self-review, not an automatic speaking grade.
+No microphone or speech-recognition feature is required to practice aloud.
 
 Allow unlimited **More reps** at each stage. The session gives a stopping point,
 not a requirement to grind forever. Example starting session: two recalled
@@ -135,6 +190,37 @@ and call it in `main.py`; add a main guard; create `data/values.txt` using a
 context manager; read it and convert lines to integers; handle a missing file
 in a separate explicit error-handling lesson. An import should not accidentally
 repeat script-only output. Reset files to supplied fixtures on a new attempt.
+
+## Practical Scripts: a first-class application
+
+Each script has read/trace tasks, small writing reps, a complete implementation,
+a changed requirement and an explain-it-aloud checkpoint. All data is supplied
+or virtual; no cloud account or live external system is needed.
+
+| Project | Contract | Changed requirement |
+|---|---|---|
+| S01 Summarize an inventory | Filter a supplied list of service dictionaries and return a count by status | Add a region filter and handle a missing status |
+| S02 Summarize a log file | Read a small text fixture, count severity levels and report malformed lines | Return only warnings/errors without losing the rejected-line count |
+| S03 Validate a configuration | Load JSON, check required fields/types and report clear validation errors | Add an optional field and distinguish missing from explicitly false |
+| S04 Produce a CSV report | Read sample resource rows, normalize fields and write a summary | Change grouping and handle empty input or invalid numeric fields |
+| S05 Assemble a reusable script | Split loading/processing/reporting into modules; introduce arguments, basic logging and exit behavior | Support another input path and a dry-run mode that performs no output writes |
+| S06 Read and adapt an API script | Use a supplied fake client with success/error/timeout/page fixtures; explain configuration and call flow | Process all supplied pages, handle a failed page and explain retry tradeoffs |
+
+Teach any new library/API syntax within its project before testing it. S06 is
+an offline boundary exercise, not proof of production SDK experience. Introduce
+the difference between language knowledge, reading library documentation and
+understanding operational behavior. AWS SDK specifics can be a later lesson,
+not a prerequisite or an excuse to make real AWS calls during practice.
+
+The course's first useful milestone is small: explain a script not seen before,
+write a function, read a supplied file, produce a result, and adapt it to one
+new requirement. Later checkpoints add methods, multiple files and errors.
+Do not wait for trees, graphs or dynamic programming to reach this milestone.
+
+An interview explanation checklist asks: What problem does this solve? What
+comes in and goes out? Why these types/operations? What changes during the
+loop? What happens with bad/empty input? How would I modify or test it? Discuss
+simple tradeoffs without claiming that a small exercise is production-ready.
 
 ## Bridge from language to problems
 
@@ -184,8 +270,9 @@ must be checked when content is authored.
 ## Practice memory and continuous improvement
 
 Store versioned attempts separately from the old completion booleans:
-`exerciseId`, `contentVersion`, `variantSeed`, timestamp, outcome, hints/reveal,
-error category, and optional learner note. Store per-skill independent successes,
+`exerciseId`, `contentVersion`, `variantSeed`, practice mode (read/trace/write/
+modify/explain), application (foundations/scripts/blind75), timestamp, outcome,
+hints/reveal, error category, and optional learner note. Store per-skill independent successes,
 last practice and due date; keep code drafts in a separate workspace record.
 Use a new storage namespace so existing progress is preserved. Offer export.
 
@@ -201,6 +288,9 @@ implementation, edge cases or explanation. Use that category to recommend a
 specific drill, not a restart of the whole course. Blank-editor solves after a
 delay and performance on changed inputs matter more than time spent or streaks.
 Skill versions prevent an old easy exercise from certifying a revised skill.
+Show reading/tracing, writing, modification and explanation separately. Keep
+explanation self-review distinct from test-verified code outcomes. "Retained"
+applies to the practiced skill/mode, not an overall claim of interview readiness.
 
 ## Integration shape and build order
 
@@ -218,12 +308,14 @@ file creation; it does not need an entire desktop IDE clone.
 Build in reviewable slices:
 
 1. Add section navigation and F01-F03 authored lessons with repeated variants.
-2. Add F04-F08 and the first complete bridge through #217 and #1. Include recall
-   attempts and hints so the intended learning loop can be used immediately.
-3. Add F09-F11, including methods and real virtual `.py`/data files; complete
-   F12-F13 before the corresponding advanced modules.
-4. Expand the fixed inventory module by module, with drills before each full
-   problem. Add review scheduling and explanation practice as content expands.
+2. Add F04-F08, S01 and read/trace/write/modify/explain practice. The first usable
+   milestone is a short ordinary Python program, not a LeetCode score.
+3. Add F10-F11, S02-S04 and a virtual file workspace. Teach F09 methods alongside
+   this milestone without forcing classes into simple scripts. Add S05-S06
+   after the underlying input, validation and module concepts are practiced.
+4. Add the bridge through #217 and #1, then F12-F13 and the remaining fixed
+   inventory module by module. Continue practical script variations in parallel;
+   review scheduling includes both uses of a shared skill.
 
 Runner requirements for implementation: browser worker, stop/timeout behavior,
 fresh namespaces and attempt filesystem/module state, captured stdout/stderr,

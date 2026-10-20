@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "status": "design-only",
   "created": "2026-10-19",
   "track_id": "python-foundations-blind75",
@@ -84,9 +84,10 @@
       "id": "F11",
       "title": "Debugging and checks",
       "requires": [
-        "F09",
+        "F08",
         "F10"
-      ]
+      ],
+      "scope_note": "Introduce try/except, validation and expected failure handling as well as debugging; basic scripts do not require classes."
     },
     {
       "id": "F12",
@@ -1043,5 +1044,167 @@
       "url": "https://leetcode.com/problems/find-median-from-data-stream/",
       "access_note": "Verify official access at authoring"
     }
-  ]
+  ],
+  "updated": "2026-10-19",
+  "title": "Python Fluency for Engineering Interviews",
+  "primary_goal": "Read, trace, write, modify and explain ordinary Python; apply the shared foundation to practical scripts and the original Blind 75.",
+  "practice_modes": [
+    "read",
+    "trace",
+    "write",
+    "modify",
+    "explain"
+  ],
+  "applications": [
+    "foundations",
+    "scripts",
+    "blind75"
+  ],
+  "learning_objectives": [
+    "Read unfamiliar short Python and explain input, control flow, output and failure cases in plain English",
+    "Trace variable values, function returns and mutable state",
+    "Write a small script from a requirement using functions and files",
+    "Modify an existing script and check changed behavior",
+    "Use library documentation while understanding language syntax and operational assumptions",
+    "Reason about a Blind 75 problem independently of its Python implementation"
+  ],
+  "script_projects": [
+    {
+      "id": "S01",
+      "title": "Summarize an inventory",
+      "requires_foundations": [
+        "F07",
+        "F08"
+      ],
+      "requires_projects": [],
+      "contract": "Filter supplied service dictionaries and count by status",
+      "modification_drill": "Add a region filter and handle a missing status",
+      "execution": "Supplied fixtures and virtual files; no live external or cloud calls",
+      "practice_modes": [
+        "read",
+        "trace",
+        "write",
+        "modify",
+        "explain"
+      ]
+    },
+    {
+      "id": "S02",
+      "title": "Summarize a log file",
+      "requires_foundations": [
+        "F10",
+        "F11"
+      ],
+      "requires_projects": [
+        "S01"
+      ],
+      "contract": "Read a text fixture; count severities and malformed lines",
+      "modification_drill": "Filter warnings/errors while retaining the malformed-line count",
+      "execution": "Supplied fixtures and virtual files; no live external or cloud calls",
+      "practice_modes": [
+        "read",
+        "trace",
+        "write",
+        "modify",
+        "explain"
+      ]
+    },
+    {
+      "id": "S03",
+      "title": "Validate a configuration",
+      "requires_foundations": [
+        "F10",
+        "F11"
+      ],
+      "requires_projects": [
+        "S01"
+      ],
+      "contract": "Load supplied JSON and report required-field/type errors",
+      "modification_drill": "Distinguish missing fields from explicit false values",
+      "execution": "Supplied fixtures and virtual files; no live external or cloud calls",
+      "practice_modes": [
+        "read",
+        "trace",
+        "write",
+        "modify",
+        "explain"
+      ]
+    },
+    {
+      "id": "S04",
+      "title": "Produce a CSV report",
+      "requires_foundations": [
+        "F10",
+        "F11"
+      ],
+      "requires_projects": [
+        "S01"
+      ],
+      "contract": "Normalize supplied CSV rows and produce a summary",
+      "modification_drill": "Change grouping and handle empty or invalid numeric input",
+      "execution": "Supplied fixtures and virtual files; no live external or cloud calls",
+      "practice_modes": [
+        "read",
+        "trace",
+        "write",
+        "modify",
+        "explain"
+      ]
+    },
+    {
+      "id": "S05",
+      "title": "Assemble a reusable script",
+      "requires_foundations": [
+        "F10",
+        "F11"
+      ],
+      "requires_projects": [
+        "S03",
+        "S04"
+      ],
+      "contract": "Split a script into modules and introduce argument/logging/exit concepts",
+      "modification_drill": "Add an input path and a dry-run mode with no output writes",
+      "execution": "Supplied fixtures and virtual files; no live external or cloud calls",
+      "practice_modes": [
+        "read",
+        "trace",
+        "write",
+        "modify",
+        "explain"
+      ]
+    },
+    {
+      "id": "S06",
+      "title": "Read and adapt an API script",
+      "requires_foundations": [
+        "F10",
+        "F11"
+      ],
+      "requires_projects": [
+        "S03",
+        "S05"
+      ],
+      "contract": "Read a fake-client script and process supplied success/error/timeout/page fixtures",
+      "modification_drill": "Handle all pages and explain failed-page/retry tradeoffs without live calls",
+      "execution": "Supplied fixtures and virtual files; no live external or cloud calls",
+      "practice_modes": [
+        "read",
+        "trace",
+        "write",
+        "modify",
+        "explain"
+      ]
+    }
+  ],
+  "first_milestone": {
+    "title": "Use Python for a small ordinary program",
+    "evidence": [
+      "Explain an unfamiliar short script",
+      "Write and call a function",
+      "Read a supplied file and produce a result",
+      "Modify the program for one changed requirement"
+    ],
+    "advanced_algorithms_required": false,
+    "explanation_assessment": "Learner checklist/self-review; separate from automated code tests"
+  }
 }
