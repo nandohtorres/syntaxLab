@@ -13,12 +13,14 @@ export default function Header() {
   const themeToggleTooltipLabel = isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-      <Typography variant="h5" fontWeight="bold" letterSpacing={1}>
-        SyntaxLab
+    <Box component="header" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5, flexShrink: 0 }}>
+      <Box aria-hidden="true" sx={{ width: 35, height: 35, border: '1px solid', borderColor: 'divider', borderRadius: 2, display: 'grid', placeItems: 'center', color: 'primary.main', fontFamily: 'Consolas, monospace', fontWeight: 700 }}>{'{ }'}</Box>
+      <Typography sx={{ fontSize: 23, fontWeight: 750, letterSpacing: '-0.7px' }}>
+        Syntax<Box component="span" sx={{ color: 'primary.main' }}>Lab</Box>
       </Typography>
+      <Typography sx={{ ml: 'auto', color: 'text.secondary', fontSize: 12, display: { xs: 'none', sm: 'block' } }}>Learn python and leetcode patterns at the same time</Typography>
       <Tooltip title={themeToggleTooltipLabel}>
-        <IconButton onClick={toggleThemeMode} size="small">
+        <IconButton aria-label={themeToggleTooltipLabel} onClick={toggleThemeMode} size="small" sx={{ ml: { xs: 'auto', sm: 0 } }}>
           {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
         </IconButton>
       </Tooltip>

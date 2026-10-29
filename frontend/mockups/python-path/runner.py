@@ -72,7 +72,23 @@ def grade_request(payload):
         return result(False, "Start with some Python", "Write your solution in the editor, then run it.")
     nodes = {type(node).__name__ for tree in trees for node in ast.walk(tree)}
     for rule in exercise.get("syntax", []):
-        found = bool(nodes.intersection(rule["anyOf"]))
+        if rule.get("unpack"):
+            found = any(isinstance(node, ast.Assign)
+                        and any(isinstance(target, (ast.Tuple, ast.List)) for target in node.targets)
+                        for tree in trees for node in ast.walk(tree))
+        elif "call" in rule:
+            scope = ([node for tree in trees for node in ast.walk(tree)
+                      if isinstance(node, ast.FunctionDef) and node.name == rule["within"]]
+                     if rule.get("within") else trees)
+            found = any(
+                isinstance(node, ast.Call) and (
+                    isinstance(node.func, ast.Name) and node.func.id == rule["call"]
+                    or isinstance(node.func, ast.Attribute) and node.func.attr == rule["call"]
+                )
+                for root in scope for node in ast.walk(root)
+            )
+        else:
+            found = bool(nodes.intersection(rule["anyOf"]))
         checks.append({"label": rule["label"], "passed": found})
         if not found:
             return result(False, "Practice the intended syntax", rule.get("message", rule["label"]))

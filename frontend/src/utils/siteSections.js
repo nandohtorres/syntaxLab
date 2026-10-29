@@ -1,10 +1,11 @@
 export const siteSections = [
-  { id: 'practice', label: 'Original practice' },
-  { id: 'python', label: 'Python Path' },
-  { id: 'interview', label: 'Interview prep' },
+  { id: 'python', label: 'Python Basics' },
+  { id: 'practice', label: 'LeetCode Patterns' },
+  { id: 'learn', label: 'Learning Hub' },
 ]
 
 export function sectionFromHash(hash) {
   const id = hash.replace(/^#/, '')
+  if (id === 'interview') return 'learn'
   return siteSections.some(section => section.id === id) ? id : 'practice'
 }

@@ -1,3 +1,4 @@
+import { basicsTeaching } from './basicsTeaching.js'
 import { lesson, check } from './lesson.js'
 
 const entries = [
@@ -45,6 +46,7 @@ const entries = [
 
 export default entries.map(entry => lesson({
   ...entry, track:'scripts',
-  note:'Build the program in small steps, inspect output, then explain input, transformation and failure behavior. All files and API responses in this exercise are local fixtures.',
+  title: basicsTeaching[entry.id].title,
+  note: basicsTeaching[entry.id].explanation, pitfall: basicsTeaching[entry.id].mistake,
   hints:['Identify input, transformation and output before writing the loop.','Keep parsing, validation and processing separate. Use the supplied file names and contract exactly.'],
 }))

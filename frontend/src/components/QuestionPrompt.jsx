@@ -5,8 +5,11 @@ import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
 import Collapse from '@mui/material/Collapse'
 import Paper from '@mui/material/Paper'
+import { useStudyLayout } from '@practice/layoutContext.js'
 
 export default function QuestionPrompt({ question }) {
+  const layout = useStudyLayout()
+  const demo = layout !== 'current'
   const [isAnswerVisible, setIsAnswerVisible] = useState(false)
   const [isNotesVisible, setIsNotesVisible] = useState(false)
 
@@ -19,16 +22,18 @@ export default function QuestionPrompt({ question }) {
   }
 
   return (
-    <Box sx={{ mt: 1, px: 1.5, pb: 1.5 }}>
-      <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+    <Box sx={{ p: demo ? (layout === 'flow' ? 0 : 2) : { xs: 2, md: 2.5 } }}>
+      <Typography sx={{ fontSize: 10, letterSpacing: '0.13em', textTransform: 'uppercase', fontWeight: 700, color: 'primary.main', mb: 1 }}>{question.group}</Typography>
+      <Typography component="h2" id="exercise-title" sx={{ fontSize: 23, fontWeight: 650, letterSpacing: '-0.4px', mb: 1.5 }}>
         {question.title}
       </Typography>
       <Box
         sx={{
-          borderLeft: '3px solid',
-          borderColor: 'primary.main',
-          backgroundColor: theme => theme.palette.mode === 'dark' ? 'rgba(144,202,249,0.06)' : 'rgba(25,118,210,0.05)',
-          borderRadius: '0 6px 6px 0',
+          border: demo ? '1px solid' : undefined,
+          borderLeft: demo ? undefined : '3px solid',
+          borderColor: demo ? 'divider' : 'primary.main',
+          backgroundColor: demo ? 'background.paper' : theme => theme.palette.mode === 'dark' ? 'rgba(144,202,249,0.06)' : 'rgba(25,118,210,0.05)',
+          borderRadius: demo ? 2 : '0 6px 6px 0',
           px: 1.5,
           py: 1,
           mb: 2,
@@ -44,7 +49,7 @@ export default function QuestionPrompt({ question }) {
 
       {/* Answer */}
       <Box sx={{ mt: 1 }}>
-        <Button variant="outlined" size="small" onClick={() => setIsAnswerVisible(v => !v)}>
+        <Button variant="outlined" size="small" aria-expanded={isAnswerVisible} onClick={() => setIsAnswerVisible(v => !v)}>
           {isAnswerVisible ? 'Hide Answer' : 'Show Answer'}
         </Button>
         <Collapse in={isAnswerVisible}>
@@ -71,7 +76,7 @@ export default function QuestionPrompt({ question }) {
       {/* Language Notes */}
       {question.languageNotes?.length > 0 && (
         <Box sx={{ mt: 1.5 }}>
-          <Button variant="outlined" size="small" color="secondary" onClick={() => setIsNotesVisible(v => !v)}>
+          <Button variant="outlined" size="small" color="secondary" aria-expanded={isNotesVisible} onClick={() => setIsNotesVisible(v => !v)}>
             {isNotesVisible ? 'Hide Language Notes' : 'Show Language Notes'}
           </Button>
           <Collapse in={isNotesVisible}>

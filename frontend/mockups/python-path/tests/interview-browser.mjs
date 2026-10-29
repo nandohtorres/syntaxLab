@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url'
 import assert from 'node:assert/strict'
 import { drills } from '../interview/content.js'
 const require = createRequire(import.meta.url)
-const { chromium, expect } = require(process.env.PLAYWRIGHT_PACKAGE ?? 'C:/Users/ferna/cursor projects/side-projects/archibrief-cleanup-codex/frontend/node_modules/@playwright/test')
+const { chromium, expect } = require(process.env.PLAYWRIGHT_PACKAGE ?? '@playwright/test')
 const browser = await chromium.launch({ headless: true })
 try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1060 } })

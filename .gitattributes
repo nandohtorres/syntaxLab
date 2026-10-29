@@ -1,0 +1,2 @@
+# Preserve the archived source bytes and their recorded SHA-256 hashes on every OS.
+archives/interview-prep/** -text
