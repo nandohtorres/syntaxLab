@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react'
+import { layoutFromSearch } from '@practice/layoutContext.js'
 
-const QUESTIONS_API_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'}/api/questions`
+// Local comparison builds include a snapshot of the same authored question bank.
+// Normal study and deployed API access keep their existing behavior.
+const localDemo = ['localhost', '127.0.0.1'].includes(location.hostname) && layoutFromSearch(location.search) !== 'current'
+const QUESTIONS_API_URL = localDemo ? '/layout-preview-questions.json' : `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'}/api/questions`
 
 export function useQuestions() {
   const [questions, setQuestions] = useState([])

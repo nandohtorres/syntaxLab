@@ -5,7 +5,7 @@ Designed for beginners who want to learn idiomatic Python fast.
 
 🌐 **Live Demo:** [syntaxlab.work](https://syntaxlab.work)
 
-![React](https://img.shields.io/badge/React_18-61DAFB?logo=react&logoColor=black)
+![React](https://img.shields.io/badge/React_19-61DAFB?logo=react&logoColor=black)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
 ![MUI](https://img.shields.io/badge/MUI-007FFF?logo=mui&logoColor=white)
 ![Java](https://img.shields.io/badge/Java_21-ED8B00?logo=openjdk&logoColor=white)
@@ -30,19 +30,32 @@ Designed for beginners who want to learn idiomatic Python fast.
 
 The frontend now includes three sections in the same application build:
 
-- **Original practice** (`/` or `/#practice`): the existing 30 API-served exercises.
-- **Python Path** (`/#python`): 208 runnable editor exercises covering foundations,
-  pattern building blocks, practical scripts and the original Blind 75.
-- **Interview prep** (`/#interview`): 29 study topics, 66 typed recall drills and
-  correction/source notes. Responses are self-reviewed against explicit criteria.
+- **Python Basics** (`/#python`): 98 core syntax drills, with six separately marked
+  optional projects. Each topic has lettered skills and numbered variations.
+- **LeetCode Patterns** (`/` or `/#practice`): exactly 75 questions with official
+  numbers/titles, ordered pattern groups, original-problem context, preparation
+  steps and the full problem. Passing a warm-up does not complete its question.
+- **Learning Hub** (`/#learn`): 21 concise Python topics with examples and
+  outputs, visuals for 15 pattern groups, Python uses and useful quirks.
 
-The new sections load independently of the questions API and preserve drafts when
-switching tabs. Python Path executes in a browser worker. Interview prep does not
-download Python unless a coding section is opened. See the
-[workspace guide](frontend/mockups/python-path/README.md) and
-[release checklist](docs/python-path-site-integration.md).
+The approved floating-island layout is now the default, with light mode initially.
+Skip lives beside Run; after the current code passes it becomes Next. Explanations
+and optional code solutions are separate. File creation appears only where useful.
+See the [curriculum review and release checks](docs/curriculum-audit.md).
 
-The following features describe Original practice:
+Basics and pattern work share the existing browser storage key with separate
+selections and one save owner; original practice progress remains separate.
+Learning Hub visits load neither the questions API nor Python/editor runtime.
+Interview Prep is saved in the [archive](archives/interview-prep/README.md) for
+a future separate site. Existing browser recall data is preserved; old
+`/#interview` links open Learning Hub. See the [Hub guide](docs/learning-hub.md),
+[study plan and release handoff](docs/study-workflow-plan.md),
+[printable reference](docs/interview-reference.md) and
+[workspace guide](frontend/mockups/python-path/README.md). These local changes
+require review and publication before they describe the live site.
+
+The earlier 30-question practice implementation remains in source for reference;
+its storage is preserved. The following list describes that historical version:
 
 - **30 exercises** across 7 topic groups: Variables & Strings, Data Structures, Control Flow, Functions & Pythonic Style, Operators, Object-Oriented, Algorithms & Patterns
 - **Python runs entirely in the browser** via Pyodide (WebAssembly) — no server-side code execution
@@ -61,7 +74,7 @@ The following features describe Original practice:
 
 | Layer | Technology |
 |---|---|
-| Frontend | React 18, Vite |
+| Frontend | React 19, Vite |
 | UI Components | Material UI (MUI) |
 | Code Editor | Monaco Editor |
 | Python Execution | Pyodide (WebAssembly — runs entirely in the browser) |

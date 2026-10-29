@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Alert, Box, Button, Chip, LinearProgress, Stack, Typography } from '@mui/material'
 import Editor from '@monaco-editor/react'
-import { definePracticeTheme, mono } from './ExerciseEditor.jsx'
+import { definePracticeTheme, mono } from './editorSupport.js'
 import usePracticeRunner from './usePracticeRunner.js'
 import exercises from './redesignExercises.js'
 
@@ -48,7 +48,7 @@ export default function RedesignDraft() {
     const result = await runner.run({ exercise: { ...exercise, entry: 'main.py' }, files: { 'main.py': code } })
     if (result?.passed) setCompleted(previous => [...new Set([...previous, exercise.id])])
   }
-  runRef.current = run
+  useEffect(() => { runRef.current = run })
   const groups = [...new Set(exercises.map(item => item.group))]
 
   return <Box sx={{ ...scrollbars, minHeight: '100dvh', p: { xs: 1.5, md: 3 }, background: 'radial-gradient(ellipse at 15% 0%, #152a2b 0%, #0c111b 48%)', [desktop]: { height: '100dvh', display: 'flex', alignItems: 'center', overflow: 'hidden' } }}>

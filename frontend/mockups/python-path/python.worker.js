@@ -1,5 +1,4 @@
-﻿/* global self */
-import runnerSource from './runner.py?raw'
+﻿import runnerSource from './runner.py?raw'
 import sharedSetup from './content/structures.py?raw'
 const base = 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/'
 let grade

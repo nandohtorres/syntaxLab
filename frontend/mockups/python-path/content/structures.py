@@ -8,6 +8,8 @@ from functools import lru_cache
 
 def _expect(actual, expected):
     assert actual == expected, f"Expected {expected!r}; got {actual!r}"
+    if type(expected) is int:
+        assert type(actual) is int, "Return an integer, not a boolean or float"
     if type(expected) is bool:
         assert type(actual) is bool, "Return a boolean, not an integer"
 

@@ -1,8 +1,9 @@
 import React from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
-import { download, mono } from './ExerciseEditor.jsx'
+import { download, mono } from './editorSupport.js'
 
 export default function FeedbackPanel({ result }) {
+  if (!result) return null
   return <Box role="status" aria-live="polite" sx={{ my: 2, p: 2, border: '1px solid', borderColor: result?.passed ? '#98e7c43d' : 'divider', borderRadius: 2, overflowWrap: 'anywhere' }}>
     <Typography sx={{ fontWeight: 650, color: result?.passed ? 'primary.main' : 'text.primary' }}>{result?.title ?? 'Write it. Run it. See what happens.'}</Typography>
     <Typography sx={{ fontSize: 13, color: 'text.secondary', mt: 0.6 }}>{result?.message ?? 'Try as many times as you need. Each run starts in a fresh file workspace.'}</Typography>

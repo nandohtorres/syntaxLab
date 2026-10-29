@@ -1,45 +1,54 @@
 import React, { useRef } from 'react'
-import { Box, Button, CircularProgress, Stack, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, IconButton, Stack, Tab, Tabs, ThemeProvider, Tooltip, Typography } from '@mui/material'
+import DarkModeIcon from '@mui/icons-material/DarkMode'
+import LightModeIcon from '@mui/icons-material/LightMode'
+import RefreshIcon from '@mui/icons-material/Refresh'
 import Editor from '@monaco-editor/react'
 import './editorRuntime.js'
 
-export const mono = '"Cascadia Code", Consolas, monospace'
-export const definePracticeTheme = api => api.editor.defineTheme('synlab-practice', { base: 'vs-dark', inherit: true, rules: [{ token: 'comment', foreground: '64758c', fontStyle: 'italic' }], colors: { 'editor.background': '#101722', 'editor.foreground': '#d7e3f3', 'editorLineNumber.foreground': '#52657e', 'editorCursor.foreground': '#98e7c4' } })
+import { mono, definePracticeTheme, download } from './editorSupport.js'
+import practiceTheme, { lightPracticeTheme } from './practiceTheme.js'
+import { exerciseFileTools } from './exerciseFeatures.js'
+import { useEditorTheme } from './editorThemeStore.js'
+import { useStudyLayout } from './layoutContext.js'
+import PassCelebration from './PassCelebration.jsx'
 
-export function download(name, text, type = 'text/plain') {
-  const url = URL.createObjectURL(new Blob([text], { type }))
-  const link = document.createElement('a')
-  link.href = url
-  link.download = name.split('/').pop()
-  link.click()
-  setTimeout(() => URL.revokeObjectURL(url), 1000)
-}
-
-export default function ExerciseEditor({ exercise, files, active, setActive, change, addFile, reset, status, run, stop, hint, passed }) {
+export default function ExerciseEditor({ exercise, files, active, setActive, change, addFile, reset, status, run, stop, passed, compact = false, next, skip, skipLabel = 'Skip question', nextLabel = 'Next question' }) {
+  const layout = useStudyLayout()
+  const [editorMode, toggleEditorMode] = useEditorTheme()
+  const tools = exerciseFileTools(exercise)
+  const island = layout === 'island'
+  const demo = layout !== 'current'
+  const desktop = '@media (min-width: 900px) and (min-height: 760px)'
   const runAction = useRef(run)
+  const nextAction = useRef(null)
+  const editor = useRef(null)
   React.useEffect(() => { runAction.current = run }, [run])
-  return <Box sx={{ border: '1px solid', borderColor: passed ? '#98e7c475' : '#2c394b', borderRadius: 2, overflow: 'hidden', bgcolor: '#101722' }}>
-    <Stack direction="row" sx={{ bgcolor: '#151e2b', alignItems: 'center', flexWrap: 'wrap' }}>
+  React.useEffect(() => { nextAction.current = passed && status === 'ready' ? next : null }, [passed, status, next])
+  return <ThemeProvider theme={editorMode === 'light' ? lightPracticeTheme : practiceTheme}><Box sx={{ border: '1px solid', borderColor: passed ? 'primary.main' : 'divider', borderRadius: 2, overflow: 'hidden', bgcolor: 'background.default', ...(island && { [desktop]: { display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 } }) }}>
+    <Stack direction="row" sx={{ bgcolor: 'background.paper', alignItems: 'center', flexWrap: 'wrap' }}>
       <Tabs value={active} onChange={(_, name) => setActive(name)} variant="scrollable" scrollButtons="auto" aria-label="Workspace files" sx={{ flex: 1, minWidth: 140 }}>
         {Object.keys(files).map(name => <Tab key={name} value={name} label={name} sx={{ fontFamily: mono, textTransform: 'none', fontSize: 12 }} />)}
       </Tabs>
-      <Button size="small" onClick={addFile} disabled={status === 'running'}>+ File</Button>
-      <Button size="small" onClick={() => download(active, files[active])}>Save file</Button>
-      <Button size="small" onClick={reset} disabled={status === 'running'}>Reset code</Button>
+      {(tools.add || tools.save) && <Box component="details" sx={{ position: 'relative', mr: 1 }}><Typography component="summary" sx={{ cursor: 'pointer', fontSize: 12, color: 'primary.main' }}>File tools</Typography><Stack sx={{ position: 'absolute', right: 0, zIndex: 3, minWidth: 130, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', p: 1 }}>{tools.add && <Button size="small" onClick={addFile} disabled={status === 'running'}>+ File</Button>}{tools.save && <Button size="small" onClick={() => download(active, files[active])}>Save file</Button>}</Stack></Box>}
+      <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 0, mr: 0.5 }}>
+      <Tooltip title="Reset code"><IconButton size="small" aria-label="Reset code" onClick={reset} disabled={status === 'running'} ><RefreshIcon fontSize="small" /></IconButton></Tooltip>
+      <Tooltip title={`Use ${editorMode === 'light' ? 'dark' : 'light'} editor`}><IconButton size="small" onClick={toggleEditorMode} aria-label={`Use ${editorMode === 'light' ? 'dark' : 'light'} editor`} sx={{ mx: 0.5 }}>{editorMode === 'light' ? <DarkModeIcon fontSize="small" /> : <LightModeIcon fontSize="small" />}</IconButton></Tooltip>
+      </Box>
     </Stack>
-    <Box sx={{ height: { xs: 320, sm: 380 } }}>
+    <Box sx={{ position: 'relative', height: demo ? { xs: 260, md: 280 } : compact ? { xs: 180, sm: 220 } : { xs: 320, sm: 380 }, ...(island && { [desktop]: { height: 'auto', flex: 1, minHeight: 100 } }) }}>
       <Editor height="100%" path={`${exercise.id}/${active}`} value={files[active] ?? ''}
         language={active.endsWith('.py') ? 'python' : active.endsWith('.json') ? 'json' : 'plaintext'}
-        onChange={value => change(value ?? '')} theme="synlab-practice"
+        onChange={value => change(value ?? '')} theme={editorMode === 'light' ? 'synlab-practice-light' : 'synlab-practice'}
         beforeMount={definePracticeTheme}
-        onMount={(instance, api) => { instance.addCommand(api.KeyMod.CtrlCmd | api.KeyCode.Enter, () => runAction.current()); instance.focus() }}
-        options={{ ariaLabel: 'Python code editor', fontFamily: mono, fontSize: 16, lineHeight: 27, minimap: { enabled: false }, tabSize: 4, automaticLayout: true, occurrencesHighlight: 'off', scrollBeyondLastLine: false, padding: { top: 15 }, quickSuggestions: false, suggestOnTriggerCharacters: false, wordBasedSuggestions: 'off', readOnly: status === 'running' }} />
+        onMount={(instance, api) => { editor.current = instance; instance.addCommand(api.KeyMod.CtrlCmd | api.KeyCode.Enter, () => runAction.current()); instance.addCommand(api.KeyMod.CtrlCmd | api.KeyMod.Shift | api.KeyCode.Enter, () => nextAction.current?.()); instance.focus() }}
+        options={{ ariaLabel: 'Python code editor', fontFamily: mono, fontSize: 16, lineHeight: 27, minimap: { enabled: false }, scrollbar: { verticalScrollbarSize: 8, horizontalScrollbarSize: 8, useShadows: false }, tabSize: 4, automaticLayout: true, occurrencesHighlight: 'off', scrollBeyondLastLine: false, padding: { top: 15 }, quickSuggestions: false, suggestOnTriggerCharacters: false, wordBasedSuggestions: 'off', readOnly: status === 'running' }} />
+      {passed && status === 'ready' && next && <PassCelebration key={exercise.id} onNext={next} onReturn={() => editor.current?.focus()} />}
     </Box>
     <Stack direction="row" spacing={1} sx={{ p: 1.5, alignItems: 'center', borderTop: '1px solid', borderColor: 'divider' }}>
-      <Button onClick={hint} size="small" sx={{ color: 'text.secondary' }}>Need a hint?</Button>
-      <Typography sx={{ flex: 1, fontSize: 11, color: 'text.secondary', display: { xs: 'none', sm: 'block' } }}>Ctrl/Cmd + Enter</Typography>
-      <Box sx={{ flex: { xs: 1, sm: 0 } }} />
-      {status === 'running' ? <Button onClick={stop} variant="outlined">Stop</Button> : <Button onClick={run} variant="contained" disabled={status !== 'ready'} startIcon={status === 'loading' ? <CircularProgress size={14} /> : null}>{status === 'loading' ? 'Loading Python' : 'Run code'}</Button>}
+      <Box sx={{ flex: 1 }} />
+      {status === 'running' ? <Button onClick={stop} variant="outlined">Stop</Button> : <Button onClick={run} variant={passed ? 'outlined' : 'contained'} disabled={status !== 'ready'} startIcon={status === 'loading' ? <CircularProgress size={14} /> : null}>{status === 'loading' ? 'Loading Python' : 'Run code'}</Button>}
+      {(skip || compact || demo) && <Button disabled={status === 'running' || (!skip && (!passed || status !== 'ready'))} variant={passed ? 'contained' : 'text'} onClick={passed ? next : skip} title={passed ? undefined : 'Move on without earning credit'}>{passed ? nextLabel : skipLabel} →</Button>}
     </Stack>
-  </Box>
+  </Box></ThemeProvider>
 }

@@ -1,4 +1,6 @@
 import { lesson, check, syntax } from './lesson.js'
+import { foundationUnits } from './catalog.js'
+import { basicsTeaching } from './basicsTeaching.js'
 
 const lessons = []
 const add = options => lessons.push(lesson(options))
@@ -8,7 +10,7 @@ const has = (name, value) => check(`Value of ${name}`, `assert ${name} == ${JSON
 variants(v => {
   const name = ['retries', 'workers', 'attempts'][v], n = [3, 5, 2][v]
   add({ id: 'assign', unit: 'F01', variant: v, title: 'Give a value a name.', prompt: `Create a variable named ${name} and set it to the integer ${n}.`, solution: `${name} = ${n}`, tests: [has(name, n), check('Integer type', `assert type(${name}) is int, "Use a whole number without quotes"`)], syntax: [syntax('An assignment', 'Assign', 'AnnAssign')], hints: ['Put the name on the left and the value on the right.', 'Use a single = sign. Numbers do not need quotes.'], note: 'A variable gives a name to a value. For example, limit = 8 stores the integer 8 under the name limit.' })
-  add({ id: 'print', unit: 'F01', variant: v, title: 'Make the output visible.', prompt: `Print the exact text ${['Hello, Python!', 'Ready to deploy', 'Learning one line'][v]}.`, solution: `print(${JSON.stringify(['Hello, Python!', 'Ready to deploy', 'Learning one line'][v])})`, tests: [check('Printed output', `assert _stdout.strip() == ${JSON.stringify(['Hello, Python!', 'Ready to deploy', 'Learning one line'][v])}, "Check the exact text you printed"`)], note: 'print(...) writes a value to the output. Text literals go inside matching quotes.' })
+  add({ id: 'print', unit: 'F01', variant: v, title: 'Make the output visible.', prompt: `Use print(...) to display the exact text ${JSON.stringify(['Hello, Python!', 'Ready to deploy', 'Learning one line'][v])}.`, solution: `print(${JSON.stringify(['Hello, Python!', 'Ready to deploy', 'Learning one line'][v])})`, tests: [check('Printed output', `assert _stdout.strip() == ${JSON.stringify(['Hello, Python!', 'Ready to deploy', 'Learning one line'][v])}, "Check the exact text you printed"`)], syntax: [{ label: 'A print() call', call: 'print', message: 'Use print(...) to display the text.' }], note: 'print(...) writes a value to the output. Text literals go inside matching quotes.' })
 })
 
 for (const [id, title, prompt, solution, code] of [
@@ -18,9 +20,20 @@ for (const [id, title, prompt, solution, code] of [
   ['float', 'Keep the decimal.', 'Create latency containing the float 1.5.', 'latency = 1.5', 'assert type(latency) is float and latency == 1.5'],
 ]) add({ id, unit: 'F02', title, prompt, solution, tests: [code], note: 'Python values have types. Strings, booleans, None and numeric values have different behavior.' })
 
+for (const v of [1, 2]) {
+  const name = ['city', 'language'][v - 1], text = ['Dallas', 'Python'][v - 1]
+  add({ id: 'string', variant: v, unit: 'F02', title: 'Store some text.', prompt: `Create ${name} containing the string ${text}.`, solution: `${name} = ${JSON.stringify(text)}`, tests: [has(name, text), `assert type(${name}) is str`], hints: ['Put the variable name on the left of =.', 'Text goes inside matching single or double quotes.'] })
+  const flag = ['ready', 'is_empty'][v - 1], value = v === 1 ? 'False' : 'True'
+  add({ id: 'boolean', variant: v, unit: 'F02', title: 'Store a true/false value.', prompt: `Create ${flag} containing the boolean ${value}, not text or a number.`, solution: `${flag} = ${value}`, tests: [`assert ${flag} is ${value}`], hints: ['Python boolean literals start with a capital letter.', 'Do not put quotes around True or False.'] })
+  const missing = ['result', 'selected'][v - 1]
+  add({ id: 'none', variant: v, unit: 'F02', title: 'Represent a missing value.', prompt: `Create ${missing} containing None.`, solution: `${missing} = None`, tests: [`assert ${missing} is None`], hints: ['Assign the special missing-value literal.', 'Use None without quotes.'] })
+  const decimal = ['price', 'duration'][v - 1], amount = [2.5, 0.75][v - 1]
+  add({ id: 'float', variant: v, unit: 'F02', title: 'Keep the decimal.', prompt: `Create ${decimal} containing the float ${amount}.`, solution: `${decimal} = ${amount}`, tests: [has(decimal, amount), `assert type(${decimal}) is float`], hints: ['Use a number with a decimal point.', 'Do not put quotes around the number.'] })
+}
+
 variants(v => {
   const n = 3 + v
-  add({ id: 'reassign', unit: 'F02', variant: v, title: 'Update an existing value.', prompt: `Start with count = ${n}. Increase count by 2 without hardcoding the final result.`, starter: `count = ${n}\n# Increase count below\n`, solution: `count = ${n}\ncount += 2`, tests: [has('count', n + 2)], syntax: [syntax('An update', 'AugAssign')], note: 'count += 2 adds 2 to the current value. The name now refers to the updated value.' })
+  add({ id: 'reassign', unit: 'F02', variant: v, title: 'Update an existing value.', prompt: `Start with count = ${n}. Increase count by 2 without hardcoding the final result.`, starter: `count = ${n}\n# Increase count below\n`, solution: `count = ${n}\ncount += 2`, tests: [has('count', n + 2)], syntax: [syntax('An update', 'AugAssign', 'BinOp')], note: 'count += 2 adds 2 to the current value. The name now refers to the updated value.' })
   add({ id: 'convert', unit: 'F02', variant: v, title: 'Turn text into a number.', prompt: `Given raw = "${n}", store its integer value in count.`, starter: `raw = "${n}"\n`, solution: `raw = "${n}"\ncount = int(raw)`, tests: [has('count', n), `assert type(count) is int`], note: 'int(text) converts a numeric string into an integer. Invalid numeric text raises ValueError.' })
   add({ id: 'remainder', unit: 'F03', variant: v, title: 'Find what is left over.', prompt: `Given jobs = ${17 + v}, store the remainder after division by 5 in leftover.`, starter: `jobs = ${17 + v}\n`, solution: `jobs = ${17 + v}\nleftover = jobs % 5`, tests: [has('leftover', (17 + v) % 5)], syntax: [syntax('The remainder operator', 'Mod')], note: '% finds the remainder; // gives the whole-number quotient.' })
   add({ id: 'quotient', unit: 'F03', variant: v, title: 'Divide into whole groups.', prompt: `Store the whole-number quotient of ${17 + v} divided by 5 in groups.`, solution: `groups = ${17 + v} // 5`, tests: [has('groups', Math.floor((17 + v) / 5)), 'assert type(groups) is int'], syntax: [syntax('Floor division', 'FloorDiv')] })
@@ -38,19 +51,19 @@ variants(v => {
   add({ id: 'file-write', unit: 'F10', variant: v, title: 'Create a data file.', prompt: `Write the text "${['ready', 'hello', 'complete'][v]}" into result.txt using a with block.`, solution: `with open("result.txt", "w", encoding="utf-8") as output:\n    output.write("${['ready', 'hello', 'complete'][v]}")`, tests: [check('File contents', `from pathlib import Path\nassert Path("result.txt").read_text() == "${['ready', 'hello', 'complete'][v]}"`)], syntax: [syntax('A with block', 'With')], note: 'Mode w creates or truncates a file. A context manager closes it when the block ends.' })
   add({ id: 'file-read', unit: 'F10', variant: v, title: 'Read a supplied file.', prompt: 'Read values.txt, convert each line to an integer, and store their sum in total.', files: { 'main.py': '# Read values.txt below\n', 'values.txt': `${v + 1}\n4\n7\n` }, solution: 'with open("values.txt", encoding="utf-8") as source:\n    total = sum(int(line) for line in source)', tests: [has('total', v + 12)], note: 'Read input as text, then explicitly convert numeric text to numbers.' })
   add({ id: 'import', unit: 'F10', variant: v, title: 'Use another Python file.', prompt: `Create helpers.py defining double(value). Import it in main.py and store double(${3 + v}) in answer.`, files: { 'main.py': '# Import your helper below\n' }, solutionFiles: { 'helpers.py': 'def double(value):\n    return value * 2\n', 'main.py': `from helpers import double\nanswer = double(${3 + v})` }, tests: [has('answer', 2 * (3 + v)), check('Helper works on another value', 'import helpers\nassert helpers.double(9) == 18')], note: 'A .py file is a module. Import its function instead of copying its definition into every script.' })
-  add({ id: 'exception', unit: 'F11', variant: v, title: 'Handle invalid input.', prompt: 'Write parse_count(raw) returning an integer, or 0 when raw is not a valid integer string.', solution: 'def parse_count(raw):\n    try:\n        return int(raw)\n    except ValueError:\n        return 0', tests: [`assert parse_count("${3 + v}") == ${3 + v}`, 'assert parse_count("bad") == 0', 'assert parse_count("") == 0', 'assert parse_count("-4") == -4'], syntax: [syntax('A try/except statement', 'Try')], note: 'Catch an expected exception specifically. Do not turn every unexpected failure into silent success.' })
+  add({ id: 'exception', unit: 'F11', variant: v, title: 'Handle invalid input.', prompt: 'Write parse_count(raw), where raw is a string. Return its integer value, or 0 when the string is not a valid integer.', solution: 'def parse_count(raw):\n    try:\n        return int(raw)\n    except ValueError:\n        return 0', tests: [`assert parse_count("${3 + v}") == ${3 + v}`, 'assert parse_count("bad") == 0', 'assert parse_count("") == 0', 'assert parse_count("-4") == -4'], syntax: [syntax('A try/except statement', 'Try')], note: 'Catch an expected exception specifically. Do not turn every unexpected failure into silent success.' })
   add({ id: 'sort', unit: 'F12', variant: v, title: 'Sort by a useful key.', prompt: `Sort words = ${JSON.stringify([['cloud', 'a', 'we'], ['python', 'i', 'code'], ['server', 'x', 'api']][v])} by length into ordered.`, starter: `words = ${JSON.stringify([['cloud', 'a', 'we'], ['python', 'i', 'code'], ['server', 'x', 'api']][v])}\n`, solution: `words = ${JSON.stringify([['cloud', 'a', 'we'], ['python', 'i', 'code'], ['server', 'x', 'api']][v])}\nordered = sorted(words, key=len)`, tests: ['assert ordered == sorted(words, key=len)'], note: 'sorted returns a new list. key supplies a function used to compare each item.' })
   add({ id: 'factorial', unit: 'F13', variant: v, title: 'Give recursion a base case.', prompt: 'Write factorial(n) recursively for nonnegative integers. factorial(0) is 1.', solution: 'def factorial(n):\n    if n == 0:\n        return 1\n    return n * factorial(n - 1)', tests: ['assert factorial(0) == 1', `assert factorial(${3 + v}) == ${[6, 24, 120][v]}`], syntax: [syntax('A function definition', 'FunctionDef')], note: 'A recursive function handles a base case and calls itself on a smaller subproblem.' })
 })
 
 const singles = [
-  ['F03','boolean-logic','Combine conditions.','Given ready = True and errors = 0, set can_run to ready and errors equal to zero.','ready = True\nerrors = 0\ncan_run = ready and errors == 0','assert can_run is True'],
+  ['F03','boolean-logic','Combine conditions.','Given ready = True and errors = 0, use and to set can_run to whether ready is true and errors equals zero.','ready = True\nerrors = 0\ncan_run = ready and errors == 0','assert can_run is True'],
   ['F04','split-join','Turn text into a list and back.','Split "api,db,worker" on commas into services, then join them with " / " into label.','services = "api,db,worker".split(",")\nlabel = " / ".join(services)','assert services == ["api","db","worker"] and label == "api / db / worker"'],
   ['F05','elif','Handle a third case.','Given status = 503, set category to "ok" below 400, "client" below 500, otherwise "server" using if/elif/else.','status = 503\nif status < 400:\n    category = "ok"\nelif status < 500:\n    category = "client"\nelse:\n    category = "server"','assert category == "server"'],
   ['F06','enumerate','Keep the index too.','Build indexed from ["api", "db"] as [(0, "api"), (1, "db")] using enumerate.','indexed = []\nfor index, name in enumerate(["api", "db"]):\n    indexed.append((index, name))','assert indexed == [(0,"api"),(1,"db")]'],
   ['F06','continue','Skip unwanted values.','Use a loop and continue to collect only nonnegative values from [-1, 2, -3, 4] into kept.','kept = []\nfor n in [-1, 2, -3, 4]:\n    if n < 0:\n        continue\n    kept.append(n)','assert kept == [2,4]'],
   ['F07','copy','Change a copy.','Create original = [1, 2]. Copy it into changed and append 3 only to changed.','original = [1, 2]\nchanged = original.copy()\nchanged.append(3)','assert original == [1,2] and changed == [1,2,3] and original is not changed'],
-  ['F07','grid','Keep rows independent.','Build grid as two independent rows of three zeros.','grid = [[0 for _ in range(3)] for _ in range(2)]','assert grid == [[0,0,0],[0,0,0]]\ngrid[0][0] = 9\nassert grid[1][0] == 0, "Do not duplicate the same row reference"'],
+  ['F12','grid','Keep rows independent.','Build grid as two independent rows of three zeros.','grid = [[0 for _ in range(3)] for _ in range(2)]','assert grid == [[0,0,0],[0,0,0]]\ngrid[0][0] = 9\nassert grid[1][0] == 0, "Do not duplicate the same row reference"'],
   ['F08','default-parameter','Use a default argument.','Write greet(name="friend") returning "Hello, " followed by name.','def greet(name="friend"):\n    return "Hello, " + name','assert greet() == "Hello, friend" and greet("Ari") == "Hello, Ari"'],
   ['F08','helper','Compose two functions.','Write square(n), then sum_squares(a, b) using square to return the sum of the two squares.','def square(n):\n    return n*n\n\ndef sum_squares(a,b):\n    return square(a)+square(b)','assert square(-3) == 9 and sum_squares(3,4) == 25 and sum_squares(0,2) == 4'],
   ['F09','class-counter','Give an object state.','Define CounterBox with an initial value of 0 and an increment() method that adds 1 and returns the new value.','class CounterBox:\n    def __init__(self):\n        self.value = 0\n    def increment(self):\n        self.value += 1\n        return self.value','a=CounterBox()\nb=CounterBox()\nassert a.increment() == 1 and a.increment() == 2\nassert b.value == 0, "Each instance needs its own state"'],
@@ -70,4 +83,28 @@ for (const [unit,id,title,prompt,solution,test] of singles) add({ id, unit, titl
 
 add({ id: 'main-guard', unit: 'F10', title: 'Separate import from execution.', prompt: 'Create helpers.py defining double(n), with a main guard that prints "script" only when run directly. In main.py import double and store double(4) in answer; importing must not print.', files: { 'main.py': '# Import your helper\n' }, solutionFiles: { 'helpers.py': 'def double(n):\n    return n*2\n\nif __name__ == "__main__":\n    print("script")\n', 'main.py': 'from helpers import double\nanswer = double(4)' }, tests: [has('answer',8), 'assert _stdout == "", "Import should not run the guarded print"'] })
 
-export default lessons.sort((a,b) => a.unit.localeCompare(b.unit) || 0)
+variants(v => {
+  const x = v + 1, y = v + 4
+  add({ id: 'tuple', unit: 'F07', variant: v, title: 'Group values in a tuple.', prompt: `Create point as the tuple (${x}, ${y}). A tuple keeps its items in order, but does not allow assigning a new item at an index.`, solution: `point = (${x}, ${y})`, tests: [`assert type(point) is tuple and point == (${x}, ${y})`], note: 'Commas create tuples. Parentheses make the grouping clear; a one-item tuple needs a trailing comma.' })
+})
+add({ id: 'unpack', unit: 'F07', title: 'Unpack a pair.', prompt: 'Given point = (3, 5), use one unpacking assignment to put its first value in x and its second in y.', starter: 'point = (3, 5)\n', solution: 'point = (3, 5)\nx, y = point', tests: ['assert x == 3 and y == 5'], syntax: [{ label: 'An unpacking assignment', unpack: true, message: 'Assign the two values together, using x, y = point.' }], note: 'x, y = point assigns items by position. The number of targets must match the number of values.' })
+add({ id: 'break', unit: 'F06', title: 'Stop a loop early.', prompt: 'Scan values = [3, -1, 7, -2] with a for loop. Put the first negative value in first_negative, then use break to stop. Use None if there is no negative value.', starter: 'values = [3, -1, 7, -2]\n', solution: 'values = [3, -1, 7, -2]\nfirst_negative = None\nfor value in values:\n    if value < 0:\n        first_negative = value\n        break', tests: ['assert first_negative == -1'], syntax: [syntax('A for loop', 'For'), syntax('A break statement', 'Break')], note: 'break exits the nearest loop immediately. continue instead skips only the current iteration.' })
+
+const requiredSyntax = {
+  'boolean-logic': [syntax('A boolean and expression', 'And')],
+  elif: [syntax('An if/elif chain', 'If')],
+  continue: [syntax('A continue statement', 'Continue'), syntax('A for loop', 'For')],
+  enumerate: [{ label: 'An enumerate() call', call: 'enumerate', message: 'Use enumerate(...) to pair each index with its value.' }],
+  comprehension: [syntax('A list comprehension', 'ListComp')],
+  helper: [{ label: 'Call square from sum_squares', call: 'square', within: 'sum_squares', message: 'Reuse square(...) inside sum_squares(...).' }],
+}
+for (const item of lessons) {
+  const teaching = basicsTeaching[item.skillId]
+  if (teaching) { item.title = teaching.title; item.note = teaching.explanation; item.pitfall = teaching.mistake }
+  if (requiredSyntax[item.skillId]) item.syntax = [...(item.syntax ?? []), ...requiredSyntax[item.skillId]]
+  if (item.skillId === 'main-guard') item.checks.push(check('Direct helper execution', 'import contextlib, io, runpy\nimport helpers\nassert helpers.double(9) == 18\n_capture = io.StringIO()\nwith contextlib.redirect_stdout(_capture):\n    runpy.run_module("helpers", run_name="__main__")\nassert _capture.getvalue().strip() == "script", "The helper should print script when run directly"'))
+  if (item.skillId === 'validate') item.checks.push(check('Port boundaries', 'assert require_port(1) == 1 and require_port(65535) == 65535\nfor value in [-1, False, 1.0, None]:\n    try:\n        require_port(value)\n    except ValueError:\n        pass\n    else:\n        raise AssertionError("Reject non-integer and out-of-range ports")'))
+}
+
+const unitOrder = new Map(foundationUnits.map((unit, index) => [unit.id, index]))
+export default lessons.sort((a,b) => unitOrder.get(a.unit) - unitOrder.get(b.unit))

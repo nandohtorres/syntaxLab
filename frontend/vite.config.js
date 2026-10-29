@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import path from 'path'
+import { fileURLToPath } from 'node:url'
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 export default defineConfig({
@@ -13,8 +13,8 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@practice': path.resolve(__dirname, './mockups/python-path'),
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      '@practice': fileURLToPath(new URL('./mockups/python-path', import.meta.url)),
     },
   },
   server: {

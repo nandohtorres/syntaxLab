@@ -1,4 +1,10 @@
 export const references = {
+  status: ['HTTP status codes (MDN)', 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status'],
+  testing: ['Testing strategies (Microsoft)', 'https://learn.microsoft.com/en-us/dotnet/core/testing/'],
+  debugging: ['Debugging (Python)', 'https://docs.python.org/3.12/library/pdb.html'],
+  caching: ['Cache-aside pattern (Microsoft)', 'https://learn.microsoft.com/en-us/azure/architecture/patterns/cache-aside'],
+  queues: ['Competing consumers (Microsoft)', 'https://learn.microsoft.com/en-us/azure/architecture/patterns/competing-consumers'],
+  balancing: ['Load-balancing concepts (AWS)', 'https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html'],
   rest: ['Fielding: REST architectural style', 'https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm'],
   dhcp: ['DHCP, RFC 2131', 'https://www.rfc-editor.org/rfc/rfc2131'],
   dom: ['DOM (MDN)', 'https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model'],

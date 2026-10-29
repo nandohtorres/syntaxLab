@@ -5,7 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline'
 const ThemeContext = createContext(null)
 
 export function ThemeContextProvider({ children }) {
-  const [themeMode, setThemeMode] = useState('dark')
+  const [themeMode, setThemeMode] = useState('light')
 
   function toggleThemeMode() {
     setThemeMode(previousMode => previousMode === 'dark' ? 'light' : 'dark')
@@ -14,21 +14,43 @@ export function ThemeContextProvider({ children }) {
   const muiTheme = useMemo(() => {
     const darkPalette = {
       mode: 'dark',
-      primary: { main: '#6495ED' },
-      secondary: { main: '#7EC8A4' },
-      background: { default: '#0f1923', paper: '#162032' },
-      text: { primary: '#e8edf4', secondary: '#8fa3bf' },
+      primary: { main: '#98e7c4', contrastText: '#0c251b' },
+      secondary: { main: '#98e7c4' },
+      background: { default: '#0c111b', paper: '#111925' },
+      text: { primary: '#edf1f7', secondary: '#8d9bb0' },
+      divider: '#253042',
     }
 
     const lightPalette = {
       mode: 'light',
-      primary: { main: '#4a7fd4' },
-      secondary: { main: '#5aab87' },
+      primary: { main: '#24684f' },
+      secondary: { main: '#24684f' },
       background: { default: '#f0f4fa', paper: '#ffffff' },
       text: { primary: '#1a2a3a', secondary: '#5a7080' },
     }
 
-    return createTheme({ palette: themeMode === 'dark' ? darkPalette : lightPalette })
+    const dark = themeMode === 'dark'
+    const track = dark ? '#111925' : '#f5f8f6'
+    const thumb = dark ? '#526b61' : '#a3b8ac'
+    return createTheme({
+      palette: dark ? darkPalette : lightPalette,
+      typography: {
+        fontFamily: '"Segoe UI", Inter, system-ui, sans-serif',
+        button: { textTransform: 'none', fontWeight: 650 },
+      },
+      shape: { borderRadius: 10 },
+      components: {
+        MuiButton: { defaultProps: { disableElevation: true } },
+        MuiCssBaseline: { styleOverrides: {
+          '*': { scrollbarWidth: 'thin', scrollbarColor: `${thumb} ${track}` },
+          '*::-webkit-scrollbar': { width: 8, height: 8 },
+          '*::-webkit-scrollbar-track': { background: track, borderRadius: 8 },
+          '*::-webkit-scrollbar-thumb': { background: thumb, borderRadius: 8, border: `2px solid ${track}` },
+          '*::-webkit-scrollbar-thumb:hover': { background: dark ? '#7c9e8b' : '#6e9180' },
+          '*::-webkit-scrollbar-corner': { background: track },
+        } },
+      },
+    })
   }, [themeMode])
 
   return (

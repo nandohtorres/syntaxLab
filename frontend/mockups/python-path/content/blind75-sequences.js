@@ -11,8 +11,8 @@ for index,value in enumerate(nums):
   p(121,'maxProfit','prices','Return the largest gain from one buy followed by a later sell. Return 0 when no profitable trade exists.',`low=float('inf')
 best=0
 for price in prices:
-    low=min(low,price)
     best=max(best,price-low)
+    low=min(low,price)
 return best`,c('maxProfit', [['[7,1,5,3,6,4]','5'],['[7,6,4,3,1]','0'],['[1]','0']])),
   p(217,'containsDuplicate','nums','Return True if any integer appears more than once, otherwise False.',`seen=set()
 for value in nums:

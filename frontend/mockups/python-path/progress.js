@@ -95,7 +95,12 @@ export function normalizeBackup(value, lessons, kind = 'python-path') {
   for (const [id,note] of Object.entries(value.notes ?? {})) {
     if (known.has(id) && typeof note==='string') notes[id]=note.slice(0,3000)
   }
-  return {version:1,kind,progress,drafts,notes,selectedId:known.has(value.selectedId)?value.selectedId:lessons[0].id}
+  const selections = {}
+  for (const scope of ['basics', 'algorithms', 'all', 'sliding-window']) {
+    const selected = known.get(value.selections?.[scope])
+    if (selected) selections[scope] = selected.id
+  }
+  return {version:1,kind,progress,drafts,notes,selections,selectedId:known.has(value.selectedId)?value.selectedId:lessons[0].id}
 }
 
 export function loadSaved(storage, lessons) {
