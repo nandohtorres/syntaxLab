@@ -86,5 +86,6 @@ export default function usePracticeRunner() {
     return completion
   }, [restart, status])
 
-  return { status, result, run, stop, restart, clearResult: () => setResult(null) }
+  const clearResult = useCallback(() => setResult(null), [])
+  return { status, result, run, stop, restart, clearResult }
 }

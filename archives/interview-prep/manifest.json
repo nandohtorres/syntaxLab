@@ -1,0 +1,65 @@
+{
+  "captured": "2026-10-27",
+  "files": [
+    {
+      "original": "frontend/mockups/python-path/interview/content.js",
+      "archived": "archives/interview-prep/source/python-path/interview/content.js",
+      "sha256": "f278554c043e74ecd8988f2efe86f80a83788254e9f212f344c237abf39abf78",
+      "bytes": 39541
+    },
+    {
+      "original": "frontend/mockups/python-path/interview/InterviewPractice.jsx",
+      "archived": "archives/interview-prep/source/python-path/interview/InterviewPractice.jsx",
+      "sha256": "1b41d669ac0c9f616ed966e754e550c771ee7aebcbef82a968b4c341f532b2f6",
+      "bytes": 16369
+    },
+    {
+      "original": "frontend/mockups/python-path/interview/InterviewReference.jsx",
+      "archived": "archives/interview-prep/source/python-path/interview/InterviewReference.jsx",
+      "sha256": "a9ae64d68a2bcc47409358b258a925f448aaf7834ae11eca3107510aa571d509",
+      "bytes": 5536
+    },
+    {
+      "original": "frontend/mockups/python-path/interview/recall.js",
+      "archived": "archives/interview-prep/source/python-path/interview/recall.js",
+      "sha256": "af5e6df963a843234a6c1d31a3d498a70a5dbed5402be79de7e0211098a8d8ec",
+      "bytes": 1110
+    },
+    {
+      "original": "frontend/mockups/python-path/interview/referenceSheet.js",
+      "archived": "archives/interview-prep/source/python-path/interview/referenceSheet.js",
+      "sha256": "b374591e645d67f1ee4842287cf046f5b099ec251932158737b5938e22561dae",
+      "bytes": 11955
+    },
+    {
+      "original": "frontend/mockups/python-path/interview/sources.js",
+      "archived": "archives/interview-prep/source/python-path/interview/sources.js",
+      "sha256": "56d617860f196fd49f849dd281a7c9c3b69f7b0ba3c305a11d4537e2804fbdd8",
+      "bytes": 9368
+    },
+    {
+      "original": "frontend/mockups/python-path/progress.js",
+      "archived": "archives/interview-prep/source/python-path/progress.js",
+      "sha256": "f0c2bc1a963783579740274b66ec065f8877540bf0c21c1de22c8c440d7ce7f4",
+      "bytes": 6866
+    },
+    {
+      "original": "frontend/mockups/python-path/editorSupport.js",
+      "archived": "archives/interview-prep/source/python-path/editorSupport.js",
+      "sha256": "c815c7fc41a5a2ca3d803867e0d35d7dc59a109e26c7613da2684a234d8bf79f",
+      "bytes": 1314
+    },
+    {
+      "original": "docs/interview-reference.md",
+      "archived": "archives/interview-prep/docs/interview-reference.md",
+      "sha256": "695901ba11eec6ef3c3bb7ae2c04b473ea09c39104549b16bd5e853d666f9d8e",
+      "bytes": 32727
+    }
+  ],
+  "counts": {
+    "referenceTopics": 36,
+    "originalTopics": 29,
+    "drills": 66,
+    "sources": 40
+  }
+}

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Alert, Box, Button, Checkbox, Chip, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, MenuItem, Stack, Tab, Tabs, TextField, Typography } from '@mui/material'
 import Editor from '@monaco-editor/react'
-import { definePracticeTheme, download, mono } from '../ExerciseEditor.jsx'
+import { definePracticeTheme, download, mono } from '../editorSupport.js'
 import { dueLessons, pickNext } from '../progress.js'
 import { drills, levels, topics } from './content.js'
 import { corrections, references } from './sources.js'

@@ -1,5 +1,14 @@
 ﻿# Build status
 
+Current status (2026-10-28): see [the completed curriculum review](curriculum-audit.md).
+The notes below preserve the earlier plan or sample review; counts and pending
+items describe that stage. The approved island and all 75 guided questions are
+now available on the normal local route. Nothing has been published.
+
+The sections below record the 2026-10-19/20 implementation. For the current
+three-section study workflow, use [study-workflow-plan.md](study-workflow-plan.md).
+Recall code remains preserved but is no longer the normal Interview Prep page.
+
 ## Completed: Python Path
 
 The standalone workspace at `frontend/mockups/python-path/` is functional with

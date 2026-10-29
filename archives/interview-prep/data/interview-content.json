@@ -1,0 +1,3911 @@
+{
+  "topics": [
+    {
+      "id": "languages",
+      "level": 1,
+      "title": "Know what each language is for",
+      "origin": "Guide §7; PDF pp7–8",
+      "sources": [
+        "csharp",
+        "php",
+        "python"
+      ],
+      "notes": [
+        "C is commonly used for procedural systems programming. C++ supports procedural, object-oriented and generic styles; it is not simply C with classes. C# is a separate language targeting .NET, with garbage collection.",
+        "PHP commonly executes on the server to build responses. HTML/CSS describe browser content/presentation; JavaScript can run in browsers and on servers. Python supports scripts, services and data work.",
+        "Name the language and runtime before making a rule about typing, inheritance or memory. PHP supports type declarations even though variables are dynamically typed."
+      ],
+      "drills": [
+        {
+          "prompt": "A PHP page sends HTML to a browser. Where did PHP execute, and what renders the HTML?",
+          "answer": "PHP usually executes on the server; the browser parses and renders the resulting HTML.",
+          "criteria": [
+            "Server runs PHP",
+            "Browser renders the response"
+          ]
+        },
+        {
+          "prompt": "Correct this claim: C#, C++ and C are just three versions of one language.",
+          "answer": "They are distinct languages. C++ supports multiple paradigms including OOP and generics; C# commonly targets .NET and has managed memory.",
+          "criteria": [
+            "Distinct languages",
+            "One meaningful runtime or paradigm distinction"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "runtime",
+      "level": 1,
+      "title": "Java runtime and generic types",
+      "origin": "Guide §7; PDF pp1–2,8",
+      "sources": [
+        "jvm",
+        "java"
+      ],
+      "notes": [
+        "The JVM executes Java bytecode. A JDK supplies development tools such as javac plus runtime support. JRE is the runtime-environment concept; distribution packaging varies.",
+        "Generics parameterize types: List<String> communicates the element type and enables compile-time checks. A generic is not a sorting algorithm."
+      ],
+      "drills": [
+        {
+          "prompt": "You have Java source and need to compile and run it. Distinguish JDK, JVM and JRE.",
+          "answer": "Use JDK development tools to compile source into bytecode. The JVM executes it; JRE describes runtime libraries and execution support.",
+          "criteria": [
+            "JDK compiles",
+            "JVM executes bytecode",
+            "JRE is runtime support"
+          ]
+        },
+        {
+          "prompt": "What does List<String> tell a Java caller?",
+          "answer": "This is a list whose declared element type is String, with compiler checks on compatible use.",
+          "criteria": [
+            "Parameterized element type",
+            "Compile-time type checking"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "objects",
+      "level": 1,
+      "title": "Classes, objects and methods",
+      "origin": "Guide §§4,11,13; PDF pp5,13–15,20",
+      "sources": [
+        "python",
+        "java"
+      ],
+      "notes": [
+        "A class describes a type; an object is an instance. Instantiation creates an instance: Python uses ClassName(...), while Java commonly uses new ClassName(...).",
+        "Methods operate through an object or class. Instance state belongs to a particular object; class-level mutable state can accidentally be shared.",
+        "The common four OOP teaching concepts are abstraction, encapsulation, inheritance and polymorphism. Explain a concrete example, not just the list."
+      ],
+      "drills": [
+        {
+          "prompt": "In Python, what is the difference between CounterBox and CounterBox()?",
+          "answer": "CounterBox names the class. CounterBox() calls it to create an instance, initialized through its constructor machinery.",
+          "criteria": [
+            "Class versus instance",
+            "Python instantiates without new"
+          ]
+        },
+        {
+          "prompt": "Name the four common OOP pillars, then describe one with an example.",
+          "answer": "Abstraction, encapsulation, inheritance and polymorphism. For encapsulation, an account exposes deposit(amount) that validates a positive amount instead of allowing arbitrary balance changes.",
+          "criteria": [
+            "All four concepts",
+            "Specific behavior in an example"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "collections",
+      "level": 1,
+      "title": "Choose a collection",
+      "origin": "Guide §13; PDF pp18–20",
+      "sources": [
+        "collections",
+        "heap"
+      ],
+      "notes": [
+        "Use a sequence for ordered values, a set for uniqueness/membership, and a dictionary for key/value lookup or counts.",
+        "A stack is LIFO; a queue is FIFO. In Python, list append/pop supports a stack; deque append/popleft supports a queue without shifting every remaining element.",
+        "A heap supports repeated access to the highest-priority item without fully sorting all values. Python 3.12 heapq is a min-heap."
+      ],
+      "drills": [
+        {
+          "prompt": "Choose structures for undo history, breadth-first traversal and counting repeated names.",
+          "answer": "Undo history: stack. Breadth-first traversal: queue. Repeated-name counts: dictionary or Counter.",
+          "criteria": [
+            "LIFO stack for undo",
+            "FIFO queue for BFS",
+            "Counts keyed by name"
+          ]
+        },
+        {
+          "prompt": "For values [5, 1, 4] in a Python 3.12 min-heap, which value is popped first? Is the whole heap sorted?",
+          "answer": "1 is popped first. A heap is partially ordered, not a fully sorted sequence.",
+          "criteria": [
+            "Minimum first",
+            "Heap is not fully sorted"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "git",
+      "level": 1,
+      "title": "Git and collaboration",
+      "origin": "Guide §6; PDF p7",
+      "sources": [
+        "git"
+      ],
+      "notes": [
+        "Git tracks repository history locally. GitHub is a hosting/collaboration service. A commit is local until published to a remote.",
+        "clone creates a local repository; fetch updates remote-tracking information; pull fetches and integrates using its selected strategy. push publishes refs/commits when authorized.",
+        "A branch is a ref within a repository; a fork is a separate hosted repository. Review a diff and tests before proposing a merge."
+      ],
+      "drills": [
+        {
+          "prompt": "You committed locally. Has GitHub changed? What would publish the branch?",
+          "answer": "A local commit does not update GitHub. An explicitly authorized push publishes the branch to its configured remote.",
+          "criteria": [
+            "Commit stays local",
+            "Push publishes"
+          ]
+        },
+        {
+          "prompt": "Explain fetch versus pull without assuming pull always merges.",
+          "answer": "Fetch obtains objects and updates remote-tracking refs. Pull also integrates the selected remote branch, using merge or rebase as configured/requested.",
+          "criteria": [
+            "Fetch does not itself integrate",
+            "Pull integrates with a strategy"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "browser",
+      "level": 1,
+      "title": "From URL to a rendered page",
+      "origin": "Guide §§8,11,13; PDF pp8–9,13,15–16,20",
+      "sources": [
+        "internet",
+        "dom",
+        "doctype"
+      ],
+      "notes": [
+        "A browser locates a server, establishes a connection, requests resources and processes responses. HTTPS adds TLS protection. Caches can avoid some network requests.",
+        "HTML is parsed into a DOM tree; CSS styles content; JavaScript handles behavior. Not every click needs a new server-rendered page.",
+        "The DOM is a document programming interface, not the JavaScript language. <!doctype html> selects standards rendering; it does not validate your markup."
+      ],
+      "drills": [
+        {
+          "prompt": "Explain a page load from request to visible content in three steps.",
+          "answer": "Request resources from a server (or cache), receive responses, then parse HTML/build DOM and apply CSS/execute JavaScript to render and interact.",
+          "criteria": [
+            "Request/response",
+            "HTML and DOM",
+            "CSS/JavaScript roles"
+          ]
+        },
+        {
+          "prompt": "What does <!doctype html> accomplish, and what does it not guarantee?",
+          "answer": "It selects standards/no-quirks rendering. It does not prove the HTML is valid or guarantee cross-browser perfection.",
+          "criteria": [
+            "Standards rendering",
+            "Not a validator"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "http",
+      "level": 1,
+      "title": "HTTP requests and responses",
+      "origin": "Guide §11; PDF pp12–13,15",
+      "sources": [
+        "http",
+        "methods"
+      ],
+      "notes": [
+        "GET retrieves a representation with intended read-only semantics. POST asks the target resource to process submitted content. Method semantics do not guarantee secrecy.",
+        "200: success; 201: created; 400: bad request; 401: authentication needed/invalid; 403: forbidden; 404: resource not found/disclosed; 405: method not allowed; 500: server error.",
+        "Headers, URL and body all carry request information. A POST body is observable to endpoints and potentially logs; protect sensitive traffic with HTTPS and appropriate logging."
+      ],
+      "drills": [
+        {
+          "prompt": "An existing endpoint supports GET, but you send DELETE. What status describes that method mismatch?",
+          "answer": "405 Method Not Allowed. The response should identify allowed methods through Allow.",
+          "criteria": [
+            "405",
+            "Method is not allowed on this resource"
+          ]
+        },
+        {
+          "prompt": "Does a POST body make a password secret? Explain.",
+          "answer": "No. Use HTTPS for transport encryption and avoid leaking sensitive fields in logs. A body is not a security boundary.",
+          "criteria": [
+            "POST alone is not secrecy",
+            "HTTPS protects transit"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "sql-basics",
+      "level": 1,
+      "title": "Read and modify relational data",
+      "origin": "Guide §3; PDF pp3–4",
+      "sources": [
+        "sql",
+        "keys"
+      ],
+      "notes": [
+        "SELECT projects columns; FROM chooses input; WHERE filters rows; INSERT adds rows; UPDATE changes rows; DELETE removes rows. DDL such as CREATE/ALTER/DROP changes schema objects.",
+        "Use explicit columns and a deliberate WHERE for modifications. NULL represents missing/unknown data; compare with IS NULL rather than = NULL.",
+        "SQL keyword case, identifier case, string comparison and statement terminators are different concerns. PostgreSQL details are examples, not rules for every engine."
+      ],
+      "drills": [
+        {
+          "prompt": "Given employees(name, active), write a query for names where active is the integer 1.",
+          "answer": "SELECT name FROM employees WHERE active = 1;",
+          "criteria": [
+            "SELECT name",
+            "FROM employees",
+            "WHERE active = 1"
+          ]
+        },
+        {
+          "prompt": "Correct: SQL is never case sensitive, and semicolons are never necessary.",
+          "answer": "Keywords are generally case insensitive. Identifier quoting and text comparison follow engine/collation rules. Terminators depend on the execution context.",
+          "criteria": [
+            "Keywords versus identifiers/text",
+            "Context matters for terminators"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "keys",
+      "level": 2,
+      "title": "Keys and referential integrity",
+      "origin": "Guide §3; PDF p4",
+      "sources": [
+        "keys"
+      ],
+      "notes": [
+        "A primary key identifies rows through unique, non-null column values; it can be composite. A foreign key requires a matching referenced key unless its null semantics permit otherwise.",
+        "Referenced keys need not be the primary key: eligible unique keys can be referenced. A self-reference can model an employee manager.",
+        "Integrity and performance are separate. PostgreSQL creates a primary-key index, but a key does not guarantee every query will be fast."
+      ],
+      "drills": [
+        {
+          "prompt": "orders.customer_id references customers.id. What does the foreign key prevent?",
+          "answer": "It prevents an order from referencing a non-existent customer key, subject to the constraint/null rules. It is a data-integrity relationship.",
+          "criteria": [
+            "Matching referenced key",
+            "Integrity rather than universal speed"
+          ]
+        },
+        {
+          "prompt": "Can a foreign key reference the same table or an eligible unique non-primary key?",
+          "answer": "Yes to both, where the engine and referenced constraint support it.",
+          "criteria": [
+            "Self-reference is possible",
+            "Eligible unique key can be referenced"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "joins",
+      "level": 2,
+      "title": "Join rows without losing the unmatched ones",
+      "origin": "Guide §§3,13; PDF pp4,19",
+      "sources": [
+        "joins"
+      ],
+      "notes": [
+        "INNER retains matches. LEFT retains every left row and matching right rows. RIGHT is the mirrored case. FULL retains matches and unmatched rows from both sides.",
+        "An unmatched outer-join side becomes NULL. Two matching right rows produce two joined rows; joins are not simply set-intersection diagrams.",
+        "A right-side WHERE filter can remove NULL-padded rows from a LEFT join. Put the condition in ON when you intend to preserve unmatched left rows."
+      ],
+      "drills": [
+        {
+          "prompt": "Customer A has two orders and B has none. How many rows does customers LEFT JOIN orders produce?",
+          "answer": "Three rows: two for A and one NULL-padded order side for B.",
+          "criteria": [
+            "Two matches for A",
+            "One retained unmatched B",
+            "Total three"
+          ]
+        },
+        {
+          "prompt": "Write a join returning every customer name and any order ID. Tables: customers(id,name), orders(id,customer_id).",
+          "answer": "SELECT c.name, o.id FROM customers c LEFT JOIN orders o ON o.customer_id = c.id;",
+          "criteria": [
+            "LEFT JOIN",
+            "Correct key condition",
+            "Select customer name and order ID"
+          ]
+        },
+        {
+          "prompt": "What does FULL OUTER JOIN add beyond LEFT JOIN?",
+          "answer": "It also preserves unmatched right-side rows with a NULL-padded left side.",
+          "criteria": [
+            "Unmatched right rows",
+            "NULL padding"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "grouping",
+      "level": 2,
+      "title": "Aggregate, group and handle missing values",
+      "origin": "Guide §§3,13; PDF pp3–4,19",
+      "sources": [
+        "joins"
+      ],
+      "notes": [
+        "GROUP BY creates groups for aggregate calculations. WHERE filters input rows; HAVING filters groups. MAX returns the largest non-null value in a group.",
+        "COUNT(*) counts rows; COUNT(column) counts non-null values. In a LEFT join, count the child key to avoid counting a NULL-padded row as a child."
+      ],
+      "drills": [
+        {
+          "prompt": "Write department maximum salary from employees(department,salary), keeping groups whose max exceeds 100000.",
+          "answer": "SELECT department, MAX(salary) FROM employees GROUP BY department HAVING MAX(salary) > 100000;",
+          "criteria": [
+            "GROUP BY department",
+            "MAX(salary)",
+            "HAVING filters aggregate"
+          ]
+        },
+        {
+          "prompt": "After customers LEFT JOIN orders, why might COUNT(*) incorrectly report one order for a customer with none?",
+          "answer": "The outer join still produces one padded row. COUNT(o.id) counts only non-null matching order IDs.",
+          "criteria": [
+            "Padded row exists",
+            "Count non-null child key"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "frontend",
+      "level": 2,
+      "title": "React, JSX, forms and CSS",
+      "origin": "Guide §§8,11,13; PDF pp8–9,15,20",
+      "sources": [
+        "react",
+        "yup",
+        "css"
+      ],
+      "notes": [
+        "React components describe UI. JSX is syntax transformed into JavaScript; braces embed JavaScript expressions. JSON exchanges data; it is not JSX.",
+        "State changes schedule UI updates. Form UI, state handling and validation are different responsibilities. Yup supplies schema parsing/validation, not form widgets.",
+        "A CSS class is reusable across elements. An HTML id should be unique in the document. Flexbox lays out one main axis at a time; grid supports two-dimensional layouts."
+      ],
+      "drills": [
+        {
+          "prompt": "An API returns JSON, and a React component uses JSX. Explain the difference.",
+          "answer": "JSON represents data. JSX expresses UI markup inside JavaScript and is transformed before execution.",
+          "criteria": [
+            "Data format versus UI syntax",
+            "JSX transforms to JavaScript"
+          ]
+        },
+        {
+          "prompt": "You need a form and field validation. Does adding Yup create the form UI?",
+          "answer": "No. Build the form UI/state handling, and use Yup if schema validation fits the requirements.",
+          "criteria": [
+            "Yup validates/parses",
+            "UI/state remain separate"
+          ]
+        },
+        {
+          "prompt": "Which CSS selector is reusable: .notice or #notice? How would you align a row of buttons?",
+          "answer": ".notice is a reusable class; #notice identifies an element with that id. A flex container can align a row with gap and align-items.",
+          "criteria": [
+            "Class versus unique id",
+            "Appropriate flex layout"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "encapsulation",
+      "level": 2,
+      "title": "Abstraction and encapsulation in practice",
+      "origin": "Guide §§4,11; PDF pp5,13",
+      "sources": [
+        "java",
+        "python"
+      ],
+      "notes": [
+        "Abstraction exposes an understandable contract while hiding irrelevant details. Encapsulation controls how state can be accessed/changed and protects invariants.",
+        "A deposit(amount) operation can reject a negative amount. An unrestricted setBalance(value) can bypass the same invariant even though it is a setter.",
+        "Composition supplies collaborators; inheritance creates a subtype relationship. Prefer a relationship that matches the contract you need rather than inheriting solely for code reuse."
+      ],
+      "drills": [
+        {
+          "prompt": "A class has private balance and setBalance(any_number). Is encapsulation automatically good?",
+          "answer": "No. Private storage plus an unrestricted setter may still violate invariants. Expose validated operations such as deposit(positive_amount).",
+          "criteria": [
+            "Getters/setters are not enough",
+            "Protect an invariant"
+          ]
+        },
+        {
+          "prompt": "Distinguish abstraction from encapsulation using a payment service.",
+          "answer": "Abstraction offers charge(amount) without revealing provider details. Encapsulation controls internal credentials/state and validates transitions.",
+          "criteria": [
+            "Simple external contract",
+            "Controlled internal state"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "polymorphism",
+      "level": 2,
+      "title": "Polymorphism, overloading and overriding",
+      "origin": "Guide §§4,11; PDF pp5,12,15",
+      "sources": [
+        "java",
+        "python"
+      ],
+      "notes": [
+        "Polymorphism lets callers use a shared contract with different implementations. For example, several storage adapters can implement save(record).",
+        "Java overloading uses different parameter signatures under the same name. Overriding supplies a subtype implementation of an inherited instance method with compatible signature and return rules.",
+        "Return type alone cannot distinguish Java overloads. Python does not implement Java-style runtime overloads by repeating def with the same name; the later definition replaces the earlier binding."
+      ],
+      "drills": [
+        {
+          "prompt": "In Java, are calculate(int) and calculate(double) overriding or overloading? What about a child replacing calculate(int)?",
+          "answer": "Different parameter signatures are overloads. A compatible child implementation of the inherited instance method is an override.",
+          "criteria": [
+            "Different parameters means overload",
+            "Subtype implementation means override"
+          ]
+        },
+        {
+          "prompt": "Can a Java override freely change its parameter types? Can an overload differ only in return type?",
+          "answer": "No to both. Overriding preserves the relevant signature; Java permits covariant reference returns. Overloading requires distinct signatures.",
+          "criteria": [
+            "Parameters are not arbitrary",
+            "Return alone does not overload"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "interfaces",
+      "level": 2,
+      "title": "Interfaces and abstract classes: Java scope",
+      "origin": "Guide §§4,11; PDF pp5–6,14",
+      "sources": [
+        "interfaces",
+        "java"
+      ],
+      "notes": [
+        "A Java abstract class can share instance state and implementations but cannot be directly instantiated. It can be abstract even without abstract methods.",
+        "A modern Java interface defines a contract and can also have default, static and private methods plus constants. It has no instance fields.",
+        "A Java class has one direct class superclass and can implement multiple interfaces. This is not universal across languages; Python permits multiple class bases."
+      ],
+      "drills": [
+        {
+          "prompt": "Correct: Java interfaces contain only public abstract methods and cannot contain implementations.",
+          "answer": "They may include default/static implementations and private helper methods. They lack per-instance fields, but may declare constants.",
+          "criteria": [
+            "Implemented methods exist",
+            "Private methods can exist",
+            "No instance fields"
+          ]
+        },
+        {
+          "prompt": "You need shared per-instance state plus a partial implementation in Java. Which construct fits, and can you instantiate it directly?",
+          "answer": "An abstract base class can provide that state/implementation. Instantiate a concrete subclass, not the abstract class directly.",
+          "criteria": [
+            "Abstract base class",
+            "Concrete subclass instance"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "agile",
+      "level": 2,
+      "title": "Agile and Scrum without the slogans",
+      "origin": "Guide §5; PDF p7",
+      "sources": [
+        "agile",
+        "scrum"
+      ],
+      "notes": [
+        "Agile emphasizes working software, collaboration, adaptation and feedback. It is not a prescribed sequential checklist and does not require Scrum.",
+        "Scrum uses fixed-length Sprints of one month or less. Planning sets the Sprint Goal; Daily Scrum inspects progress; Review inspects outcomes; Retrospective improves how the team works.",
+        "Product Owner, Scrum Master and Developers have distinct accountabilities. The Daily Scrum is not primarily a manager status report. An increment must meet the Definition of Done."
+      ],
+      "drills": [
+        {
+          "prompt": "Does every Agile team have Sprints? Give the distinction.",
+          "answer": "No. Agile is a set of values/principles. Scrum is a specific framework that uses Sprints.",
+          "criteria": [
+            "Agile is broader",
+            "Scrum uses Sprints"
+          ]
+        },
+        {
+          "prompt": "Distinguish a Sprint Review from a Retrospective.",
+          "answer": "Review inspects the product outcome with stakeholders and adapts future work; Retrospective improves the team’s ways of working.",
+          "criteria": [
+            "Product outcome and feedback",
+            "Team process improvement"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "sort-simple",
+      "level": 3,
+      "title": "Insertion and bubble sort",
+      "origin": "Guide §2; PDF p2",
+      "sources": [
+        "sorting"
+      ],
+      "notes": [
+        "Insertion sort grows a sorted prefix by inserting the next value. Typical stable array insertion sort uses O(n²) worst-case time and O(1) extra storage; already-sorted input can be O(n).",
+        "Ordinary bubble sort swaps adjacent out-of-order values and settles an extreme at one end per pass. With an early-exit flag its best case is O(n), but its worst case remains O(n²).",
+        "For nearly sorted data, insertion sort is usually the stronger teaching/default choice between these two. Do not choose an algorithm only from its best-case bound."
+      ],
+      "drills": [
+        {
+          "prompt": "After inserting 2 into the sorted prefix [1,4] of [1,4,2,3], show the array.",
+          "answer": "[1,2,4,3]. The sorted prefix is now [1,2,4].",
+          "criteria": [
+            "Correct array",
+            "Sorted-prefix invariant"
+          ]
+        },
+        {
+          "prompt": "Why does bubble sort remain a weak default even if early exit makes sorted input linear?",
+          "answer": "Many inputs still require quadratic comparisons/swaps; insertion sort generally handles small/nearly-sorted data more effectively. Best case does not describe every workload.",
+          "criteria": [
+            "Worst case O(n²)",
+            "Best-case limitation"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "sort-divide",
+      "level": 3,
+      "title": "Merge sort and quicksort",
+      "origin": "Guide §2; PDF p2",
+      "sources": [
+        "sorting"
+      ],
+      "notes": [
+        "Typical array merge sort divides, sorts and merges. It guarantees O(n log n) worst-case time and usually needs O(n) auxiliary storage; stable merging preserves equal-key order.",
+        "Quicksort partitions around a pivot. Randomized/ordinary average analysis gives O(n log n), but very unbalanced partitions can produce O(n²). Recursion space depends on partition balance and implementation.",
+        "Median-of-three is a pivot heuristic, not a universal worst-case guarantee. State the implementation before calling a sort stable or in-place."
+      ],
+      "drills": [
+        {
+          "prompt": "Choose between ordinary array merge sort and quicksort when guaranteed O(n log n) time matters. State a tradeoff.",
+          "answer": "Merge sort gives the worst-case bound, usually with O(n) auxiliary storage. Ordinary quicksort has quadratic worst cases.",
+          "criteria": [
+            "Merge sort worst-case bound",
+            "Extra memory tradeoff"
+          ]
+        },
+        {
+          "prompt": "Does median-of-three make ordinary quicksort immune to quadratic behavior?",
+          "answer": "No. It can improve pivot choice in practice, but does not guarantee balanced partitions for every input.",
+          "criteria": [
+            "No worst-case guarantee",
+            "Partition balance matters"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "heap",
+      "level": 3,
+      "title": "Binary heaps and heapsort",
+      "origin": "Guide §2; PDF pp2–3",
+      "sources": [
+        "heap",
+        "sorting"
+      ],
+      "notes": [
+        "A binary heap is a complete binary tree represented conveniently as an array. In a max-heap each parent is at least its children; siblings and distant nodes need not be ordered.",
+        "Bottom-up heap construction is O(n). Sift-down at a node is O(log n) assuming its child subtrees already satisfy the heap property.",
+        "Heapsort swaps the max root with the end of the active heap and repairs the reduced heap. It gives O(n log n) worst-case time and O(1) auxiliary array storage; ordinary heapsort is not stable."
+      ],
+      "drills": [
+        {
+          "prompt": "Is [9,7,8,1,2] a valid max-heap despite 7 coming before 8?",
+          "answer": "Yes. Each parent is at least its children; heap order does not require siblings or the entire array to be sorted.",
+          "criteria": [
+            "Valid heap",
+            "Parent-child invariant"
+          ]
+        },
+        {
+          "prompt": "State bottom-up heap-build time, one sift-down time and heapsort worst-case time.",
+          "answer": "O(n), O(log n), O(n log n), respectively.",
+          "criteria": [
+            "Build O(n)",
+            "Sift-down O(log n)",
+            "Sort O(n log n)"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "solid",
+      "level": 3,
+      "title": "SOLID as design reasoning",
+      "origin": "Guide §4; PDF p6",
+      "sources": [
+        "solid",
+        "liskov"
+      ],
+      "notes": [
+        "S: group responsibilities that change for the same reason. O: provide extension points for expected variation. Neither principle requires a separate class for every line.",
+        "L: subtypes preserve the promises of the base contract. I: expose focused interfaces so clients need not depend on unrelated operations.",
+        "D: high-level policy and low-level details depend on abstractions. This is Dependency Inversion. Apply it where change/testing justify the indirection."
+      ],
+      "drills": [
+        {
+          "prompt": "Expand SOLID, especially D, then give a small dependency example.",
+          "answer": "Single Responsibility; Open/Closed; Liskov Substitution; Interface Segregation; Dependency Inversion. A report service depends on a storage contract rather than constructing a specific database client.",
+          "criteria": [
+            "Correct D: Inversion",
+            "Other four named",
+            "Contract-based example"
+          ]
+        },
+        {
+          "prompt": "A subtype keeps every method name but throws unsupported errors for valid parent operations. Does that establish Liskov substitution?",
+          "answer": "No. Clients relying on the base behavior can break. Substitution is about behavior/contracts, not method-name count.",
+          "criteria": [
+            "Behavioral contract",
+            "Client can break"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "di",
+      "level": 3,
+      "title": "Inject collaborators and control coupling",
+      "origin": "Guide §11; PDF p14",
+      "sources": [
+        "di",
+        "solid"
+      ],
+      "notes": [
+        "Dependency injection means providing a collaborator externally. Constructor injection makes required collaborators explicit; method or property injection can fit other lifetimes/frameworks.",
+        "The composition boundary still creates objects, possibly with new. The goal is to move concrete wiring away from business policy, not ban object creation.",
+        "A fake storage adapter lets a test exercise report generation without a live database. Too many dependencies can signal too many responsibilities."
+      ],
+      "drills": [
+        {
+          "prompt": "Refactor ReportService creating its own DatabaseClient into a DI design. A short Python sketch is enough.",
+          "answer": "class ReportService:\n    def __init__(self, store):\n        self.store = store\n\nWire ReportService(real_store) in the composition code; pass a fake store in tests.",
+          "criteria": [
+            "Collaborator passed from outside",
+            "Test can supply fake",
+            "Creation remains somewhere"
+          ]
+        },
+        {
+          "prompt": "Is Dependency Injection identical to Dependency Inversion? Must DI remove every new expression?",
+          "answer": "No. Inversion is a principle about dependency direction/abstractions; injection supplies dependencies. Objects still have to be constructed.",
+          "criteria": [
+            "Principle versus technique",
+            "Object creation remains"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "database-design",
+      "level": 3,
+      "title": "Model data and query performance",
+      "origin": "Guide §§3,11,13; PDF pp3,14–15,19–20",
+      "sources": [
+        "indexes",
+        "cluster",
+        "explain",
+        "transactions"
+      ],
+      "notes": [
+        "Normalization uses dependencies to separate facts and reduce update anomalies. Intentional denormalization can trade more complex writes for faster reads; measure and keep a consistency plan.",
+        "Relational and NoSQL systems both have schemas and constraints in practice. Choose based on access patterns, integrity, transactions, scale and operational needs rather than SQL versus unstructured slogans.",
+        "Indexes cost storage and write maintenance. Inspect a query plan and actual workload before adding one. EXPLAIN ANALYZE executes the query; use it carefully with mutations.",
+        "Clustering can mean physical row organization, a group of servers, or statistical grouping. Clarify which. PostgreSQL CLUSTER reorders a table once and does not keep that ordering automatically.",
+        "Transactions group changes into an all-or-nothing unit; concurrency/isolation still needs deliberate design. This extends the source notes into practical architecture reasoning."
+      ],
+      "drills": [
+        {
+          "prompt": "Every order repeats customer_email. What anomaly can occur, and how can normalization help?",
+          "answer": "Updating only some orders produces inconsistent customer facts. Store customer data once and reference the customer key; still consider historical snapshot requirements.",
+          "criteria": [
+            "Inconsistent repeated updates",
+            "Separate customer fact/reference",
+            "Acknowledge business meaning"
+          ]
+        },
+        {
+          "prompt": "A query is slow. Why not add an index on every column?",
+          "answer": "Indexes use space and slow writes. Inspect filters, joins, selectivity and the plan, then measure a suitable index against the workload.",
+          "criteria": [
+            "Write/storage cost",
+            "Measure/query plan"
+          ]
+        },
+        {
+          "prompt": "Two account updates must succeed together. Which concept helps, and what should you clarify when someone says database clustering?",
+          "answer": "Use a transaction for atomic updates. Ask whether clustering means physical organization, server topology or statistical grouping.",
+          "criteria": [
+            "Atomic transaction",
+            "Clarify clustering context"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "security",
+      "level": 3,
+      "title": "API security and repeatable requests",
+      "origin": "Guide §§3,11; PDF pp4,12–13,15–16",
+      "sources": [
+        "injection",
+        "http",
+        "rest"
+      ],
+      "notes": [
+        "Prevent SQL injection by binding values with parameterized statements; do not concatenate untrusted input into SQL. Dynamically chosen table/column names need allowlisting or supported identifier composition.",
+        "Authentication identifies the caller; authorization checks that caller’s permitted action on a particular resource. Validate inputs server-side and minimize sensitive logging.",
+        "Safe methods request read-only behavior. Idempotent methods have the same intended effect when repeated; GET, PUT and DELETE are idempotent by HTTP semantics, while POST is not inherently so. Response codes may differ across repeats."
+      ],
+      "drills": [
+        {
+          "prompt": "A login query concatenates a username into SQL. Describe the fix and why escaping alone is a weak default.",
+          "answer": "Use parameter binding so input is treated as data, not executable SQL syntax. Validate inputs too, but do not replace binding with ad hoc escaping.",
+          "criteria": [
+            "Parameterized values",
+            "Data separated from SQL syntax"
+          ]
+        },
+        {
+          "prompt": "A user is logged in and requests another user’s private record. Which check is missing?",
+          "answer": "Resource-level authorization. Authentication alone does not grant permission to access every object.",
+          "criteria": [
+            "Authorization",
+            "Specific resource ownership/permission"
+          ]
+        },
+        {
+          "prompt": "Can DELETE remain idempotent if the first response is 204 and the second is 404?",
+          "answer": "Yes. Idempotence concerns the intended server-side effect, not identical response status. The resource remains deleted.",
+          "criteria": [
+            "Same effect",
+            "Responses may differ"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "api-design",
+      "level": 3,
+      "title": "REST, SOAP and the web contract",
+      "origin": "Guide §11; PDF pp13,16–17",
+      "sources": [
+        "rest",
+        "soap",
+        "http"
+      ],
+      "notes": [
+        "REST is an architectural style with client/server separation, stateless requests, caching constraints, a uniform interface and layers (optional code on demand). JSON over HTTP alone does not prove REST compliance.",
+        "SOAP defines an XML envelope/messaging framework with transport bindings, commonly HTTP. It does not inherently force a stateful session or HTML messages.",
+        "For an HTTP resource API, define representations, methods, status codes, validation, pagination, permissions and error behavior. Stateless requests do not mean the database stores no state."
+      ],
+      "drills": [
+        {
+          "prompt": "Correct: SOAP is always stateful, REST is always faster, and SOAP sends HTML.",
+          "answer": "SOAP uses XML envelopes and does not inherently require sessions. REST is a style; performance depends on workload, protocol use and implementation. HTML is not the SOAP envelope format.",
+          "criteria": [
+            "SOAP XML",
+            "No mandatory stateful session",
+            "No universal performance winner"
+          ]
+        },
+        {
+          "prompt": "Design a short contract for creating an order and later fetching it.",
+          "answer": "POST /orders with validated input; return 201 plus a resource location/representation on creation. GET /orders/{id} reads it. Check caller permissions and define errors.",
+          "criteria": [
+            "Creation and retrieval methods",
+            "201/resource identity",
+            "Validation and authorization"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "patterns",
+      "level": 3,
+      "title": "Turn source coding notes into Blind 75 preparation",
+      "origin": "Guide §13; PDF pp18–20",
+      "sources": [
+        "collections"
+      ],
+      "notes": [
+        "First clarify output meaning and edge cases. Frequency maps solve counting/mode/anagram checks; sets handle membership; two pointers handle ordered scans; a queue supports breadth-first traversal.",
+        "Use the fixed Blind 75 path for full coding practice. Historical non-Blind-75 links are source context, not additions to the required problem inventory. Old COMPLETED labels do not imply current recall.",
+        "For a maximum number of disjoint teams needing one p,c,m,b,z each, the bottleneck is the minimum of their counts. Distinguish maximum simultaneous teams from counting every possible combination.",
+        "The source’s second team input includes o and cannot support its stated answer of 3. Reject invalid symbols under the stated contract. A corrected valid example bbbbcccmmmmppppzzzz yields 3."
+      ],
+      "drills": [
+        {
+          "prompt": "Given [1,4,8,2,1,7,4,1], return the most frequent value, not the numerically largest duplicate. Explain the approach.",
+          "answer": "1 occurs three times. Count values using a dictionary/Counter, then select the maximum count; define tie behavior before coding.",
+          "criteria": [
+            "Returns 1",
+            "Counts frequency",
+            "Clarifies ties"
+          ]
+        },
+        {
+          "prompt": "For pcmbzpcmbz, find the maximum number of disjoint teams needing one of each letter. Why minimum count?",
+          "answer": "2. Every team consumes one of each required skill, so the least available skill limits the number; pairing arbitrary members constructs that many teams.",
+          "criteria": [
+            "Answer 2",
+            "Bottleneck argument"
+          ]
+        },
+        {
+          "prompt": "The source says mppzombpzcmpmzz yields three teams. What must be corrected before implementing?",
+          "answer": "It contains invalid o and only one c and b. Reject it under the specified alphabet. If explicitly ignoring invalid symbols, the minimum required count is 1; the separate valid sorted example yields 3.",
+          "criteria": [
+            "Invalid symbol",
+            "c and b counts are 1",
+            "Contract and answer corrected"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "reasoning",
+      "level": 4,
+      "title": "Explain a solution and its boundaries",
+      "origin": "Guide §§11,13; PDF pp18–20",
+      "sources": [
+        "collections",
+        "sorting"
+      ],
+      "notes": [
+        "For an engineering interview, state inputs/outputs, an invariant, data structure, time/space and at least one boundary case. A passing sample is not proof of correctness.",
+        "Fibonacci: define F0=0,F1=1, then reuse earlier states instead of exponential repeated recursion. For primes below N, the sieve marks composite multiples; test N<=2.",
+        "For duplicate item records, clarify whether you count extra occurrences or every matching pair, and which attributes define identity. For matrices, distinguish unique-row storage from repeated shared references."
+      ],
+      "drills": [
+        {
+          "prompt": "Two Sum: what invariant does a seen-value map maintain, and what complexity do you expect?",
+          "answer": "The map contains values/indices processed before the current index. Look up target-current before storing the current item to avoid reusing it; expected O(n) time and O(n) space with ordinary hash behavior.",
+          "criteria": [
+            "Previously seen indices",
+            "Do not reuse one item",
+            "Expected time/space"
+          ]
+        },
+        {
+          "prompt": "How do you improve naive repeated-recursion Fibonacci, and which base convention should you state?",
+          "answer": "Memoize subproblems or keep the previous two values iteratively. State F0=0 and F1=1; iterative computation uses O(n) time/O(1) auxiliary space under the usual unit-cost arithmetic model.",
+          "criteria": [
+            "Reuse earlier results",
+            "Explicit base cases",
+            "Complexity with model"
+          ]
+        },
+        {
+          "prompt": "A list contains the same item three times. How many duplicates are there?",
+          "answer": "Clarify the definition: two extra occurrences beyond the first, or three unordered equal pairs. Both are plausible; agree on the contract first.",
+          "criteria": [
+            "Ambiguity identified",
+            "Two extra or three pairs"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "architecture",
+      "level": 4,
+      "title": "Explain a small system for a customer",
+      "origin": "Guide §§11,13; PDF pp13,16,20",
+      "sources": [
+        "rest",
+        "transactions",
+        "dhcp"
+      ],
+      "notes": [
+        "Start with users, core operations, data sensitivity, scale and reliability needs. Trace browser → API → data store, then discuss one failure path and one measurable tradeoff. This is an application exercise extending the source material.",
+        "MVC separates model/data-domain behavior, view/presentation and controller/input coordination. Frameworks apply these boundaries differently.",
+        "A dynamic address is typically leased by DHCP and may remain the same for long periods. Static configuration or a reservation provides predictable addressing; dynamic does not mean every request gets a new IP."
+      ],
+      "drills": [
+        {
+          "prompt": "Explain a small reporting web app to a non-specialist, including one failure case and one tradeoff.",
+          "answer": "The browser asks an API for a report; the API checks permission, reads data and returns a result. Show a clear retry/error state on failure. A cached report can be faster but may be stale.",
+          "criteria": [
+            "Clear request/data flow",
+            "Permission and failure behavior",
+            "One explicit tradeoff"
+          ]
+        },
+        {
+          "prompt": "Does a DHCP client necessarily change IP on every connection or request? Distinguish static addressing.",
+          "answer": "No. DHCP leases can be renewed with the same address. Static configuration or a reservation is used when predictable assignment is needed.",
+          "criteria": [
+            "Leases can stay the same",
+            "Predictable/static or reserved assignment"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "stories",
+      "level": 4,
+      "title": "Tell a truthful project and teamwork story",
+      "origin": "Guide §§0,9–10; PDF pp1,9–12,20–21",
+      "sources": [],
+      "notes": [
+        "Use a short situation → task → your action → result → lesson outline. Explain what you personally did and what evidence supports the result; do not invent metrics or borrow somebody else’s outcome.",
+        "Prepare distinct examples for learning something unfamiliar, a technical setback, collaboration/conflict, leadership, failure and a meaningful achievement. Historical source stories are private prompts, not verified scripts.",
+        "Describe constraints professionally. Explain your response, tradeoff and learning instead of blaming teammates or making unverifiable accusations. Update career stage and current experience before rehearsing."
+      ],
+      "drills": [
+        {
+          "prompt": "Write a five-line outline for a real project challenge. Use placeholders for facts you still need to verify.",
+          "answer": "Situation: [context]. Task: [responsibility]. Action: [your specific choices]. Result: [verifiable outcome]. Lesson: [what changed in your approach].",
+          "criteria": [
+            "Specific personal action",
+            "Truthful outcome/evidence",
+            "Lesson or changed behavior"
+          ]
+        },
+        {
+          "prompt": "Your failure answer is only “I persevere.” What is missing?",
+          "answer": "A specific failure, your responsibility, what you changed, and evidence of a later improvement. A slogan alone does not demonstrate behavior.",
+          "criteria": [
+            "Concrete event and ownership",
+            "Changed action",
+            "Evidence or honest limitation"
+          ]
+        },
+        {
+          "prompt": "Outline a respectful conflict answer without criticizing a teammate.",
+          "answer": "Explain the shared goal, the differing views, how you listened/clarified constraints, the agreed action and the observed result. Own your contribution.",
+          "criteria": [
+            "Shared goal/difference",
+            "Listening and resolution",
+            "Result without blame"
+          ]
+        }
+      ],
+      "example": ""
+    },
+    {
+      "id": "interview",
+      "level": 4,
+      "title": "Motivation, role fit and questions to ask",
+      "origin": "Guide §§0,9,12; PDF pp1,9,11,17,20–21",
+      "sources": [],
+      "notes": [
+        "For “why this company,” connect verified current work to your relevant experience and the contribution you want to make. Replace dated company claims and vague “nothing to lose” wording with a concrete fit.",
+        "State Python experience honestly: distinguish what you can read, build independently, explain with help and are still practicing. For engineering emphasize implementation; for solutions architecture emphasize customer needs and tradeoffs while keeping technical depth.",
+        "Useful questions cover actual projects, onboarding, success measures, collaboration, technical ownership, SQL/data expectations, customer feedback and growth. Historical hiring anecdotes are not promises about the next interview."
+      ],
+      "drills": [
+        {
+          "prompt": "Draft a brief motivation answer without inventing company facts or claiming experience you do not have.",
+          "answer": "I am interested in [verified work/problem] because [real connection]. I have worked on [truthful relevant example], and want to contribute [specific value] while developing [skill].",
+          "criteria": [
+            "Verified company connection",
+            "Truthful experience",
+            "Contribution and growth"
+          ]
+        },
+        {
+          "prompt": "Choose three useful questions to ask about either an engineering or solutions architect role.",
+          "answer": "What would I own in the first three months? How is success measured? How do engineers/architects clarify customer requirements and review tradeoffs?",
+          "criteria": [
+            "Concrete responsibilities",
+            "Success/onboarding",
+            "Collaboration or customer context"
+          ]
+        },
+        {
+          "prompt": "How would you describe early Python experience honestly in an interview?",
+          "answer": "I am building fluency through scripts and algorithm exercises. I can demonstrate [specific verified task] independently; I am still practicing [specific area]. Then show or explain actual code.",
+          "criteria": [
+            "Specific demonstrated capability",
+            "Clear limits",
+            "Avoid exaggerated fluency"
+          ]
+        }
+      ],
+      "example": ""
+    }
+  ],
+  "drills": [
+    {
+      "prompt": "A PHP page sends HTML to a browser. Where did PHP execute, and what renders the HTML?",
+      "answer": "PHP usually executes on the server; the browser parses and renders the resulting HTML.",
+      "criteria": [
+        "Server runs PHP",
+        "Browser renders the response"
+      ],
+      "id": "languages-1",
+      "topicId": "languages",
+      "title": "Know what each language is for",
+      "level": 1,
+      "origin": "Guide §7; PDF pp7–8",
+      "sources": [
+        "csharp",
+        "php",
+        "python"
+      ]
+    },
+    {
+      "prompt": "Correct this claim: C#, C++ and C are just three versions of one language.",
+      "answer": "They are distinct languages. C++ supports multiple paradigms including OOP and generics; C# commonly targets .NET and has managed memory.",
+      "criteria": [
+        "Distinct languages",
+        "One meaningful runtime or paradigm distinction"
+      ],
+      "id": "languages-2",
+      "topicId": "languages",
+      "title": "Know what each language is for",
+      "level": 1,
+      "origin": "Guide §7; PDF pp7–8",
+      "sources": [
+        "csharp",
+        "php",
+        "python"
+      ]
+    },
+    {
+      "prompt": "You have Java source and need to compile and run it. Distinguish JDK, JVM and JRE.",
+      "answer": "Use JDK development tools to compile source into bytecode. The JVM executes it; JRE describes runtime libraries and execution support.",
+      "criteria": [
+        "JDK compiles",
+        "JVM executes bytecode",
+        "JRE is runtime support"
+      ],
+      "id": "runtime-1",
+      "topicId": "runtime",
+      "title": "Java runtime and generic types",
+      "level": 1,
+      "origin": "Guide §7; PDF pp1–2,8",
+      "sources": [
+        "jvm",
+        "java"
+      ]
+    },
+    {
+      "prompt": "What does List<String> tell a Java caller?",
+      "answer": "This is a list whose declared element type is String, with compiler checks on compatible use.",
+      "criteria": [
+        "Parameterized element type",
+        "Compile-time type checking"
+      ],
+      "id": "runtime-2",
+      "topicId": "runtime",
+      "title": "Java runtime and generic types",
+      "level": 1,
+      "origin": "Guide §7; PDF pp1–2,8",
+      "sources": [
+        "jvm",
+        "java"
+      ]
+    },
+    {
+      "prompt": "In Python, what is the difference between CounterBox and CounterBox()?",
+      "answer": "CounterBox names the class. CounterBox() calls it to create an instance, initialized through its constructor machinery.",
+      "criteria": [
+        "Class versus instance",
+        "Python instantiates without new"
+      ],
+      "id": "objects-1",
+      "topicId": "objects",
+      "title": "Classes, objects and methods",
+      "level": 1,
+      "origin": "Guide §§4,11,13; PDF pp5,13–15,20",
+      "sources": [
+        "python",
+        "java"
+      ]
+    },
+    {
+      "prompt": "Name the four common OOP pillars, then describe one with an example.",
+      "answer": "Abstraction, encapsulation, inheritance and polymorphism. For encapsulation, an account exposes deposit(amount) that validates a positive amount instead of allowing arbitrary balance changes.",
+      "criteria": [
+        "All four concepts",
+        "Specific behavior in an example"
+      ],
+      "id": "objects-2",
+      "topicId": "objects",
+      "title": "Classes, objects and methods",
+      "level": 1,
+      "origin": "Guide §§4,11,13; PDF pp5,13–15,20",
+      "sources": [
+        "python",
+        "java"
+      ]
+    },
+    {
+      "prompt": "Choose structures for undo history, breadth-first traversal and counting repeated names.",
+      "answer": "Undo history: stack. Breadth-first traversal: queue. Repeated-name counts: dictionary or Counter.",
+      "criteria": [
+        "LIFO stack for undo",
+        "FIFO queue for BFS",
+        "Counts keyed by name"
+      ],
+      "id": "collections-1",
+      "topicId": "collections",
+      "title": "Choose a collection",
+      "level": 1,
+      "origin": "Guide §13; PDF pp18–20",
+      "sources": [
+        "collections",
+        "heap"
+      ]
+    },
+    {
+      "prompt": "For values [5, 1, 4] in a Python 3.12 min-heap, which value is popped first? Is the whole heap sorted?",
+      "answer": "1 is popped first. A heap is partially ordered, not a fully sorted sequence.",
+      "criteria": [
+        "Minimum first",
+        "Heap is not fully sorted"
+      ],
+      "id": "collections-2",
+      "topicId": "collections",
+      "title": "Choose a collection",
+      "level": 1,
+      "origin": "Guide §13; PDF pp18–20",
+      "sources": [
+        "collections",
+        "heap"
+      ]
+    },
+    {
+      "prompt": "You committed locally. Has GitHub changed? What would publish the branch?",
+      "answer": "A local commit does not update GitHub. An explicitly authorized push publishes the branch to its configured remote.",
+      "criteria": [
+        "Commit stays local",
+        "Push publishes"
+      ],
+      "id": "git-1",
+      "topicId": "git",
+      "title": "Git and collaboration",
+      "level": 1,
+      "origin": "Guide §6; PDF p7",
+      "sources": [
+        "git"
+      ]
+    },
+    {
+      "prompt": "Explain fetch versus pull without assuming pull always merges.",
+      "answer": "Fetch obtains objects and updates remote-tracking refs. Pull also integrates the selected remote branch, using merge or rebase as configured/requested.",
+      "criteria": [
+        "Fetch does not itself integrate",
+        "Pull integrates with a strategy"
+      ],
+      "id": "git-2",
+      "topicId": "git",
+      "title": "Git and collaboration",
+      "level": 1,
+      "origin": "Guide §6; PDF p7",
+      "sources": [
+        "git"
+      ]
+    },
+    {
+      "prompt": "Explain a page load from request to visible content in three steps.",
+      "answer": "Request resources from a server (or cache), receive responses, then parse HTML/build DOM and apply CSS/execute JavaScript to render and interact.",
+      "criteria": [
+        "Request/response",
+        "HTML and DOM",
+        "CSS/JavaScript roles"
+      ],
+      "id": "browser-1",
+      "topicId": "browser",
+      "title": "From URL to a rendered page",
+      "level": 1,
+      "origin": "Guide §§8,11,13; PDF pp8–9,13,15–16,20",
+      "sources": [
+        "internet",
+        "dom",
+        "doctype"
+      ]
+    },
+    {
+      "prompt": "What does <!doctype html> accomplish, and what does it not guarantee?",
+      "answer": "It selects standards/no-quirks rendering. It does not prove the HTML is valid or guarantee cross-browser perfection.",
+      "criteria": [
+        "Standards rendering",
+        "Not a validator"
+      ],
+      "id": "browser-2",
+      "topicId": "browser",
+      "title": "From URL to a rendered page",
+      "level": 1,
+      "origin": "Guide §§8,11,13; PDF pp8–9,13,15–16,20",
+      "sources": [
+        "internet",
+        "dom",
+        "doctype"
+      ]
+    },
+    {
+      "prompt": "An existing endpoint supports GET, but you send DELETE. What status describes that method mismatch?",
+      "answer": "405 Method Not Allowed. The response should identify allowed methods through Allow.",
+      "criteria": [
+        "405",
+        "Method is not allowed on this resource"
+      ],
+      "id": "http-1",
+      "topicId": "http",
+      "title": "HTTP requests and responses",
+      "level": 1,
+      "origin": "Guide §11; PDF pp12–13,15",
+      "sources": [
+        "http",
+        "methods"
+      ]
+    },
+    {
+      "prompt": "Does a POST body make a password secret? Explain.",
+      "answer": "No. Use HTTPS for transport encryption and avoid leaking sensitive fields in logs. A body is not a security boundary.",
+      "criteria": [
+        "POST alone is not secrecy",
+        "HTTPS protects transit"
+      ],
+      "id": "http-2",
+      "topicId": "http",
+      "title": "HTTP requests and responses",
+      "level": 1,
+      "origin": "Guide §11; PDF pp12–13,15",
+      "sources": [
+        "http",
+        "methods"
+      ]
+    },
+    {
+      "prompt": "Given employees(name, active), write a query for names where active is the integer 1.",
+      "answer": "SELECT name FROM employees WHERE active = 1;",
+      "criteria": [
+        "SELECT name",
+        "FROM employees",
+        "WHERE active = 1"
+      ],
+      "id": "sql-basics-1",
+      "topicId": "sql-basics",
+      "title": "Read and modify relational data",
+      "level": 1,
+      "origin": "Guide §3; PDF pp3–4",
+      "sources": [
+        "sql",
+        "keys"
+      ]
+    },
+    {
+      "prompt": "Correct: SQL is never case sensitive, and semicolons are never necessary.",
+      "answer": "Keywords are generally case insensitive. Identifier quoting and text comparison follow engine/collation rules. Terminators depend on the execution context.",
+      "criteria": [
+        "Keywords versus identifiers/text",
+        "Context matters for terminators"
+      ],
+      "id": "sql-basics-2",
+      "topicId": "sql-basics",
+      "title": "Read and modify relational data",
+      "level": 1,
+      "origin": "Guide §3; PDF pp3–4",
+      "sources": [
+        "sql",
+        "keys"
+      ]
+    },
+    {
+      "prompt": "orders.customer_id references customers.id. What does the foreign key prevent?",
+      "answer": "It prevents an order from referencing a non-existent customer key, subject to the constraint/null rules. It is a data-integrity relationship.",
+      "criteria": [
+        "Matching referenced key",
+        "Integrity rather than universal speed"
+      ],
+      "id": "keys-1",
+      "topicId": "keys",
+      "title": "Keys and referential integrity",
+      "level": 2,
+      "origin": "Guide §3; PDF p4",
+      "sources": [
+        "keys"
+      ]
+    },
+    {
+      "prompt": "Can a foreign key reference the same table or an eligible unique non-primary key?",
+      "answer": "Yes to both, where the engine and referenced constraint support it.",
+      "criteria": [
+        "Self-reference is possible",
+        "Eligible unique key can be referenced"
+      ],
+      "id": "keys-2",
+      "topicId": "keys",
+      "title": "Keys and referential integrity",
+      "level": 2,
+      "origin": "Guide §3; PDF p4",
+      "sources": [
+        "keys"
+      ]
+    },
+    {
+      "prompt": "Customer A has two orders and B has none. How many rows does customers LEFT JOIN orders produce?",
+      "answer": "Three rows: two for A and one NULL-padded order side for B.",
+      "criteria": [
+        "Two matches for A",
+        "One retained unmatched B",
+        "Total three"
+      ],
+      "id": "joins-1",
+      "topicId": "joins",
+      "title": "Join rows without losing the unmatched ones",
+      "level": 2,
+      "origin": "Guide §§3,13; PDF pp4,19",
+      "sources": [
+        "joins"
+      ]
+    },
+    {
+      "prompt": "Write a join returning every customer name and any order ID. Tables: customers(id,name), orders(id,customer_id).",
+      "answer": "SELECT c.name, o.id FROM customers c LEFT JOIN orders o ON o.customer_id = c.id;",
+      "criteria": [
+        "LEFT JOIN",
+        "Correct key condition",
+        "Select customer name and order ID"
+      ],
+      "id": "joins-2",
+      "topicId": "joins",
+      "title": "Join rows without losing the unmatched ones",
+      "level": 2,
+      "origin": "Guide §§3,13; PDF pp4,19",
+      "sources": [
+        "joins"
+      ]
+    },
+    {
+      "prompt": "What does FULL OUTER JOIN add beyond LEFT JOIN?",
+      "answer": "It also preserves unmatched right-side rows with a NULL-padded left side.",
+      "criteria": [
+        "Unmatched right rows",
+        "NULL padding"
+      ],
+      "id": "joins-3",
+      "topicId": "joins",
+      "title": "Join rows without losing the unmatched ones",
+      "level": 2,
+      "origin": "Guide §§3,13; PDF pp4,19",
+      "sources": [
+        "joins"
+      ]
+    },
+    {
+      "prompt": "Write department maximum salary from employees(department,salary), keeping groups whose max exceeds 100000.",
+      "answer": "SELECT department, MAX(salary) FROM employees GROUP BY department HAVING MAX(salary) > 100000;",
+      "criteria": [
+        "GROUP BY department",
+        "MAX(salary)",
+        "HAVING filters aggregate"
+      ],
+      "id": "grouping-1",
+      "topicId": "grouping",
+      "title": "Aggregate, group and handle missing values",
+      "level": 2,
+      "origin": "Guide §§3,13; PDF pp3–4,19",
+      "sources": [
+        "joins"
+      ]
+    },
+    {
+      "prompt": "After customers LEFT JOIN orders, why might COUNT(*) incorrectly report one order for a customer with none?",
+      "answer": "The outer join still produces one padded row. COUNT(o.id) counts only non-null matching order IDs.",
+      "criteria": [
+        "Padded row exists",
+        "Count non-null child key"
+      ],
+      "id": "grouping-2",
+      "topicId": "grouping",
+      "title": "Aggregate, group and handle missing values",
+      "level": 2,
+      "origin": "Guide §§3,13; PDF pp3–4,19",
+      "sources": [
+        "joins"
+      ]
+    },
+    {
+      "prompt": "An API returns JSON, and a React component uses JSX. Explain the difference.",
+      "answer": "JSON represents data. JSX expresses UI markup inside JavaScript and is transformed before execution.",
+      "criteria": [
+        "Data format versus UI syntax",
+        "JSX transforms to JavaScript"
+      ],
+      "id": "frontend-1",
+      "topicId": "frontend",
+      "title": "React, JSX, forms and CSS",
+      "level": 2,
+      "origin": "Guide §§8,11,13; PDF pp8–9,15,20",
+      "sources": [
+        "react",
+        "yup",
+        "css"
+      ]
+    },
+    {
+      "prompt": "You need a form and field validation. Does adding Yup create the form UI?",
+      "answer": "No. Build the form UI/state handling, and use Yup if schema validation fits the requirements.",
+      "criteria": [
+        "Yup validates/parses",
+        "UI/state remain separate"
+      ],
+      "id": "frontend-2",
+      "topicId": "frontend",
+      "title": "React, JSX, forms and CSS",
+      "level": 2,
+      "origin": "Guide §§8,11,13; PDF pp8–9,15,20",
+      "sources": [
+        "react",
+        "yup",
+        "css"
+      ]
+    },
+    {
+      "prompt": "Which CSS selector is reusable: .notice or #notice? How would you align a row of buttons?",
+      "answer": ".notice is a reusable class; #notice identifies an element with that id. A flex container can align a row with gap and align-items.",
+      "criteria": [
+        "Class versus unique id",
+        "Appropriate flex layout"
+      ],
+      "id": "frontend-3",
+      "topicId": "frontend",
+      "title": "React, JSX, forms and CSS",
+      "level": 2,
+      "origin": "Guide §§8,11,13; PDF pp8–9,15,20",
+      "sources": [
+        "react",
+        "yup",
+        "css"
+      ]
+    },
+    {
+      "prompt": "A class has private balance and setBalance(any_number). Is encapsulation automatically good?",
+      "answer": "No. Private storage plus an unrestricted setter may still violate invariants. Expose validated operations such as deposit(positive_amount).",
+      "criteria": [
+        "Getters/setters are not enough",
+        "Protect an invariant"
+      ],
+      "id": "encapsulation-1",
+      "topicId": "encapsulation",
+      "title": "Abstraction and encapsulation in practice",
+      "level": 2,
+      "origin": "Guide §§4,11; PDF pp5,13",
+      "sources": [
+        "java",
+        "python"
+      ]
+    },
+    {
+      "prompt": "Distinguish abstraction from encapsulation using a payment service.",
+      "answer": "Abstraction offers charge(amount) without revealing provider details. Encapsulation controls internal credentials/state and validates transitions.",
+      "criteria": [
+        "Simple external contract",
+        "Controlled internal state"
+      ],
+      "id": "encapsulation-2",
+      "topicId": "encapsulation",
+      "title": "Abstraction and encapsulation in practice",
+      "level": 2,
+      "origin": "Guide §§4,11; PDF pp5,13",
+      "sources": [
+        "java",
+        "python"
+      ]
+    },
+    {
+      "prompt": "In Java, are calculate(int) and calculate(double) overriding or overloading? What about a child replacing calculate(int)?",
+      "answer": "Different parameter signatures are overloads. A compatible child implementation of the inherited instance method is an override.",
+      "criteria": [
+        "Different parameters means overload",
+        "Subtype implementation means override"
+      ],
+      "id": "polymorphism-1",
+      "topicId": "polymorphism",
+      "title": "Polymorphism, overloading and overriding",
+      "level": 2,
+      "origin": "Guide §§4,11; PDF pp5,12,15",
+      "sources": [
+        "java",
+        "python"
+      ]
+    },
+    {
+      "prompt": "Can a Java override freely change its parameter types? Can an overload differ only in return type?",
+      "answer": "No to both. Overriding preserves the relevant signature; Java permits covariant reference returns. Overloading requires distinct signatures.",
+      "criteria": [
+        "Parameters are not arbitrary",
+        "Return alone does not overload"
+      ],
+      "id": "polymorphism-2",
+      "topicId": "polymorphism",
+      "title": "Polymorphism, overloading and overriding",
+      "level": 2,
+      "origin": "Guide §§4,11; PDF pp5,12,15",
+      "sources": [
+        "java",
+        "python"
+      ]
+    },
+    {
+      "prompt": "Correct: Java interfaces contain only public abstract methods and cannot contain implementations.",
+      "answer": "They may include default/static implementations and private helper methods. They lack per-instance fields, but may declare constants.",
+      "criteria": [
+        "Implemented methods exist",
+        "Private methods can exist",
+        "No instance fields"
+      ],
+      "id": "interfaces-1",
+      "topicId": "interfaces",
+      "title": "Interfaces and abstract classes: Java scope",
+      "level": 2,
+      "origin": "Guide §§4,11; PDF pp5–6,14",
+      "sources": [
+        "interfaces",
+        "java"
+      ]
+    },
+    {
+      "prompt": "You need shared per-instance state plus a partial implementation in Java. Which construct fits, and can you instantiate it directly?",
+      "answer": "An abstract base class can provide that state/implementation. Instantiate a concrete subclass, not the abstract class directly.",
+      "criteria": [
+        "Abstract base class",
+        "Concrete subclass instance"
+      ],
+      "id": "interfaces-2",
+      "topicId": "interfaces",
+      "title": "Interfaces and abstract classes: Java scope",
+      "level": 2,
+      "origin": "Guide §§4,11; PDF pp5–6,14",
+      "sources": [
+        "interfaces",
+        "java"
+      ]
+    },
+    {
+      "prompt": "Does every Agile team have Sprints? Give the distinction.",
+      "answer": "No. Agile is a set of values/principles. Scrum is a specific framework that uses Sprints.",
+      "criteria": [
+        "Agile is broader",
+        "Scrum uses Sprints"
+      ],
+      "id": "agile-1",
+      "topicId": "agile",
+      "title": "Agile and Scrum without the slogans",
+      "level": 2,
+      "origin": "Guide §5; PDF p7",
+      "sources": [
+        "agile",
+        "scrum"
+      ]
+    },
+    {
+      "prompt": "Distinguish a Sprint Review from a Retrospective.",
+      "answer": "Review inspects the product outcome with stakeholders and adapts future work; Retrospective improves the team’s ways of working.",
+      "criteria": [
+        "Product outcome and feedback",
+        "Team process improvement"
+      ],
+      "id": "agile-2",
+      "topicId": "agile",
+      "title": "Agile and Scrum without the slogans",
+      "level": 2,
+      "origin": "Guide §5; PDF p7",
+      "sources": [
+        "agile",
+        "scrum"
+      ]
+    },
+    {
+      "prompt": "After inserting 2 into the sorted prefix [1,4] of [1,4,2,3], show the array.",
+      "answer": "[1,2,4,3]. The sorted prefix is now [1,2,4].",
+      "criteria": [
+        "Correct array",
+        "Sorted-prefix invariant"
+      ],
+      "id": "sort-simple-1",
+      "topicId": "sort-simple",
+      "title": "Insertion and bubble sort",
+      "level": 3,
+      "origin": "Guide §2; PDF p2",
+      "sources": [
+        "sorting"
+      ]
+    },
+    {
+      "prompt": "Why does bubble sort remain a weak default even if early exit makes sorted input linear?",
+      "answer": "Many inputs still require quadratic comparisons/swaps; insertion sort generally handles small/nearly-sorted data more effectively. Best case does not describe every workload.",
+      "criteria": [
+        "Worst case O(n²)",
+        "Best-case limitation"
+      ],
+      "id": "sort-simple-2",
+      "topicId": "sort-simple",
+      "title": "Insertion and bubble sort",
+      "level": 3,
+      "origin": "Guide §2; PDF p2",
+      "sources": [
+        "sorting"
+      ]
+    },
+    {
+      "prompt": "Choose between ordinary array merge sort and quicksort when guaranteed O(n log n) time matters. State a tradeoff.",
+      "answer": "Merge sort gives the worst-case bound, usually with O(n) auxiliary storage. Ordinary quicksort has quadratic worst cases.",
+      "criteria": [
+        "Merge sort worst-case bound",
+        "Extra memory tradeoff"
+      ],
+      "id": "sort-divide-1",
+      "topicId": "sort-divide",
+      "title": "Merge sort and quicksort",
+      "level": 3,
+      "origin": "Guide §2; PDF p2",
+      "sources": [
+        "sorting"
+      ]
+    },
+    {
+      "prompt": "Does median-of-three make ordinary quicksort immune to quadratic behavior?",
+      "answer": "No. It can improve pivot choice in practice, but does not guarantee balanced partitions for every input.",
+      "criteria": [
+        "No worst-case guarantee",
+        "Partition balance matters"
+      ],
+      "id": "sort-divide-2",
+      "topicId": "sort-divide",
+      "title": "Merge sort and quicksort",
+      "level": 3,
+      "origin": "Guide §2; PDF p2",
+      "sources": [
+        "sorting"
+      ]
+    },
+    {
+      "prompt": "Is [9,7,8,1,2] a valid max-heap despite 7 coming before 8?",
+      "answer": "Yes. Each parent is at least its children; heap order does not require siblings or the entire array to be sorted.",
+      "criteria": [
+        "Valid heap",
+        "Parent-child invariant"
+      ],
+      "id": "heap-1",
+      "topicId": "heap",
+      "title": "Binary heaps and heapsort",
+      "level": 3,
+      "origin": "Guide §2; PDF pp2–3",
+      "sources": [
+        "heap",
+        "sorting"
+      ]
+    },
+    {
+      "prompt": "State bottom-up heap-build time, one sift-down time and heapsort worst-case time.",
+      "answer": "O(n), O(log n), O(n log n), respectively.",
+      "criteria": [
+        "Build O(n)",
+        "Sift-down O(log n)",
+        "Sort O(n log n)"
+      ],
+      "id": "heap-2",
+      "topicId": "heap",
+      "title": "Binary heaps and heapsort",
+      "level": 3,
+      "origin": "Guide §2; PDF pp2–3",
+      "sources": [
+        "heap",
+        "sorting"
+      ]
+    },
+    {
+      "prompt": "Expand SOLID, especially D, then give a small dependency example.",
+      "answer": "Single Responsibility; Open/Closed; Liskov Substitution; Interface Segregation; Dependency Inversion. A report service depends on a storage contract rather than constructing a specific database client.",
+      "criteria": [
+        "Correct D: Inversion",
+        "Other four named",
+        "Contract-based example"
+      ],
+      "id": "solid-1",
+      "topicId": "solid",
+      "title": "SOLID as design reasoning",
+      "level": 3,
+      "origin": "Guide §4; PDF p6",
+      "sources": [
+        "solid",
+        "liskov"
+      ]
+    },
+    {
+      "prompt": "A subtype keeps every method name but throws unsupported errors for valid parent operations. Does that establish Liskov substitution?",
+      "answer": "No. Clients relying on the base behavior can break. Substitution is about behavior/contracts, not method-name count.",
+      "criteria": [
+        "Behavioral contract",
+        "Client can break"
+      ],
+      "id": "solid-2",
+      "topicId": "solid",
+      "title": "SOLID as design reasoning",
+      "level": 3,
+      "origin": "Guide §4; PDF p6",
+      "sources": [
+        "solid",
+        "liskov"
+      ]
+    },
+    {
+      "prompt": "Refactor ReportService creating its own DatabaseClient into a DI design. A short Python sketch is enough.",
+      "answer": "class ReportService:\n    def __init__(self, store):\n        self.store = store\n\nWire ReportService(real_store) in the composition code; pass a fake store in tests.",
+      "criteria": [
+        "Collaborator passed from outside",
+        "Test can supply fake",
+        "Creation remains somewhere"
+      ],
+      "id": "di-1",
+      "topicId": "di",
+      "title": "Inject collaborators and control coupling",
+      "level": 3,
+      "origin": "Guide §11; PDF p14",
+      "sources": [
+        "di",
+        "solid"
+      ]
+    },
+    {
+      "prompt": "Is Dependency Injection identical to Dependency Inversion? Must DI remove every new expression?",
+      "answer": "No. Inversion is a principle about dependency direction/abstractions; injection supplies dependencies. Objects still have to be constructed.",
+      "criteria": [
+        "Principle versus technique",
+        "Object creation remains"
+      ],
+      "id": "di-2",
+      "topicId": "di",
+      "title": "Inject collaborators and control coupling",
+      "level": 3,
+      "origin": "Guide §11; PDF p14",
+      "sources": [
+        "di",
+        "solid"
+      ]
+    },
+    {
+      "prompt": "Every order repeats customer_email. What anomaly can occur, and how can normalization help?",
+      "answer": "Updating only some orders produces inconsistent customer facts. Store customer data once and reference the customer key; still consider historical snapshot requirements.",
+      "criteria": [
+        "Inconsistent repeated updates",
+        "Separate customer fact/reference",
+        "Acknowledge business meaning"
+      ],
+      "id": "database-design-1",
+      "topicId": "database-design",
+      "title": "Model data and query performance",
+      "level": 3,
+      "origin": "Guide §§3,11,13; PDF pp3,14–15,19–20",
+      "sources": [
+        "indexes",
+        "cluster",
+        "explain",
+        "transactions"
+      ]
+    },
+    {
+      "prompt": "A query is slow. Why not add an index on every column?",
+      "answer": "Indexes use space and slow writes. Inspect filters, joins, selectivity and the plan, then measure a suitable index against the workload.",
+      "criteria": [
+        "Write/storage cost",
+        "Measure/query plan"
+      ],
+      "id": "database-design-2",
+      "topicId": "database-design",
+      "title": "Model data and query performance",
+      "level": 3,
+      "origin": "Guide §§3,11,13; PDF pp3,14–15,19–20",
+      "sources": [
+        "indexes",
+        "cluster",
+        "explain",
+        "transactions"
+      ]
+    },
+    {
+      "prompt": "Two account updates must succeed together. Which concept helps, and what should you clarify when someone says database clustering?",
+      "answer": "Use a transaction for atomic updates. Ask whether clustering means physical organization, server topology or statistical grouping.",
+      "criteria": [
+        "Atomic transaction",
+        "Clarify clustering context"
+      ],
+      "id": "database-design-3",
+      "topicId": "database-design",
+      "title": "Model data and query performance",
+      "level": 3,
+      "origin": "Guide §§3,11,13; PDF pp3,14–15,19–20",
+      "sources": [
+        "indexes",
+        "cluster",
+        "explain",
+        "transactions"
+      ]
+    },
+    {
+      "prompt": "A login query concatenates a username into SQL. Describe the fix and why escaping alone is a weak default.",
+      "answer": "Use parameter binding so input is treated as data, not executable SQL syntax. Validate inputs too, but do not replace binding with ad hoc escaping.",
+      "criteria": [
+        "Parameterized values",
+        "Data separated from SQL syntax"
+      ],
+      "id": "security-1",
+      "topicId": "security",
+      "title": "API security and repeatable requests",
+      "level": 3,
+      "origin": "Guide §§3,11; PDF pp4,12–13,15–16",
+      "sources": [
+        "injection",
+        "http",
+        "rest"
+      ]
+    },
+    {
+      "prompt": "A user is logged in and requests another user’s private record. Which check is missing?",
+      "answer": "Resource-level authorization. Authentication alone does not grant permission to access every object.",
+      "criteria": [
+        "Authorization",
+        "Specific resource ownership/permission"
+      ],
+      "id": "security-2",
+      "topicId": "security",
+      "title": "API security and repeatable requests",
+      "level": 3,
+      "origin": "Guide §§3,11; PDF pp4,12–13,15–16",
+      "sources": [
+        "injection",
+        "http",
+        "rest"
+      ]
+    },
+    {
+      "prompt": "Can DELETE remain idempotent if the first response is 204 and the second is 404?",
+      "answer": "Yes. Idempotence concerns the intended server-side effect, not identical response status. The resource remains deleted.",
+      "criteria": [
+        "Same effect",
+        "Responses may differ"
+      ],
+      "id": "security-3",
+      "topicId": "security",
+      "title": "API security and repeatable requests",
+      "level": 3,
+      "origin": "Guide §§3,11; PDF pp4,12–13,15–16",
+      "sources": [
+        "injection",
+        "http",
+        "rest"
+      ]
+    },
+    {
+      "prompt": "Correct: SOAP is always stateful, REST is always faster, and SOAP sends HTML.",
+      "answer": "SOAP uses XML envelopes and does not inherently require sessions. REST is a style; performance depends on workload, protocol use and implementation. HTML is not the SOAP envelope format.",
+      "criteria": [
+        "SOAP XML",
+        "No mandatory stateful session",
+        "No universal performance winner"
+      ],
+      "id": "api-design-1",
+      "topicId": "api-design",
+      "title": "REST, SOAP and the web contract",
+      "level": 3,
+      "origin": "Guide §11; PDF pp13,16–17",
+      "sources": [
+        "rest",
+        "soap",
+        "http"
+      ]
+    },
+    {
+      "prompt": "Design a short contract for creating an order and later fetching it.",
+      "answer": "POST /orders with validated input; return 201 plus a resource location/representation on creation. GET /orders/{id} reads it. Check caller permissions and define errors.",
+      "criteria": [
+        "Creation and retrieval methods",
+        "201/resource identity",
+        "Validation and authorization"
+      ],
+      "id": "api-design-2",
+      "topicId": "api-design",
+      "title": "REST, SOAP and the web contract",
+      "level": 3,
+      "origin": "Guide §11; PDF pp13,16–17",
+      "sources": [
+        "rest",
+        "soap",
+        "http"
+      ]
+    },
+    {
+      "prompt": "Given [1,4,8,2,1,7,4,1], return the most frequent value, not the numerically largest duplicate. Explain the approach.",
+      "answer": "1 occurs three times. Count values using a dictionary/Counter, then select the maximum count; define tie behavior before coding.",
+      "criteria": [
+        "Returns 1",
+        "Counts frequency",
+        "Clarifies ties"
+      ],
+      "id": "patterns-1",
+      "topicId": "patterns",
+      "title": "Turn source coding notes into Blind 75 preparation",
+      "level": 3,
+      "origin": "Guide §13; PDF pp18–20",
+      "sources": [
+        "collections"
+      ]
+    },
+    {
+      "prompt": "For pcmbzpcmbz, find the maximum number of disjoint teams needing one of each letter. Why minimum count?",
+      "answer": "2. Every team consumes one of each required skill, so the least available skill limits the number; pairing arbitrary members constructs that many teams.",
+      "criteria": [
+        "Answer 2",
+        "Bottleneck argument"
+      ],
+      "id": "patterns-2",
+      "topicId": "patterns",
+      "title": "Turn source coding notes into Blind 75 preparation",
+      "level": 3,
+      "origin": "Guide §13; PDF pp18–20",
+      "sources": [
+        "collections"
+      ]
+    },
+    {
+      "prompt": "The source says mppzombpzcmpmzz yields three teams. What must be corrected before implementing?",
+      "answer": "It contains invalid o and only one c and b. Reject it under the specified alphabet. If explicitly ignoring invalid symbols, the minimum required count is 1; the separate valid sorted example yields 3.",
+      "criteria": [
+        "Invalid symbol",
+        "c and b counts are 1",
+        "Contract and answer corrected"
+      ],
+      "id": "patterns-3",
+      "topicId": "patterns",
+      "title": "Turn source coding notes into Blind 75 preparation",
+      "level": 3,
+      "origin": "Guide §13; PDF pp18–20",
+      "sources": [
+        "collections"
+      ]
+    },
+    {
+      "prompt": "Two Sum: what invariant does a seen-value map maintain, and what complexity do you expect?",
+      "answer": "The map contains values/indices processed before the current index. Look up target-current before storing the current item to avoid reusing it; expected O(n) time and O(n) space with ordinary hash behavior.",
+      "criteria": [
+        "Previously seen indices",
+        "Do not reuse one item",
+        "Expected time/space"
+      ],
+      "id": "reasoning-1",
+      "topicId": "reasoning",
+      "title": "Explain a solution and its boundaries",
+      "level": 4,
+      "origin": "Guide §§11,13; PDF pp18–20",
+      "sources": [
+        "collections",
+        "sorting"
+      ]
+    },
+    {
+      "prompt": "How do you improve naive repeated-recursion Fibonacci, and which base convention should you state?",
+      "answer": "Memoize subproblems or keep the previous two values iteratively. State F0=0 and F1=1; iterative computation uses O(n) time/O(1) auxiliary space under the usual unit-cost arithmetic model.",
+      "criteria": [
+        "Reuse earlier results",
+        "Explicit base cases",
+        "Complexity with model"
+      ],
+      "id": "reasoning-2",
+      "topicId": "reasoning",
+      "title": "Explain a solution and its boundaries",
+      "level": 4,
+      "origin": "Guide §§11,13; PDF pp18–20",
+      "sources": [
+        "collections",
+        "sorting"
+      ]
+    },
+    {
+      "prompt": "A list contains the same item three times. How many duplicates are there?",
+      "answer": "Clarify the definition: two extra occurrences beyond the first, or three unordered equal pairs. Both are plausible; agree on the contract first.",
+      "criteria": [
+        "Ambiguity identified",
+        "Two extra or three pairs"
+      ],
+      "id": "reasoning-3",
+      "topicId": "reasoning",
+      "title": "Explain a solution and its boundaries",
+      "level": 4,
+      "origin": "Guide §§11,13; PDF pp18–20",
+      "sources": [
+        "collections",
+        "sorting"
+      ]
+    },
+    {
+      "prompt": "Explain a small reporting web app to a non-specialist, including one failure case and one tradeoff.",
+      "answer": "The browser asks an API for a report; the API checks permission, reads data and returns a result. Show a clear retry/error state on failure. A cached report can be faster but may be stale.",
+      "criteria": [
+        "Clear request/data flow",
+        "Permission and failure behavior",
+        "One explicit tradeoff"
+      ],
+      "id": "architecture-1",
+      "topicId": "architecture",
+      "title": "Explain a small system for a customer",
+      "level": 4,
+      "origin": "Guide §§11,13; PDF pp13,16,20",
+      "sources": [
+        "rest",
+        "transactions",
+        "dhcp"
+      ]
+    },
+    {
+      "prompt": "Does a DHCP client necessarily change IP on every connection or request? Distinguish static addressing.",
+      "answer": "No. DHCP leases can be renewed with the same address. Static configuration or a reservation is used when predictable assignment is needed.",
+      "criteria": [
+        "Leases can stay the same",
+        "Predictable/static or reserved assignment"
+      ],
+      "id": "architecture-2",
+      "topicId": "architecture",
+      "title": "Explain a small system for a customer",
+      "level": 4,
+      "origin": "Guide §§11,13; PDF pp13,16,20",
+      "sources": [
+        "rest",
+        "transactions",
+        "dhcp"
+      ]
+    },
+    {
+      "prompt": "Write a five-line outline for a real project challenge. Use placeholders for facts you still need to verify.",
+      "answer": "Situation: [context]. Task: [responsibility]. Action: [your specific choices]. Result: [verifiable outcome]. Lesson: [what changed in your approach].",
+      "criteria": [
+        "Specific personal action",
+        "Truthful outcome/evidence",
+        "Lesson or changed behavior"
+      ],
+      "id": "stories-1",
+      "topicId": "stories",
+      "title": "Tell a truthful project and teamwork story",
+      "level": 4,
+      "origin": "Guide §§0,9–10; PDF pp1,9–12,20–21",
+      "sources": []
+    },
+    {
+      "prompt": "Your failure answer is only “I persevere.” What is missing?",
+      "answer": "A specific failure, your responsibility, what you changed, and evidence of a later improvement. A slogan alone does not demonstrate behavior.",
+      "criteria": [
+        "Concrete event and ownership",
+        "Changed action",
+        "Evidence or honest limitation"
+      ],
+      "id": "stories-2",
+      "topicId": "stories",
+      "title": "Tell a truthful project and teamwork story",
+      "level": 4,
+      "origin": "Guide §§0,9–10; PDF pp1,9–12,20–21",
+      "sources": []
+    },
+    {
+      "prompt": "Outline a respectful conflict answer without criticizing a teammate.",
+      "answer": "Explain the shared goal, the differing views, how you listened/clarified constraints, the agreed action and the observed result. Own your contribution.",
+      "criteria": [
+        "Shared goal/difference",
+        "Listening and resolution",
+        "Result without blame"
+      ],
+      "id": "stories-3",
+      "topicId": "stories",
+      "title": "Tell a truthful project and teamwork story",
+      "level": 4,
+      "origin": "Guide §§0,9–10; PDF pp1,9–12,20–21",
+      "sources": []
+    },
+    {
+      "prompt": "Draft a brief motivation answer without inventing company facts or claiming experience you do not have.",
+      "answer": "I am interested in [verified work/problem] because [real connection]. I have worked on [truthful relevant example], and want to contribute [specific value] while developing [skill].",
+      "criteria": [
+        "Verified company connection",
+        "Truthful experience",
+        "Contribution and growth"
+      ],
+      "id": "interview-1",
+      "topicId": "interview",
+      "title": "Motivation, role fit and questions to ask",
+      "level": 4,
+      "origin": "Guide §§0,9,12; PDF pp1,9,11,17,20–21",
+      "sources": []
+    },
+    {
+      "prompt": "Choose three useful questions to ask about either an engineering or solutions architect role.",
+      "answer": "What would I own in the first three months? How is success measured? How do engineers/architects clarify customer requirements and review tradeoffs?",
+      "criteria": [
+        "Concrete responsibilities",
+        "Success/onboarding",
+        "Collaboration or customer context"
+      ],
+      "id": "interview-2",
+      "topicId": "interview",
+      "title": "Motivation, role fit and questions to ask",
+      "level": 4,
+      "origin": "Guide §§0,9,12; PDF pp1,9,11,17,20–21",
+      "sources": []
+    },
+    {
+      "prompt": "How would you describe early Python experience honestly in an interview?",
+      "answer": "I am building fluency through scripts and algorithm exercises. I can demonstrate [specific verified task] independently; I am still practicing [specific area]. Then show or explain actual code.",
+      "criteria": [
+        "Specific demonstrated capability",
+        "Clear limits",
+        "Avoid exaggerated fluency"
+      ],
+      "id": "interview-3",
+      "topicId": "interview",
+      "title": "Motivation, role fit and questions to ask",
+      "level": 4,
+      "origin": "Guide §§0,9,12; PDF pp1,9,11,17,20–21",
+      "sources": []
+    }
+  ],
+  "levels": [
+    "Fundamentals",
+    "Apply the concepts",
+    "Reason about tradeoffs",
+    "Interview application"
+  ],
+  "referenceTopics": [
+    {
+      "id": "languages",
+      "level": 1,
+      "title": "Know what each language is for",
+      "origin": "Guide §7; PDF pp7–8",
+      "sources": [
+        "csharp",
+        "php",
+        "python"
+      ],
+      "notes": [
+        "C is commonly used for procedural systems programming. C++ supports procedural, object-oriented and generic styles; it is not simply C with classes. C# is a separate language targeting .NET, with garbage collection.",
+        "PHP commonly executes on the server to build responses. HTML/CSS describe browser content/presentation; JavaScript can run in browsers and on servers. Python supports scripts, services and data work.",
+        "Name the language and runtime before making a rule about typing, inheritance or memory. PHP supports type declarations even though variables are dynamically typed."
+      ],
+      "drills": [
+        {
+          "prompt": "A PHP page sends HTML to a browser. Where did PHP execute, and what renders the HTML?",
+          "answer": "PHP usually executes on the server; the browser parses and renders the resulting HTML.",
+          "criteria": [
+            "Server runs PHP",
+            "Browser renders the response"
+          ]
+        },
+        {
+          "prompt": "Correct this claim: C#, C++ and C are just three versions of one language.",
+          "answer": "They are distinct languages. C++ supports multiple paradigms including OOP and generics; C# commonly targets .NET and has managed memory.",
+          "criteria": [
+            "Distinct languages",
+            "One meaningful runtime or paradigm distinction"
+          ]
+        }
+      ],
+      "example": "Python runs scripts/services; JavaScript runs in browsers and on servers.",
+      "category": "fundamentals",
+      "summary": "Separate a language from its runtime and the environment where it executes."
+    },
+    {
+      "id": "runtime",
+      "level": 1,
+      "title": "Java runtime and generic types",
+      "origin": "Guide §7; PDF pp1–2,8",
+      "sources": [
+        "jvm",
+        "java"
+      ],
+      "notes": [
+        "The JVM executes Java bytecode. A JDK supplies development tools such as javac plus runtime support. JRE is the runtime-environment concept; distribution packaging varies.",
+        "Generics parameterize types: List<String> communicates the element type and enables compile-time checks. A generic is not a sorting algorithm."
+      ],
+      "drills": [
+        {
+          "prompt": "You have Java source and need to compile and run it. Distinguish JDK, JVM and JRE.",
+          "answer": "Use JDK development tools to compile source into bytecode. The JVM executes it; JRE describes runtime libraries and execution support.",
+          "criteria": [
+            "JDK compiles",
+            "JVM executes bytecode",
+            "JRE is runtime support"
+          ]
+        },
+        {
+          "prompt": "What does List<String> tell a Java caller?",
+          "answer": "This is a list whose declared element type is String, with compiler checks on compatible use.",
+          "criteria": [
+            "Parameterized element type",
+            "Compile-time type checking"
+          ]
+        }
+      ],
+      "example": "List<String> names a list of strings; javac compiles Java source.",
+      "category": "fundamentals",
+      "summary": "The JVM runs bytecode; the JDK supplies development tools. Generics describe type parameters."
+    },
+    {
+      "id": "objects",
+      "level": 1,
+      "title": "Classes, objects and methods",
+      "origin": "Guide §§4,11,13; PDF pp5,13–15,20",
+      "sources": [
+        "python",
+        "java"
+      ],
+      "notes": [
+        "A class describes a type; an object is an instance. Instantiation creates an instance: Python uses ClassName(...), while Java commonly uses new ClassName(...).",
+        "Methods operate through an object or class. Instance state belongs to a particular object; class-level mutable state can accidentally be shared.",
+        "The common four OOP teaching concepts are abstraction, encapsulation, inheritance and polymorphism. Explain a concrete example, not just the list."
+      ],
+      "drills": [
+        {
+          "prompt": "In Python, what is the difference between CounterBox and CounterBox()?",
+          "answer": "CounterBox names the class. CounterBox() calls it to create an instance, initialized through its constructor machinery.",
+          "criteria": [
+            "Class versus instance",
+            "Python instantiates without new"
+          ]
+        },
+        {
+          "prompt": "Name the four common OOP pillars, then describe one with an example.",
+          "answer": "Abstraction, encapsulation, inheritance and polymorphism. For encapsulation, an account exposes deposit(amount) that validates a positive amount instead of allowing arbitrary balance changes.",
+          "criteria": [
+            "All four concepts",
+            "Specific behavior in an example"
+          ]
+        }
+      ],
+      "example": "class User: ...\nuser = User()\n# OOP: abstraction, encapsulation, inheritance, polymorphism.",
+      "category": "fundamentals",
+      "summary": "A class defines a type; an object is an instance with its own state and behavior."
+    },
+    {
+      "id": "collections",
+      "level": 1,
+      "title": "Choose a collection",
+      "origin": "Guide §13; PDF pp18–20",
+      "sources": [
+        "collections",
+        "heap"
+      ],
+      "notes": [
+        "Use a sequence for ordered values, a set for uniqueness/membership, and a dictionary for key/value lookup or counts.",
+        "A stack is LIFO; a queue is FIFO. In Python, list append/pop supports a stack; deque append/popleft supports a queue without shifting every remaining element.",
+        "A heap supports repeated access to the highest-priority item without fully sorting all values. Python 3.12 heapq is a min-heap."
+      ],
+      "drills": [
+        {
+          "prompt": "Choose structures for undo history, breadth-first traversal and counting repeated names.",
+          "answer": "Undo history: stack. Breadth-first traversal: queue. Repeated-name counts: dictionary or Counter.",
+          "criteria": [
+            "LIFO stack for undo",
+            "FIFO queue for BFS",
+            "Counts keyed by name"
+          ]
+        },
+        {
+          "prompt": "For values [5, 1, 4] in a Python 3.12 min-heap, which value is popped first? Is the whole heap sorted?",
+          "answer": "1 is popped first. A heap is partially ordered, not a fully sorted sequence.",
+          "criteria": [
+            "Minimum first",
+            "Heap is not fully sorted"
+          ]
+        }
+      ],
+      "example": "dict: key lookup · set: membership · list: ordered items · deque: queue",
+      "category": "fundamentals",
+      "summary": "Choose a structure by the operations you need, not by habit."
+    },
+    {
+      "id": "git",
+      "level": 1,
+      "title": "Git and collaboration",
+      "origin": "Guide §6; PDF p7",
+      "sources": [
+        "git"
+      ],
+      "notes": [
+        "Git tracks repository history locally. GitHub is a hosting/collaboration service. A commit is local until published to a remote.",
+        "clone creates a local repository; fetch updates remote-tracking information; pull fetches and integrates using its selected strategy. push publishes refs/commits when authorized.",
+        "A branch is a ref within a repository; a fork is a separate hosted repository. Review a diff and tests before proposing a merge."
+      ],
+      "drills": [
+        {
+          "prompt": "You committed locally. Has GitHub changed? What would publish the branch?",
+          "answer": "A local commit does not update GitHub. An explicitly authorized push publishes the branch to its configured remote.",
+          "criteria": [
+            "Commit stays local",
+            "Push publishes"
+          ]
+        },
+        {
+          "prompt": "Explain fetch versus pull without assuming pull always merges.",
+          "answer": "Fetch obtains objects and updates remote-tracking refs. Pull also integrates the selected remote branch, using merge or rebase as configured/requested.",
+          "criteria": [
+            "Fetch does not itself integrate",
+            "Pull integrates with a strategy"
+          ]
+        }
+      ],
+      "example": "git status → review diff → test → commit\nA commit is not automatically published.",
+      "category": "quality",
+      "summary": "Commit records local history; fetch retrieves remote history; merge/rebase integrates it."
+    },
+    {
+      "id": "browser",
+      "level": 1,
+      "title": "From URL to a rendered page",
+      "origin": "Guide §§8,11,13; PDF pp8–9,13,15–16,20",
+      "sources": [
+        "internet",
+        "dom",
+        "doctype"
+      ],
+      "notes": [
+        "A browser locates a server, establishes a connection, requests resources and processes responses. HTTPS adds TLS protection. Caches can avoid some network requests.",
+        "HTML is parsed into a DOM tree; CSS styles content; JavaScript handles behavior. Not every click needs a new server-rendered page.",
+        "The DOM is a document programming interface, not the JavaScript language. <!doctype html> selects standards rendering; it does not validate your markup."
+      ],
+      "drills": [
+        {
+          "prompt": "Explain a page load from request to visible content in three steps.",
+          "answer": "Request resources from a server (or cache), receive responses, then parse HTML/build DOM and apply CSS/execute JavaScript to render and interact.",
+          "criteria": [
+            "Request/response",
+            "HTML and DOM",
+            "CSS/JavaScript roles"
+          ]
+        },
+        {
+          "prompt": "What does <!doctype html> accomplish, and what does it not guarantee?",
+          "answer": "It selects standards/no-quirks rendering. It does not prove the HTML is valid or guarantee cross-browser perfection.",
+          "criteria": [
+            "Standards rendering",
+            "Not a validator"
+          ]
+        }
+      ],
+      "example": "DNS → connection/TLS → HTTP → HTML/DOM + CSS + JavaScript",
+      "category": "web",
+      "summary": "A page load involves finding the server, securing the connection, requesting resources and rendering them."
+    },
+    {
+      "id": "http",
+      "level": 1,
+      "title": "HTTP requests and responses",
+      "origin": "Guide §11; PDF pp12–13,15",
+      "sources": [
+        "http",
+        "methods"
+      ],
+      "notes": [
+        "GET retrieves a representation with intended read-only semantics. POST asks the target resource to process submitted content. Method semantics do not guarantee secrecy.",
+        "200: success; 201: created; 400: bad request; 401: authentication needed/invalid; 403: forbidden; 404: resource not found/disclosed; 405: method not allowed; 500: server error.",
+        "Headers, URL and body all carry request information. A POST body is observable to endpoints and potentially logs; protect sensitive traffic with HTTPS and appropriate logging."
+      ],
+      "drills": [
+        {
+          "prompt": "An existing endpoint supports GET, but you send DELETE. What status describes that method mismatch?",
+          "answer": "405 Method Not Allowed. The response should identify allowed methods through Allow.",
+          "criteria": [
+            "405",
+            "Method is not allowed on this resource"
+          ]
+        },
+        {
+          "prompt": "Does a POST body make a password secret? Explain.",
+          "answer": "No. Use HTTPS for transport encryption and avoid leaking sensitive fields in logs. A body is not a security boundary.",
+          "criteria": [
+            "POST alone is not secrecy",
+            "HTTPS protects transit"
+          ]
+        }
+      ],
+      "example": "GET /users/7 → 200\nPOST /users → 201\n401: authentication · 403: permission",
+      "category": "web",
+      "summary": "HTTP methods express request intent; status codes describe the result. HTTPS protects traffic in transit."
+    },
+    {
+      "id": "sql-basics",
+      "level": 1,
+      "title": "Read and modify relational data",
+      "origin": "Guide §3; PDF pp3–4",
+      "sources": [
+        "sql",
+        "keys"
+      ],
+      "notes": [
+        "SELECT projects columns; FROM chooses input; WHERE filters rows; INSERT adds rows; UPDATE changes rows; DELETE removes rows. DDL such as CREATE/ALTER/DROP changes schema objects.",
+        "Use explicit columns and a deliberate WHERE for modifications. NULL represents missing/unknown data; compare with IS NULL rather than = NULL.",
+        "SQL keyword case, identifier case, string comparison and statement terminators are different concerns. PostgreSQL details are examples, not rules for every engine."
+      ],
+      "drills": [
+        {
+          "prompt": "Given employees(name, active), write a query for names where active is the integer 1.",
+          "answer": "SELECT name FROM employees WHERE active = 1;",
+          "criteria": [
+            "SELECT name",
+            "FROM employees",
+            "WHERE active = 1"
+          ]
+        },
+        {
+          "prompt": "Correct: SQL is never case sensitive, and semicolons are never necessary.",
+          "answer": "Keywords are generally case insensitive. Identifier quoting and text comparison follow engine/collation rules. Terminators depend on the execution context.",
+          "criteria": [
+            "Keywords versus identifiers/text",
+            "Context matters for terminators"
+          ]
+        }
+      ],
+      "example": "SELECT name FROM users WHERE active = TRUE;\nWHERE deleted_at IS NULL -- not = NULL",
+      "category": "data",
+      "summary": "Select the columns and rows you need. Treat missing values explicitly."
+    },
+    {
+      "id": "keys",
+      "level": 2,
+      "title": "Keys and referential integrity",
+      "origin": "Guide §3; PDF p4",
+      "sources": [
+        "keys"
+      ],
+      "notes": [
+        "A primary key identifies rows through unique, non-null column values; it can be composite. A foreign key requires a matching referenced key unless its null semantics permit otherwise.",
+        "Referenced keys need not be the primary key: eligible unique keys can be referenced. A self-reference can model an employee manager.",
+        "Integrity and performance are separate. PostgreSQL creates a primary-key index, but a key does not guarantee every query will be fast."
+      ],
+      "drills": [
+        {
+          "prompt": "orders.customer_id references customers.id. What does the foreign key prevent?",
+          "answer": "It prevents an order from referencing a non-existent customer key, subject to the constraint/null rules. It is a data-integrity relationship.",
+          "criteria": [
+            "Matching referenced key",
+            "Integrity rather than universal speed"
+          ]
+        },
+        {
+          "prompt": "Can a foreign key reference the same table or an eligible unique non-primary key?",
+          "answer": "Yes to both, where the engine and referenced constraint support it.",
+          "criteria": [
+            "Self-reference is possible",
+            "Eligible unique key can be referenced"
+          ]
+        }
+      ],
+      "example": "orders.customer_id → customers.id\nA key can contain more than one column.",
+      "category": "data",
+      "summary": "Primary keys identify rows; foreign keys enforce relationships to eligible referenced keys."
+    },
+    {
+      "id": "joins",
+      "level": 2,
+      "title": "Join rows without losing the unmatched ones",
+      "origin": "Guide §§3,13; PDF pp4,19",
+      "sources": [
+        "joins"
+      ],
+      "notes": [
+        "INNER retains matches. LEFT retains every left row and matching right rows. RIGHT is the mirrored case. FULL retains matches and unmatched rows from both sides.",
+        "An unmatched outer-join side becomes NULL. Two matching right rows produce two joined rows; joins are not simply set-intersection diagrams.",
+        "A right-side WHERE filter can remove NULL-padded rows from a LEFT join. Put the condition in ON when you intend to preserve unmatched left rows."
+      ],
+      "drills": [
+        {
+          "prompt": "Customer A has two orders and B has none. How many rows does customers LEFT JOIN orders produce?",
+          "answer": "Three rows: two for A and one NULL-padded order side for B.",
+          "criteria": [
+            "Two matches for A",
+            "One retained unmatched B",
+            "Total three"
+          ]
+        },
+        {
+          "prompt": "Write a join returning every customer name and any order ID. Tables: customers(id,name), orders(id,customer_id).",
+          "answer": "SELECT c.name, o.id FROM customers c LEFT JOIN orders o ON o.customer_id = c.id;",
+          "criteria": [
+            "LEFT JOIN",
+            "Correct key condition",
+            "Select customer name and order ID"
+          ]
+        },
+        {
+          "prompt": "What does FULL OUTER JOIN add beyond LEFT JOIN?",
+          "answer": "It also preserves unmatched right-side rows with a NULL-padded left side.",
+          "criteria": [
+            "Unmatched right rows",
+            "NULL padding"
+          ]
+        }
+      ],
+      "example": "FROM customers c LEFT JOIN orders o ON o.customer_id = c.id\nFiltering o in WHERE may remove unmatched customers.",
+      "category": "data",
+      "summary": "INNER JOIN keeps matches; LEFT JOIN also keeps unmatched left rows with NULLs on the right."
+    },
+    {
+      "id": "grouping",
+      "level": 2,
+      "title": "Aggregate, group and handle missing values",
+      "origin": "Guide §§3,13; PDF pp3–4,19",
+      "sources": [
+        "joins"
+      ],
+      "notes": [
+        "GROUP BY creates groups for aggregate calculations. WHERE filters input rows; HAVING filters groups. MAX returns the largest non-null value in a group.",
+        "COUNT(*) counts rows; COUNT(column) counts non-null values. In a LEFT join, count the child key to avoid counting a NULL-padded row as a child."
+      ],
+      "drills": [
+        {
+          "prompt": "Write department maximum salary from employees(department,salary), keeping groups whose max exceeds 100000.",
+          "answer": "SELECT department, MAX(salary) FROM employees GROUP BY department HAVING MAX(salary) > 100000;",
+          "criteria": [
+            "GROUP BY department",
+            "MAX(salary)",
+            "HAVING filters aggregate"
+          ]
+        },
+        {
+          "prompt": "After customers LEFT JOIN orders, why might COUNT(*) incorrectly report one order for a customer with none?",
+          "answer": "The outer join still produces one padded row. COUNT(o.id) counts only non-null matching order IDs.",
+          "criteria": [
+            "Padded row exists",
+            "Count non-null child key"
+          ]
+        }
+      ],
+      "example": "SELECT customer_id, COUNT(*) FROM orders\nGROUP BY customer_id HAVING COUNT(*) > 2;",
+      "category": "data",
+      "summary": "WHERE filters rows before aggregation; HAVING filters groups afterward."
+    },
+    {
+      "id": "frontend",
+      "level": 2,
+      "title": "React, JSX, forms and CSS",
+      "origin": "Guide §§8,11,13; PDF pp8–9,15,20",
+      "sources": [
+        "react",
+        "yup",
+        "css"
+      ],
+      "notes": [
+        "React components describe UI. JSX is syntax transformed into JavaScript; braces embed JavaScript expressions. JSON exchanges data; it is not JSX.",
+        "State changes schedule UI updates. Form UI, state handling and validation are different responsibilities. Yup supplies schema parsing/validation, not form widgets.",
+        "A CSS class is reusable across elements. An HTML id should be unique in the document. Flexbox lays out one main axis at a time; grid supports two-dimensional layouts."
+      ],
+      "drills": [
+        {
+          "prompt": "An API returns JSON, and a React component uses JSX. Explain the difference.",
+          "answer": "JSON represents data. JSX expresses UI markup inside JavaScript and is transformed before execution.",
+          "criteria": [
+            "Data format versus UI syntax",
+            "JSX transforms to JavaScript"
+          ]
+        },
+        {
+          "prompt": "You need a form and field validation. Does adding Yup create the form UI?",
+          "answer": "No. Build the form UI/state handling, and use Yup if schema validation fits the requirements.",
+          "criteria": [
+            "Yup validates/parses",
+            "UI/state remain separate"
+          ]
+        },
+        {
+          "prompt": "Which CSS selector is reusable: .notice or #notice? How would you align a row of buttons?",
+          "answer": ".notice is a reusable class; #notice identifies an element with that id. A flex container can align a row with gap and align-items.",
+          "criteria": [
+            "Class versus unique id",
+            "Appropriate flex layout"
+          ]
+        }
+      ],
+      "example": "JSX: {user.name}\nJSON: {\"name\": \"Ari\"}\nThey serve different purposes.",
+      "category": "web",
+      "summary": "Components describe UI; state drives updates. Keep rendering, validation and network behavior distinct."
+    },
+    {
+      "id": "encapsulation",
+      "level": 2,
+      "title": "Abstraction and encapsulation in practice",
+      "origin": "Guide §§4,11; PDF pp5,13",
+      "sources": [
+        "java",
+        "python"
+      ],
+      "notes": [
+        "Abstraction exposes an understandable contract while hiding irrelevant details. Encapsulation controls how state can be accessed/changed and protects invariants.",
+        "A deposit(amount) operation can reject a negative amount. An unrestricted setBalance(value) can bypass the same invariant even though it is a setter.",
+        "Composition supplies collaborators; inheritance creates a subtype relationship. Prefer a relationship that matches the contract you need rather than inheriting solely for code reuse."
+      ],
+      "drills": [
+        {
+          "prompt": "A class has private balance and setBalance(any_number). Is encapsulation automatically good?",
+          "answer": "No. Private storage plus an unrestricted setter may still violate invariants. Expose validated operations such as deposit(positive_amount).",
+          "criteria": [
+            "Getters/setters are not enough",
+            "Protect an invariant"
+          ]
+        },
+        {
+          "prompt": "Distinguish abstraction from encapsulation using a payment service.",
+          "answer": "Abstraction offers charge(amount) without revealing provider details. Encapsulation controls internal credentials/state and validates transitions.",
+          "criteria": [
+            "Simple external contract",
+            "Controlled internal state"
+          ]
+        }
+      ],
+      "example": "account.deposit(10) can validate the amount.\nA public balance setter could bypass that rule.",
+      "category": "fundamentals",
+      "summary": "Abstraction exposes a useful contract; encapsulation protects state and invariants."
+    },
+    {
+      "id": "polymorphism",
+      "level": 2,
+      "title": "Polymorphism, overloading and overriding",
+      "origin": "Guide §§4,11; PDF pp5,12,15",
+      "sources": [
+        "java",
+        "python"
+      ],
+      "notes": [
+        "Polymorphism lets callers use a shared contract with different implementations. For example, several storage adapters can implement save(record).",
+        "Java overloading uses different parameter signatures under the same name. Overriding supplies a subtype implementation of an inherited instance method with compatible signature and return rules.",
+        "Return type alone cannot distinguish Java overloads. Python does not implement Java-style runtime overloads by repeating def with the same name; the later definition replaces the earlier binding."
+      ],
+      "drills": [
+        {
+          "prompt": "In Java, are calculate(int) and calculate(double) overriding or overloading? What about a child replacing calculate(int)?",
+          "answer": "Different parameter signatures are overloads. A compatible child implementation of the inherited instance method is an override.",
+          "criteria": [
+            "Different parameters means overload",
+            "Subtype implementation means override"
+          ]
+        },
+        {
+          "prompt": "Can a Java override freely change its parameter types? Can an overload differ only in return type?",
+          "answer": "No to both. Overriding preserves the relevant signature; Java permits covariant reference returns. Overloading requires distinct signatures.",
+          "criteria": [
+            "Parameters are not arbitrary",
+            "Return alone does not overload"
+          ]
+        }
+      ],
+      "example": "storage.save(record) works with different adapters.\nJava overloads differ in parameters, not return type alone.",
+      "category": "fundamentals",
+      "summary": "A shared contract can have several implementations. Overloading and overriding have language-specific rules."
+    },
+    {
+      "id": "interfaces",
+      "level": 2,
+      "title": "Interfaces and abstract classes: Java scope",
+      "origin": "Guide §§4,11; PDF pp5–6,14",
+      "sources": [
+        "interfaces",
+        "java"
+      ],
+      "notes": [
+        "A Java abstract class can share instance state and implementations but cannot be directly instantiated. It can be abstract even without abstract methods.",
+        "A modern Java interface defines a contract and can also have default, static and private methods plus constants. It has no instance fields.",
+        "A Java class has one direct class superclass and can implement multiple interfaces. This is not universal across languages; Python permits multiple class bases."
+      ],
+      "drills": [
+        {
+          "prompt": "Correct: Java interfaces contain only public abstract methods and cannot contain implementations.",
+          "answer": "They may include default/static implementations and private helper methods. They lack per-instance fields, but may declare constants.",
+          "criteria": [
+            "Implemented methods exist",
+            "Private methods can exist",
+            "No instance fields"
+          ]
+        },
+        {
+          "prompt": "You need shared per-instance state plus a partial implementation in Java. Which construct fits, and can you instantiate it directly?",
+          "answer": "An abstract base class can provide that state/implementation. Instantiate a concrete subclass, not the abstract class directly.",
+          "criteria": [
+            "Abstract base class",
+            "Concrete subclass instance"
+          ]
+        }
+      ],
+      "example": "Java: one direct class superclass, multiple interfaces.\nPython permits multiple class bases.",
+      "category": "fundamentals",
+      "summary": "An interface specifies a contract; an abstract class can also share instance state and implementation."
+    },
+    {
+      "id": "agile",
+      "level": 2,
+      "title": "Agile and Scrum without the slogans",
+      "origin": "Guide §5; PDF p7",
+      "sources": [
+        "agile",
+        "scrum"
+      ],
+      "notes": [
+        "Agile emphasizes working software, collaboration, adaptation and feedback. It is not a prescribed sequential checklist and does not require Scrum.",
+        "Scrum uses fixed-length Sprints of one month or less. Planning sets the Sprint Goal; Daily Scrum inspects progress; Review inspects outcomes; Retrospective improves how the team works.",
+        "Product Owner, Scrum Master and Developers have distinct accountabilities. The Daily Scrum is not primarily a manager status report. An increment must meet the Definition of Done."
+      ],
+      "drills": [
+        {
+          "prompt": "Does every Agile team have Sprints? Give the distinction.",
+          "answer": "No. Agile is a set of values/principles. Scrum is a specific framework that uses Sprints.",
+          "criteria": [
+            "Agile is broader",
+            "Scrum uses Sprints"
+          ]
+        },
+        {
+          "prompt": "Distinguish a Sprint Review from a Retrospective.",
+          "answer": "Review inspects the product outcome with stakeholders and adapts future work; Retrospective improves the team’s ways of working.",
+          "criteria": [
+            "Product outcome and feedback",
+            "Team process improvement"
+          ]
+        }
+      ],
+      "example": "Review: inspect the product.\nRetrospective: improve how the team works.",
+      "category": "career",
+      "summary": "Work in small increments, inspect outcomes and adapt. Scrum is one framework, not a synonym for Agile."
+    },
+    {
+      "id": "sort-simple",
+      "level": 3,
+      "title": "Insertion and bubble sort",
+      "origin": "Guide §2; PDF p2",
+      "sources": [
+        "sorting"
+      ],
+      "notes": [
+        "Insertion sort grows a sorted prefix by inserting the next value. Typical stable array insertion sort uses O(n²) worst-case time and O(1) extra storage; already-sorted input can be O(n).",
+        "Ordinary bubble sort swaps adjacent out-of-order values and settles an extreme at one end per pass. With an early-exit flag its best case is O(n), but its worst case remains O(n²).",
+        "For nearly sorted data, insertion sort is usually the stronger teaching/default choice between these two. Do not choose an algorithm only from its best-case bound."
+      ],
+      "drills": [
+        {
+          "prompt": "After inserting 2 into the sorted prefix [1,4] of [1,4,2,3], show the array.",
+          "answer": "[1,2,4,3]. The sorted prefix is now [1,2,4].",
+          "criteria": [
+            "Correct array",
+            "Sorted-prefix invariant"
+          ]
+        },
+        {
+          "prompt": "Why does bubble sort remain a weak default even if early exit makes sorted input linear?",
+          "answer": "Many inputs still require quadratic comparisons/swaps; insertion sort generally handles small/nearly-sorted data more effectively. Best case does not describe every workload.",
+          "criteria": [
+            "Worst case O(n²)",
+            "Best-case limitation"
+          ]
+        }
+      ],
+      "example": "Typical array implementations: O(n²) worst-case time.\nAn early-exit implementation can improve best-case behavior.",
+      "category": "algorithms",
+      "summary": "Insertion sort grows a sorted prefix. Bubble sort repeatedly swaps adjacent inversions."
+    },
+    {
+      "id": "sort-divide",
+      "level": 3,
+      "title": "Merge sort and quicksort",
+      "origin": "Guide §2; PDF p2",
+      "sources": [
+        "sorting"
+      ],
+      "notes": [
+        "Typical array merge sort divides, sorts and merges. It guarantees O(n log n) worst-case time and usually needs O(n) auxiliary storage; stable merging preserves equal-key order.",
+        "Quicksort partitions around a pivot. Randomized/ordinary average analysis gives O(n log n), but very unbalanced partitions can produce O(n²). Recursion space depends on partition balance and implementation.",
+        "Median-of-three is a pivot heuristic, not a universal worst-case guarantee. State the implementation before calling a sort stable or in-place."
+      ],
+      "drills": [
+        {
+          "prompt": "Choose between ordinary array merge sort and quicksort when guaranteed O(n log n) time matters. State a tradeoff.",
+          "answer": "Merge sort gives the worst-case bound, usually with O(n) auxiliary storage. Ordinary quicksort has quadratic worst cases.",
+          "criteria": [
+            "Merge sort worst-case bound",
+            "Extra memory tradeoff"
+          ]
+        },
+        {
+          "prompt": "Does median-of-three make ordinary quicksort immune to quadratic behavior?",
+          "answer": "No. It can improve pivot choice in practice, but does not guarantee balanced partitions for every input.",
+          "criteria": [
+            "No worst-case guarantee",
+            "Partition balance matters"
+          ]
+        }
+      ],
+      "example": "Merge sort: O(n log n) typical/worst time.\nQuicksort: average O(n log n), worst O(n²).",
+      "category": "algorithms",
+      "summary": "Merge sort combines sorted pieces; quicksort partitions around a pivot."
+    },
+    {
+      "id": "heap",
+      "level": 3,
+      "title": "Binary heaps and heapsort",
+      "origin": "Guide §2; PDF pp2–3",
+      "sources": [
+        "heap",
+        "sorting"
+      ],
+      "notes": [
+        "A binary heap is a complete binary tree represented conveniently as an array. In a max-heap each parent is at least its children; siblings and distant nodes need not be ordered.",
+        "Bottom-up heap construction is O(n). Sift-down at a node is O(log n) assuming its child subtrees already satisfy the heap property.",
+        "Heapsort swaps the max root with the end of the active heap and repairs the reduced heap. It gives O(n log n) worst-case time and O(1) auxiliary array storage; ordinary heapsort is not stable."
+      ],
+      "drills": [
+        {
+          "prompt": "Is [9,7,8,1,2] a valid max-heap despite 7 coming before 8?",
+          "answer": "Yes. Each parent is at least its children; heap order does not require siblings or the entire array to be sorted.",
+          "criteria": [
+            "Valid heap",
+            "Parent-child invariant"
+          ]
+        },
+        {
+          "prompt": "State bottom-up heap-build time, one sift-down time and heapsort worst-case time.",
+          "answer": "O(n), O(log n), O(n log n), respectively.",
+          "criteria": [
+            "Build O(n)",
+            "Sift-down O(log n)",
+            "Sort O(n log n)"
+          ]
+        }
+      ],
+      "example": "heapq.heappush(heap, value)\nsmallest = heapq.heappop(heap) # Python 3.12 min-heap",
+      "category": "algorithms",
+      "summary": "A heap gives efficient repeated access to the highest-priority item; it is not a fully sorted sequence."
+    },
+    {
+      "id": "solid",
+      "level": 3,
+      "title": "SOLID as design reasoning",
+      "origin": "Guide §4; PDF p6",
+      "sources": [
+        "solid",
+        "liskov"
+      ],
+      "notes": [
+        "S: group responsibilities that change for the same reason. O: provide extension points for expected variation. Neither principle requires a separate class for every line.",
+        "L: subtypes preserve the promises of the base contract. I: expose focused interfaces so clients need not depend on unrelated operations.",
+        "D: high-level policy and low-level details depend on abstractions. This is Dependency Inversion. Apply it where change/testing justify the indirection."
+      ],
+      "drills": [
+        {
+          "prompt": "Expand SOLID, especially D, then give a small dependency example.",
+          "answer": "Single Responsibility; Open/Closed; Liskov Substitution; Interface Segregation; Dependency Inversion. A report service depends on a storage contract rather than constructing a specific database client.",
+          "criteria": [
+            "Correct D: Inversion",
+            "Other four named",
+            "Contract-based example"
+          ]
+        },
+        {
+          "prompt": "A subtype keeps every method name but throws unsupported errors for valid parent operations. Does that establish Liskov substitution?",
+          "answer": "No. Clients relying on the base behavior can break. Substitution is about behavior/contracts, not method-name count.",
+          "criteria": [
+            "Behavioral contract",
+            "Client can break"
+          ]
+        }
+      ],
+      "example": "S: Single Responsibility · O: Open/Closed\nL: Liskov Substitution · I: Interface Segregation\nD: Dependency Inversion",
+      "category": "quality",
+      "summary": "SOLID helps reason about responsibilities, contracts and dependency direction."
+    },
+    {
+      "id": "di",
+      "level": 3,
+      "title": "Inject collaborators and control coupling",
+      "origin": "Guide §11; PDF p14",
+      "sources": [
+        "di",
+        "solid"
+      ],
+      "notes": [
+        "Dependency injection means providing a collaborator externally. Constructor injection makes required collaborators explicit; method or property injection can fit other lifetimes/frameworks.",
+        "The composition boundary still creates objects, possibly with new. The goal is to move concrete wiring away from business policy, not ban object creation.",
+        "A fake storage adapter lets a test exercise report generation without a live database. Too many dependencies can signal too many responsibilities."
+      ],
+      "drills": [
+        {
+          "prompt": "Refactor ReportService creating its own DatabaseClient into a DI design. A short Python sketch is enough.",
+          "answer": "class ReportService:\n    def __init__(self, store):\n        self.store = store\n\nWire ReportService(real_store) in the composition code; pass a fake store in tests.",
+          "criteria": [
+            "Collaborator passed from outside",
+            "Test can supply fake",
+            "Creation remains somewhere"
+          ]
+        },
+        {
+          "prompt": "Is Dependency Injection identical to Dependency Inversion? Must DI remove every new expression?",
+          "answer": "No. Inversion is a principle about dependency direction/abstractions; injection supplies dependencies. Objects still have to be constructed.",
+          "criteria": [
+            "Principle versus technique",
+            "Object creation remains"
+          ]
+        }
+      ],
+      "example": "ReportService(storage)\nTests can supply a fake storage implementation.",
+      "category": "quality",
+      "summary": "Inject a dependency instead of constructing it inside the code that uses it."
+    },
+    {
+      "id": "database-design",
+      "level": 3,
+      "title": "Model data and query performance",
+      "origin": "Guide §§3,11,13; PDF pp3,14–15,19–20",
+      "sources": [
+        "indexes",
+        "cluster",
+        "explain",
+        "transactions"
+      ],
+      "notes": [
+        "Normalization uses dependencies to separate facts and reduce update anomalies. Intentional denormalization can trade more complex writes for faster reads; measure and keep a consistency plan.",
+        "Relational and NoSQL systems both have schemas and constraints in practice. Choose based on access patterns, integrity, transactions, scale and operational needs rather than SQL versus unstructured slogans.",
+        "Indexes cost storage and write maintenance. Inspect a query plan and actual workload before adding one. EXPLAIN ANALYZE executes the query; use it carefully with mutations.",
+        "Clustering can mean physical row organization, a group of servers, or statistical grouping. Clarify which. PostgreSQL CLUSTER reorders a table once and does not keep that ordering automatically.",
+        "Transactions group changes into an all-or-nothing unit; concurrency/isolation still needs deliberate design. This extends the source notes into practical architecture reasoning."
+      ],
+      "drills": [
+        {
+          "prompt": "Every order repeats customer_email. What anomaly can occur, and how can normalization help?",
+          "answer": "Updating only some orders produces inconsistent customer facts. Store customer data once and reference the customer key; still consider historical snapshot requirements.",
+          "criteria": [
+            "Inconsistent repeated updates",
+            "Separate customer fact/reference",
+            "Acknowledge business meaning"
+          ]
+        },
+        {
+          "prompt": "A query is slow. Why not add an index on every column?",
+          "answer": "Indexes use space and slow writes. Inspect filters, joins, selectivity and the plan, then measure a suitable index against the workload.",
+          "criteria": [
+            "Write/storage cost",
+            "Measure/query plan"
+          ]
+        },
+        {
+          "prompt": "Two account updates must succeed together. Which concept helps, and what should you clarify when someone says database clustering?",
+          "answer": "Use a transaction for atomic updates. Ask whether clustering means physical organization, server topology or statistical grouping.",
+          "criteria": [
+            "Atomic transaction",
+            "Clarify clustering context"
+          ]
+        }
+      ],
+      "example": "Inspect the query plan before adding an index.\nTransactions group changes; isolation controls interactions.",
+      "category": "data",
+      "summary": "Model relationships and access patterns. Indexes help selected reads but cost storage and write work."
+    },
+    {
+      "id": "security",
+      "level": 3,
+      "title": "API security and repeatable requests",
+      "origin": "Guide §§3,11; PDF pp4,12–13,15–16",
+      "sources": [
+        "injection",
+        "http",
+        "rest"
+      ],
+      "notes": [
+        "Prevent SQL injection by binding values with parameterized statements; do not concatenate untrusted input into SQL. Dynamically chosen table/column names need allowlisting or supported identifier composition.",
+        "Authentication identifies the caller; authorization checks that caller’s permitted action on a particular resource. Validate inputs server-side and minimize sensitive logging.",
+        "Safe methods request read-only behavior. Idempotent methods have the same intended effect when repeated; GET, PUT and DELETE are idempotent by HTTP semantics, while POST is not inherently so. Response codes may differ across repeats."
+      ],
+      "drills": [
+        {
+          "prompt": "A login query concatenates a username into SQL. Describe the fix and why escaping alone is a weak default.",
+          "answer": "Use parameter binding so input is treated as data, not executable SQL syntax. Validate inputs too, but do not replace binding with ad hoc escaping.",
+          "criteria": [
+            "Parameterized values",
+            "Data separated from SQL syntax"
+          ]
+        },
+        {
+          "prompt": "A user is logged in and requests another user’s private record. Which check is missing?",
+          "answer": "Resource-level authorization. Authentication alone does not grant permission to access every object.",
+          "criteria": [
+            "Authorization",
+            "Specific resource ownership/permission"
+          ]
+        },
+        {
+          "prompt": "Can DELETE remain idempotent if the first response is 204 and the second is 404?",
+          "answer": "Yes. Idempotence concerns the intended server-side effect, not identical response status. The resource remains deleted.",
+          "criteria": [
+            "Same effect",
+            "Responses may differ"
+          ]
+        }
+      ],
+      "example": "WHERE email = ? -- parameter bound separately\nNever trust a hidden UI button as an access-control boundary.",
+      "category": "web",
+      "summary": "Authenticate identity, authorize each operation, validate input and parameterize SQL."
+    },
+    {
+      "id": "api-design",
+      "level": 3,
+      "title": "REST, SOAP and the web contract",
+      "origin": "Guide §11; PDF pp13,16–17",
+      "sources": [
+        "rest",
+        "soap",
+        "http"
+      ],
+      "notes": [
+        "REST is an architectural style with client/server separation, stateless requests, caching constraints, a uniform interface and layers (optional code on demand). JSON over HTTP alone does not prove REST compliance.",
+        "SOAP defines an XML envelope/messaging framework with transport bindings, commonly HTTP. It does not inherently force a stateful session or HTML messages.",
+        "For an HTTP resource API, define representations, methods, status codes, validation, pagination, permissions and error behavior. Stateless requests do not mean the database stores no state."
+      ],
+      "drills": [
+        {
+          "prompt": "Correct: SOAP is always stateful, REST is always faster, and SOAP sends HTML.",
+          "answer": "SOAP uses XML envelopes and does not inherently require sessions. REST is a style; performance depends on workload, protocol use and implementation. HTML is not the SOAP envelope format.",
+          "criteria": [
+            "SOAP XML",
+            "No mandatory stateful session",
+            "No universal performance winner"
+          ]
+        },
+        {
+          "prompt": "Design a short contract for creating an order and later fetching it.",
+          "answer": "POST /orders with validated input; return 201 plus a resource location/representation on creation. GET /orders/{id} reads it. Check caller permissions and define errors.",
+          "criteria": [
+            "Creation and retrieval methods",
+            "201/resource identity",
+            "Validation and authorization"
+          ]
+        }
+      ],
+      "example": "PUT /users/7 repeats the intended replacement effect.\nA retryable POST may need an idempotency key.",
+      "category": "web",
+      "summary": "Define resources, methods, validation, permissions, pagination and predictable errors."
+    },
+    {
+      "id": "patterns",
+      "level": 3,
+      "title": "Turn source coding notes into Blind 75 preparation",
+      "origin": "Guide §13; PDF pp18–20",
+      "sources": [
+        "collections"
+      ],
+      "notes": [
+        "First clarify output meaning and edge cases. Frequency maps solve counting/mode/anagram checks; sets handle membership; two pointers handle ordered scans; a queue supports breadth-first traversal.",
+        "Use the fixed Blind 75 path for full coding practice. Historical non-Blind-75 links are source context, not additions to the required problem inventory. Old COMPLETED labels do not imply current recall.",
+        "For a maximum number of disjoint teams needing one p,c,m,b,z each, the bottleneck is the minimum of their counts. Distinguish maximum simultaneous teams from counting every possible combination.",
+        "The source’s second team input includes o and cannot support its stated answer of 3. Reject invalid symbols under the stated contract. A corrected valid example bbbbcccmmmmppppzzzz yields 3."
+      ],
+      "drills": [
+        {
+          "prompt": "Given [1,4,8,2,1,7,4,1], return the most frequent value, not the numerically largest duplicate. Explain the approach.",
+          "answer": "1 occurs three times. Count values using a dictionary/Counter, then select the maximum count; define tie behavior before coding.",
+          "criteria": [
+            "Returns 1",
+            "Counts frequency",
+            "Clarifies ties"
+          ]
+        },
+        {
+          "prompt": "For pcmbzpcmbz, find the maximum number of disjoint teams needing one of each letter. Why minimum count?",
+          "answer": "2. Every team consumes one of each required skill, so the least available skill limits the number; pairing arbitrary members constructs that many teams.",
+          "criteria": [
+            "Answer 2",
+            "Bottleneck argument"
+          ]
+        },
+        {
+          "prompt": "The source says mppzombpzcmpmzz yields three teams. What must be corrected before implementing?",
+          "answer": "It contains invalid o and only one c and b. Reject it under the specified alphabet. If explicitly ignoring invalid symbols, the minimum required count is 1; the separate valid sorted example yields 3.",
+          "criteria": [
+            "Invalid symbol",
+            "c and b counts are 1",
+            "Contract and answer corrected"
+          ]
+        }
+      ],
+      "example": "Contiguous range → consider sliding window.\nSorted search space → consider binary search.",
+      "category": "algorithms",
+      "summary": "Recognize the constraint and invariant before choosing a code template."
+    },
+    {
+      "id": "reasoning",
+      "level": 4,
+      "title": "Explain a solution and its boundaries",
+      "origin": "Guide §§11,13; PDF pp18–20",
+      "sources": [
+        "collections",
+        "sorting"
+      ],
+      "notes": [
+        "For an engineering interview, state inputs/outputs, an invariant, data structure, time/space and at least one boundary case. A passing sample is not proof of correctness.",
+        "Fibonacci: define F0=0,F1=1, then reuse earlier states instead of exponential repeated recursion. For primes below N, the sieve marks composite multiples; test N<=2.",
+        "For duplicate item records, clarify whether you count extra occurrences or every matching pair, and which attributes define identity. For matrices, distinguish unique-row storage from repeated shared references."
+      ],
+      "drills": [
+        {
+          "prompt": "Two Sum: what invariant does a seen-value map maintain, and what complexity do you expect?",
+          "answer": "The map contains values/indices processed before the current index. Look up target-current before storing the current item to avoid reusing it; expected O(n) time and O(n) space with ordinary hash behavior.",
+          "criteria": [
+            "Previously seen indices",
+            "Do not reuse one item",
+            "Expected time/space"
+          ]
+        },
+        {
+          "prompt": "How do you improve naive repeated-recursion Fibonacci, and which base convention should you state?",
+          "answer": "Memoize subproblems or keep the previous two values iteratively. State F0=0 and F1=1; iterative computation uses O(n) time/O(1) auxiliary space under the usual unit-cost arithmetic model.",
+          "criteria": [
+            "Reuse earlier results",
+            "Explicit base cases",
+            "Complexity with model"
+          ]
+        },
+        {
+          "prompt": "A list contains the same item three times. How many duplicates are there?",
+          "answer": "Clarify the definition: two extra occurrences beyond the first, or three unordered equal pairs. Both are plausible; agree on the contract first.",
+          "criteria": [
+            "Ambiguity identified",
+            "Two extra or three pairs"
+          ]
+        }
+      ],
+      "example": "What stays true each iteration?\nWhat happens for empty input, duplicates and boundaries?",
+      "category": "algorithms",
+      "summary": "Explain the approach, invariant, edge cases and complexity; trace a small input."
+    },
+    {
+      "id": "architecture",
+      "level": 4,
+      "title": "Explain a small system for a customer",
+      "origin": "Guide §§11,13; PDF pp13,16,20",
+      "sources": [
+        "rest",
+        "transactions",
+        "dhcp"
+      ],
+      "notes": [
+        "Start with users, core operations, data sensitivity, scale and reliability needs. Trace browser → API → data store, then discuss one failure path and one measurable tradeoff. This is an application exercise extending the source material.",
+        "MVC separates model/data-domain behavior, view/presentation and controller/input coordination. Frameworks apply these boundaries differently.",
+        "A dynamic address is typically leased by DHCP and may remain the same for long periods. Static configuration or a reservation provides predictable addressing; dynamic does not mean every request gets a new IP."
+      ],
+      "drills": [
+        {
+          "prompt": "Explain a small reporting web app to a non-specialist, including one failure case and one tradeoff.",
+          "answer": "The browser asks an API for a report; the API checks permission, reads data and returns a result. Show a clear retry/error state on failure. A cached report can be faster but may be stale.",
+          "criteria": [
+            "Clear request/data flow",
+            "Permission and failure behavior",
+            "One explicit tradeoff"
+          ]
+        },
+        {
+          "prompt": "Does a DHCP client necessarily change IP on every connection or request? Distinguish static addressing.",
+          "answer": "No. DHCP leases can be renewed with the same address. Static configuration or a reservation is used when predictable assignment is needed.",
+          "criteria": [
+            "Leases can stay the same",
+            "Predictable/static or reserved assignment"
+          ]
+        }
+      ],
+      "example": "Browser → authenticated API → database\nWhat happens when the database is slow or unavailable?",
+      "category": "design",
+      "summary": "Start with requirements, follow the request/data flow, then explain failures and tradeoffs."
+    },
+    {
+      "id": "stories",
+      "level": 4,
+      "title": "Tell a truthful project and teamwork story",
+      "origin": "Guide §§0,9–10; PDF pp1,9–12,20–21",
+      "sources": [],
+      "notes": [
+        "Use a short situation → task → your action → result → lesson outline. Explain what you personally did and what evidence supports the result; do not invent metrics or borrow somebody else’s outcome.",
+        "Prepare distinct examples for learning something unfamiliar, a technical setback, collaboration/conflict, leadership, failure and a meaningful achievement. Historical source stories are private prompts, not verified scripts.",
+        "Describe constraints professionally. Explain your response, tradeoff and learning instead of blaming teammates or making unverifiable accusations. Update career stage and current experience before rehearsing."
+      ],
+      "drills": [
+        {
+          "prompt": "Write a five-line outline for a real project challenge. Use placeholders for facts you still need to verify.",
+          "answer": "Situation: [context]. Task: [responsibility]. Action: [your specific choices]. Result: [verifiable outcome]. Lesson: [what changed in your approach].",
+          "criteria": [
+            "Specific personal action",
+            "Truthful outcome/evidence",
+            "Lesson or changed behavior"
+          ]
+        },
+        {
+          "prompt": "Your failure answer is only “I persevere.” What is missing?",
+          "answer": "A specific failure, your responsibility, what you changed, and evidence of a later improvement. A slogan alone does not demonstrate behavior.",
+          "criteria": [
+            "Concrete event and ownership",
+            "Changed action",
+            "Evidence or honest limitation"
+          ]
+        },
+        {
+          "prompt": "Outline a respectful conflict answer without criticizing a teammate.",
+          "answer": "Explain the shared goal, the differing views, how you listened/clarified constraints, the agreed action and the observed result. Own your contribution.",
+          "criteria": [
+            "Shared goal/difference",
+            "Listening and resolution",
+            "Result without blame"
+          ]
+        }
+      ],
+      "example": "Situation → task → action → result\nDistinguish personal work from team outcomes.",
+      "category": "career",
+      "summary": "Explain a specific problem, your contribution, evidence of the outcome and what you learned."
+    },
+    {
+      "id": "interview",
+      "level": 4,
+      "title": "Motivation, role fit and questions to ask",
+      "origin": "Guide §§0,9,12; PDF pp1,9,11,17,20–21",
+      "sources": [],
+      "notes": [
+        "For “why this company,” connect verified current work to your relevant experience and the contribution you want to make. Replace dated company claims and vague “nothing to lose” wording with a concrete fit.",
+        "State Python experience honestly: distinguish what you can read, build independently, explain with help and are still practicing. For engineering emphasize implementation; for solutions architecture emphasize customer needs and tradeoffs while keeping technical depth.",
+        "Useful questions cover actual projects, onboarding, success measures, collaboration, technical ownership, SQL/data expectations, customer feedback and growth. Historical hiring anecdotes are not promises about the next interview."
+      ],
+      "drills": [
+        {
+          "prompt": "Draft a brief motivation answer without inventing company facts or claiming experience you do not have.",
+          "answer": "I am interested in [verified work/problem] because [real connection]. I have worked on [truthful relevant example], and want to contribute [specific value] while developing [skill].",
+          "criteria": [
+            "Verified company connection",
+            "Truthful experience",
+            "Contribution and growth"
+          ]
+        },
+        {
+          "prompt": "Choose three useful questions to ask about either an engineering or solutions architect role.",
+          "answer": "What would I own in the first three months? How is success measured? How do engineers/architects clarify customer requirements and review tradeoffs?",
+          "criteria": [
+            "Concrete responsibilities",
+            "Success/onboarding",
+            "Collaboration or customer context"
+          ]
+        },
+        {
+          "prompt": "How would you describe early Python experience honestly in an interview?",
+          "answer": "I am building fluency through scripts and algorithm exercises. I can demonstrate [specific verified task] independently; I am still practicing [specific area]. Then show or explain actual code.",
+          "criteria": [
+            "Specific demonstrated capability",
+            "Clear limits",
+            "Avoid exaggerated fluency"
+          ]
+        }
+      ],
+      "example": "How are releases tested?\nHow does the team investigate production incidents?",
+      "category": "career",
+      "summary": "Connect your experience to the role and ask how the team builds and operates software."
+    },
+    {
+      "id": "testing",
+      "category": "quality",
+      "title": "Unit, integration and end-to-end tests",
+      "summary": "Test behavior at the smallest useful boundary, then cover important connections and user journeys.",
+      "example": "Unit: price calculation\nIntegration: repository + database\nE2E: browser completes a workflow",
+      "notes": [
+        "Include failure paths, boundaries and alternate valid inputs. A passing suite proves its assertions for the tested cases, not the absence of defects.",
+        "Mock external boundaries deliberately; too much mocking can hide integration failures."
+      ],
+      "sources": [
+        "testing"
+      ]
+    },
+    {
+      "id": "debugging",
+      "category": "quality",
+      "title": "Debug a production issue",
+      "summary": "Reproduce or characterize the failure, narrow its scope, test a hypothesis and verify the fix.",
+      "example": "Symptoms → logs/request ID → smallest reproduction\n→ root cause → regression test → monitored rollout",
+      "notes": [
+        "Avoid recording credentials or sensitive payloads in diagnostic logs. Distinguish the root cause from a workaround.",
+        "Change one relevant variable at a time; use measurements rather than guessing where time is spent."
+      ],
+      "sources": [
+        "debugging"
+      ]
+    },
+    {
+      "id": "clean-functions",
+      "category": "quality",
+      "title": "Write understandable functions",
+      "summary": "Use specific names, cohesive responsibilities and explicit inputs/outputs. Keep error behavior deliberate.",
+      "example": "parse_user_input(text)\nvalidate_user(user)\nsave_user(user)",
+      "notes": [
+        "Separate pure transformations from I/O where useful. Avoid both giant functions and needless layers.",
+        "Explain why an abstraction helps this codebase; do not apply a design principle as an automatic rule."
+      ],
+      "sources": [
+        "solid"
+      ]
+    },
+    {
+      "id": "caching",
+      "category": "design",
+      "title": "Caching and stale data",
+      "summary": "Reuse a previous result to reduce repeated work; decide how stale it may be and how it expires.",
+      "example": "Read cache → miss → read database → cache result\nTTL bounds freshness; invalidation handles changes.",
+      "notes": [
+        "Consider keys, eviction, invalidation, cache misses and sensitive-data scope. A cache should not accidentally share one user’s result with another.",
+        "A cache outage or synchronized expiry can push traffic back onto the database."
+      ],
+      "sources": [
+        "caching"
+      ]
+    },
+    {
+      "id": "queues",
+      "category": "design",
+      "title": "Queues, retries and idempotency",
+      "summary": "A queue decouples request handling from background work. Plan for duplicates and failures.",
+      "example": "API → queue → worker → saved result\nJob ID + idempotent write makes retries safer.",
+      "notes": [
+        "At-least-once delivery can repeat work. Bound retry attempts, use backoff where appropriate and inspect failed jobs.",
+        "A queue helps absorb bursts; it does not make slow work disappear or guarantee exactly-once effects."
+      ],
+      "sources": [
+        "queues"
+      ]
+    },
+    {
+      "id": "scaling",
+      "category": "design",
+      "title": "Load balancing and availability",
+      "summary": "Distribute traffic across healthy instances and identify the dependencies that still limit availability.",
+      "example": "Load balancer → stateless application replicas → database\nHealth checks route around unhealthy replicas.",
+      "notes": [
+        "Horizontal scaling adds instances; vertical scaling adds resources to an instance. Both have costs and limits.",
+        "Consider state/session handling, database capacity, timeouts, backups and tested recovery. Replicas alone do not guarantee reliability."
+      ],
+      "sources": [
+        "balancing"
+      ]
+    },
+    {
+      "id": "concurrency",
+      "category": "design",
+      "title": "Race conditions and atomic changes",
+      "summary": "Concurrent requests can read the same old state and overwrite each other. Protect the whole operation.",
+      "example": "Two buyers see stock = 1.\nUse an atomic conditional update or an appropriate transaction.",
+      "notes": [
+        "Transactions provide atomic grouping, but isolation and locking choices still matter. Read-modify-write in application code is not automatically atomic.",
+        "Consider contention, deadlocks and retry behavior. Explain the database’s guarantees rather than assuming them."
+      ],
+      "sources": [
+        "transactions"
+      ]
+    }
+  ],
+  "categories": [
+    [
+      "fundamentals",
+      "Languages & OOP"
+    ],
+    [
+      "web",
+      "HTTP & APIs"
+    ],
+    [
+      "data",
+      "SQL & data"
+    ],
+    [
+      "quality",
+      "Clean code & testing"
+    ],
+    [
+      "design",
+      "System design"
+    ],
+    [
+      "algorithms",
+      "Algorithms"
+    ],
+    [
+      "career",
+      "Projects & teamwork"
+    ]
+  ],
+  "httpCodes": [
+    [
+      200,
+      "OK",
+      "Successful request"
+    ],
+    [
+      201,
+      "Created",
+      "New resource created"
+    ],
+    [
+      204,
+      "No Content",
+      "Success without a response body"
+    ],
+    [
+      301,
+      "Moved Permanently",
+      "Permanent redirect"
+    ],
+    [
+      302,
+      "Found",
+      "Temporary redirect"
+    ],
+    [
+      304,
+      "Not Modified",
+      "Reuse a cached representation"
+    ],
+    [
+      400,
+      "Bad Request",
+      "Invalid request"
+    ],
+    [
+      401,
+      "Unauthorized",
+      "Missing or invalid authentication"
+    ],
+    [
+      403,
+      "Forbidden",
+      "Request refused; permission may be insufficient"
+    ],
+    [
+      404,
+      "Not Found",
+      "Resource missing or not disclosed"
+    ],
+    [
+      405,
+      "Method Not Allowed",
+      "Method unsupported for this resource"
+    ],
+    [
+      409,
+      "Conflict",
+      "Conflict with current resource state"
+    ],
+    [
+      422,
+      "Unprocessable Content",
+      "Valid syntax, instructions cannot be processed"
+    ],
+    [
+      429,
+      "Too Many Requests",
+      "Rate limit exceeded"
+    ],
+    [
+      500,
+      "Internal Server Error",
+      "Unexpected server failure"
+    ],
+    [
+      502,
+      "Bad Gateway",
+      "Invalid upstream response"
+    ],
+    [
+      503,
+      "Service Unavailable",
+      "Temporarily unavailable"
+    ],
+    [
+      504,
+      "Gateway Timeout",
+      "Upstream response timed out"
+    ]
+  ],
+  "references": {
+    "status": [
+      "HTTP status codes (MDN)",
+      "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status"
+    ],
+    "testing": [
+      "Testing strategies (Microsoft)",
+      "https://learn.microsoft.com/en-us/dotnet/core/testing/"
+    ],
+    "debugging": [
+      "Debugging (Python)",
+      "https://docs.python.org/3.12/library/pdb.html"
+    ],
+    "caching": [
+      "Cache-aside pattern (Microsoft)",
+      "https://learn.microsoft.com/en-us/azure/architecture/patterns/cache-aside"
+    ],
+    "queues": [
+      "Competing consumers (Microsoft)",
+      "https://learn.microsoft.com/en-us/azure/architecture/patterns/competing-consumers"
+    ],
+    "balancing": [
+      "Load-balancing concepts (AWS)",
+      "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html"
+    ],
+    "rest": [
+      "Fielding: REST architectural style",
+      "https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm"
+    ],
+    "dhcp": [
+      "DHCP, RFC 2131",
+      "https://www.rfc-editor.org/rfc/rfc2131"
+    ],
+    "dom": [
+      "DOM (MDN)",
+      "https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model"
+    ],
+    "css": [
+      "CSS flexbox (MDN)",
+      "https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Basic_concepts_of_flexbox"
+    ],
+    "java": [
+      "Java classes and overriding",
+      "https://docs.oracle.com/javase/specs/jls/se25/html/jls-8.html"
+    ],
+    "interfaces": [
+      "Java interface specification",
+      "https://docs.oracle.com/javase/specs/jls/se25/html/jls-9.html"
+    ],
+    "python": [
+      "Python classes",
+      "https://docs.python.org/3.12/tutorial/classes.html"
+    ],
+    "jvm": [
+      "Java platform overview",
+      "https://docs.oracle.com/javase/8/docs/technotes/guides/"
+    ],
+    "csharp": [
+      "C# language overview",
+      "https://learn.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/overview"
+    ],
+    "php": [
+      "PHP type declarations",
+      "https://www.php.net/manual/en/language.types.declarations.php"
+    ],
+    "sql": [
+      "SQL lexical structure (PostgreSQL)",
+      "https://www.postgresql.org/docs/current/sql-syntax-lexical.html"
+    ],
+    "keys": [
+      "Database constraints (PostgreSQL)",
+      "https://www.postgresql.org/docs/current/ddl-constraints.html"
+    ],
+    "joins": [
+      "Joins and grouping (PostgreSQL)",
+      "https://www.postgresql.org/docs/current/queries-table-expressions.html"
+    ],
+    "indexes": [
+      "Database indexes (PostgreSQL)",
+      "https://www.postgresql.org/docs/current/indexes.html"
+    ],
+    "explain": [
+      "Reading query plans (PostgreSQL)",
+      "https://www.postgresql.org/docs/current/using-explain.html"
+    ],
+    "cluster": [
+      "CLUSTER (PostgreSQL)",
+      "https://www.postgresql.org/docs/current/sql-cluster.html"
+    ],
+    "transactions": [
+      "Transactions (PostgreSQL)",
+      "https://www.postgresql.org/docs/current/tutorial-transactions.html"
+    ],
+    "http": [
+      "HTTP semantics, RFC 9110",
+      "https://www.rfc-editor.org/rfc/rfc9110.html"
+    ],
+    "methods": [
+      "HTTP methods (MDN)",
+      "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods"
+    ],
+    "soap": [
+      "SOAP 1.2 messaging specification",
+      "https://www.w3.org/TR/soap12-part1/"
+    ],
+    "react": [
+      "React: writing JSX",
+      "https://react.dev/learn/writing-markup-with-jsx"
+    ],
+    "yup": [
+      "Yup schema validation",
+      "https://github.com/jquense/yup"
+    ],
+    "doctype": [
+      "DOCTYPE (MDN)",
+      "https://developer.mozilla.org/en-US/docs/Glossary/Doctype"
+    ],
+    "internet": [
+      "How the internet works (MDN)",
+      "https://developer.mozilla.org/en-US/docs/Learn_web_development/Howto/Web_mechanics/How_does_the_Internet_work"
+    ],
+    "agile": [
+      "Agile Manifesto principles",
+      "https://agilemanifesto.org/principles.html"
+    ],
+    "scrum": [
+      "The Scrum Guide",
+      "https://scrumguides.org/scrum-guide.html"
+    ],
+    "git": [
+      "Git pull documentation",
+      "https://git-scm.com/docs/git-pull"
+    ],
+    "sorting": [
+      "Princeton algorithms summary",
+      "https://algs4.cs.princeton.edu/cheatsheet/"
+    ],
+    "heap": [
+      "Python heapq",
+      "https://docs.python.org/3.12/library/heapq.html"
+    ],
+    "collections": [
+      "Python Counter and deque",
+      "https://docs.python.org/3.12/library/collections.html"
+    ],
+    "liskov": [
+      "Liskov and Wing: behavioral subtyping",
+      "https://www.cs.cmu.edu/afs/cs/project/venari/www/subtype-tr.html"
+    ],
+    "solid": [
+      "Architectural principles (Microsoft)",
+      "https://learn.microsoft.com/en-gb/dotnet/architecture/modern-web-apps-azure/architectural-principles"
+    ],
+    "di": [
+      "Dependency injection (.NET)",
+      "https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection/overview"
+    ],
+    "injection": [
+      "OWASP: SQL injection",
+      "https://community.owasp.org/attacks/SQL_Injection"
+    ]
+  },
+  "corrections": [
+    [
+      "SQL case sensitivity",
+      "Guide §3; PDF p3",
+      "SQL keywords are generally case insensitive. Quoted identifiers, text comparisons and collations have engine-specific rules. Statement terminators depend on the client/context.",
+      [
+        "sql"
+      ]
+    ],
+    [
+      "Primary and foreign keys",
+      "Guide §3; PDF p4",
+      "A primary key enforces uniqueness and non-nullness, not universal query speed. Foreign keys may reference eligible unique keys, including in the same table.",
+      [
+        "keys"
+      ]
+    ],
+    [
+      "Outer joins",
+      "Guide §3; PDF p4",
+      "FULL OUTER JOIN retains matched rows and unmatched rows from both sides, padding missing values with NULL. Multiple matches can multiply rows.",
+      [
+        "joins"
+      ]
+    ],
+    [
+      "SOLID D",
+      "Guide §4; PDF p6",
+      "D means Dependency Inversion. Dependency injection is a technique that can support it, not the name of the principle.",
+      [
+        "solid",
+        "di"
+      ]
+    ],
+    [
+      "Liskov substitution",
+      "Guide §4; PDF p6",
+      "Preserve the behavioral contract of the base type. Merely keeping method names or adding features does not establish substitutability.",
+      [
+        "liskov"
+      ]
+    ],
+    [
+      "Interfaces",
+      "Guide §§4,11; PDF pp5,14",
+      "Modern Java interfaces can declare default, static and private methods plus constants. They have no per-instance fields. Abstraction percentages are not a useful rule.",
+      [
+        "interfaces"
+      ]
+    ],
+    [
+      "Inheritance scope",
+      "Guide §§4,11; PDF p14",
+      "One class superclass is a Java rule, not a universal OOP rule. Python supports multiple class inheritance.",
+      [
+        "java",
+        "python"
+      ]
+    ],
+    [
+      "Overriding",
+      "Guide §11; PDF p12",
+      "In Java, overriding preserves the method signature and permits a covariant reference return. It does not permit arbitrary parameter-type changes. Return type alone cannot overload a method.",
+      [
+        "java"
+      ]
+    ],
+    [
+      "Encapsulation",
+      "Guide §§4,11; PDF pp5,13",
+      "Controlled access and invariant preservation matter; adding unrestricted getters/setters alone does not protect state.",
+      [
+        "python",
+        "java"
+      ]
+    ],
+    [
+      "Dependency injection",
+      "Guide §11; PDF p14",
+      "Supply collaborators externally. Constructor injection is often useful, but not the only form. Object creation with new still happens at a composition boundary.",
+      [
+        "di"
+      ]
+    ],
+    [
+      "Agile and Scrum",
+      "Guide §5; PDF p7",
+      "Agile does not require Sprints. Scrum has Sprints of one month or less, an explicit Sprint Goal, Review and Retrospective; it does not guarantee faster delivery.",
+      [
+        "agile",
+        "scrum"
+      ]
+    ],
+    [
+      "Git versus GitHub",
+      "Guide §6; PDF p7",
+      "Git is the version-control system. GitHub hosts repositories and collaboration. Pull fetches and then integrates according to options/configuration, potentially by rebase.",
+      [
+        "git"
+      ]
+    ],
+    [
+      "PHP types",
+      "Guide §7; PDF p8",
+      "PHP is dynamically typed and supports parameter, return and property declarations; coercion and strict_types affect scalar calls. Type declarations are not universally absent.",
+      [
+        "php"
+      ]
+    ],
+    [
+      "Yup and JSX",
+      "Guide §8; PDF pp8,13",
+      "Yup validates/parses schemas; it does not create form UI. JSON is a data format. JSX is a JavaScript syntax extension for UI markup, not the usual REST data format.",
+      [
+        "yup",
+        "react"
+      ]
+    ],
+    [
+      "GET and POST",
+      "Guide §11; PDF p12",
+      "Safe means intended read-only semantics, not zero logging or security. POST is not inherently secret and need not always mutate data; HTTPS protects either method in transit.",
+      [
+        "http",
+        "methods"
+      ]
+    ],
+    [
+      "HTTP 405",
+      "Guide §11; PDF p15",
+      "405 means Method Not Allowed, not Method Not Found. A 404 can also intentionally conceal a resource; it is not always a malformed URL.",
+      [
+        "http"
+      ]
+    ],
+    [
+      "DOCTYPE",
+      "Guide §11; PDF p16",
+      "The HTML doctype selects standards/no-quirks rendering. It does not validate the page or guarantee future compatibility.",
+      [
+        "doctype"
+      ]
+    ],
+    [
+      "SOAP and REST",
+      "Guide §11; PDF pp16–17",
+      "SOAP is an XML messaging protocol with transport bindings; REST is an architectural style. SOAP does not inherently require sessions, and neither label guarantees scalability.",
+      [
+        "soap",
+        "http"
+      ]
+    ],
+    [
+      "Database clustering",
+      "Guide §11; PDF pp14–15",
+      "Clarify the context: indexed physical row ordering, multiple database servers, and statistical clustering are distinct meanings. PostgreSQL CLUSTER is a one-time table reordering.",
+      [
+        "cluster"
+      ]
+    ],
+    [
+      "Heaps and sorting",
+      "Guide §2; PDF pp2–3",
+      "A binary heap is complete and partially ordered, with non-strict parent inequalities. Sift-down assumes child subtrees are heaps, not sorted arrays. Ordinary bubble sort settles one end per pass; it is rarely the preferred nearly-sorted choice.",
+      [
+        "heap",
+        "sorting"
+      ]
+    ],
+    [
+      "Teams example",
+      "Guide §13; PDF p19",
+      "mppzombpzcmpmzz contains an invalid o and counts p=4,c=1,m=4,b=1,z=4. It cannot establish an answer of 3. Under the stated alphabet rule reject it; with an explicit ignore-other policy it yields 1. The separate string bbbbcccmmmmppppzzzz yields 3.",
+      []
+    ],
+    [
+      "Historical interview notes",
+      "Guide §§0,9,10,12,13; PDF pp1,9–12,17–21",
+      "Company awards, hiring rounds, completed-problem marks and personal stories are historical notes, not current verified promises or evidence of retained skill. Use truthful, updated examples; personal prose is not bundled here.",
+      []
+    ]
+  ]
+}

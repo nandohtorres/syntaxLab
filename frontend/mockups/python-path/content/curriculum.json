@@ -45,24 +45,25 @@
       ]
     },
     {
-      "id": "F06",
-      "title": "Repetition",
-      "requires": [
-        "F05"
-      ]
-    },
-    {
       "id": "F07",
       "title": "Containers",
       "requires": [
-        "F04",
-        "F06"
+        "F04"
+      ]
+    },
+    {
+      "id": "F06",
+      "title": "Repetition",
+      "requires": [
+        "F05",
+        "F07"
       ]
     },
     {
       "id": "F08",
       "title": "Functions",
       "requires": [
+        "F06",
         "F07"
       ]
     },
@@ -91,7 +92,7 @@
     },
     {
       "id": "F12",
-      "title": "Interview Python",
+      "title": "Collection helpers",
       "requires": [
         "F08",
         "F11"

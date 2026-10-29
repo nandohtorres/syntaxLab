@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import assert from 'node:assert/strict'
 const require = createRequire(import.meta.url)
-const { chromium, expect } = require(process.env.PLAYWRIGHT_PACKAGE ?? 'C:/Users/ferna/cursor projects/side-projects/archibrief-cleanup-codex/frontend/node_modules/@playwright/test')
+const { chromium, expect } = require(process.env.PLAYWRIGHT_PACKAGE ?? '@playwright/test')
 const questions = JSON.parse(readFileSync(new URL('../../../../backend/src/main/resources/questions.json', import.meta.url)))
 const base = process.env.SITE_BASE_URL ?? 'http://127.0.0.1:4316/'
 const browser = await chromium.launch({ headless: true })

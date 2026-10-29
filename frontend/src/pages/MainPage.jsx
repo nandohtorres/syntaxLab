@@ -10,7 +10,8 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { useTheme } from '@mui/material/styles'
+import { ThemeProvider, useTheme } from '@mui/material/styles'
+import practiceTheme from '@practice/practiceTheme.js'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
@@ -18,7 +19,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import Popover from '@mui/material/Popover'
 import Backdrop from '@mui/material/Backdrop'
 import Fade from '@mui/material/Fade'
-import Header from '@/components/Header'
+import LinearProgress from '@mui/material/LinearProgress'
 import QuestionList from '@/components/QuestionList'
 import QuestionPrompt from '@/components/QuestionPrompt'
 import CodeEditor from '@/components/CodeEditor'
@@ -28,6 +29,9 @@ import { useQuestions } from '@/hooks/useQuestions'
 import { usePyodide } from '@/hooks/usePyodide'
 import { useProgressContext } from '@/context/ProgressContext'
 import { runTestsAgainstUserCode } from '@/utils/testRunner'
+import { useStudyLayout } from '@practice/layoutContext.js'
+import StudyWorkspace from '@practice/StudyWorkspace.jsx'
+import StudyLibrary from '@practice/StudyLibrary.jsx'
 
 const TEST_QUESTION = { id: '__test__', title: '🧪 Test Pop Button', prompt: 'This is a test question.', starterCode: '', tests: [], answer: '', pythonicTip: '', group: '', order: 0 }
 
@@ -72,6 +76,7 @@ function DragHandlePill({ direction }) {
 }
 
 export default function MainPage() {
+  const layout = useStudyLayout()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const { questions, isLoading: isLoadingQuestions, fetchError } = useQuestions()
@@ -95,7 +100,6 @@ export default function MainPage() {
   const [runFeedback, setRunFeedback] = useState(null) // null | 'correct' | 'incorrect'
   const [leftPanelWidth, setLeftPanelWidth] = useState(40)
   const [questionListHeightPct, setQuestionListHeightPct] = useState(35) // desktop: question list vs prompt
-  const [mobileSplitPct, setMobileSplitPct] = useState(35)              // mobile: prompt vs editor
 
   // Horizontal drag refs (left/right panels, desktop)
   const isDraggingRef = useRef(false)
@@ -108,12 +112,6 @@ export default function MainPage() {
   const leftPanelRef = useRef(null)
   const vDragMoveHandlerRef = useRef(null)
   const vDragEndHandlerRef = useRef(null)
-
-  // Vertical drag refs (prompt / editor, mobile)
-  const isMobileVDraggingRef = useRef(false)
-  const mobileContainerRef = useRef(null)
-  const mobileVDragMoveHandlerRef = useRef(null)
-  const mobileVDragEndHandlerRef = useRef(null)
 
   const feedbackTimerRef = useRef(null)
   const initialQuestionSelectedRef = useRef(false)
@@ -182,33 +180,6 @@ export default function MainPage() {
     document.addEventListener('touchend', vDragEndHandlerRef.current)
   }
 
-  function handleMobileVerticalDragStart(e) {
-    e.preventDefault()
-    isMobileVDraggingRef.current = true
-
-    mobileVDragMoveHandlerRef.current = (moveEvent) => {
-      if (!isMobileVDraggingRef.current || !mobileContainerRef.current) return
-      moveEvent.preventDefault()
-      const y = moveEvent.touches ? moveEvent.touches[0].clientY : moveEvent.clientY
-      const rect = mobileContainerRef.current.getBoundingClientRect()
-      const newPct = ((y - rect.top) / rect.height) * 100
-      setMobileSplitPct(Math.min(60, Math.max(15, newPct)))
-    }
-
-    mobileVDragEndHandlerRef.current = () => {
-      isMobileVDraggingRef.current = false
-      document.removeEventListener('mousemove', mobileVDragMoveHandlerRef.current)
-      document.removeEventListener('mouseup', mobileVDragEndHandlerRef.current)
-      document.removeEventListener('touchmove', mobileVDragMoveHandlerRef.current)
-      document.removeEventListener('touchend', mobileVDragEndHandlerRef.current)
-    }
-
-    document.addEventListener('mousemove', mobileVDragMoveHandlerRef.current)
-    document.addEventListener('mouseup', mobileVDragEndHandlerRef.current)
-    document.addEventListener('touchmove', mobileVDragMoveHandlerRef.current, { passive: false })
-    document.addEventListener('touchend', mobileVDragEndHandlerRef.current)
-  }
-
   useEffect(() => {
     return () => {
       clearTimeout(feedbackTimerRef.current)
@@ -221,14 +192,6 @@ export default function MainPage() {
       if (vDragEndHandlerRef.current) {
         document.removeEventListener('mouseup', vDragEndHandlerRef.current)
         document.removeEventListener('touchend', vDragEndHandlerRef.current)
-      }
-      if (mobileVDragMoveHandlerRef.current) {
-        document.removeEventListener('mousemove', mobileVDragMoveHandlerRef.current)
-        document.removeEventListener('touchmove', mobileVDragMoveHandlerRef.current)
-      }
-      if (mobileVDragEndHandlerRef.current) {
-        document.removeEventListener('mouseup', mobileVDragEndHandlerRef.current)
-        document.removeEventListener('touchend', mobileVDragEndHandlerRef.current)
       }
     }
   }, [])
@@ -257,13 +220,13 @@ export default function MainPage() {
     setTestRunResult(null)
   }, [questions, isQuestionComplete])
 
-  async function handleRunCode() {
-    if (!pyodide || !selectedQuestion) return
+  async function handleRunCode(editorValue) {
+    if (!pyodide || !selectedQuestion || isRunningTests) return
 
     setIsRunningTests(true)
     setTestRunResult(null)
 
-    const result = await runTestsAgainstUserCode(pyodide, userCode, selectedQuestion.tests)
+    const result = await runTestsAgainstUserCode(pyodide, typeof editorValue === 'string' ? editorValue : userCode, selectedQuestion.tests)
     setTestRunResult(result)
 
     clearTimeout(feedbackTimerRef.current)
@@ -300,7 +263,7 @@ export default function MainPage() {
   }
 
   const editorOutlineSx = {
-    flex: 1, overflow: 'hidden', borderRadius: 1, position: 'relative',
+    flex: 1, minHeight: 0, overflow: 'hidden', position: 'relative',
     border: '1px solid',
     borderColor: 'divider',
     outline: runFeedback === 'correct' ? '2px solid #4caf50' : runFeedback === 'incorrect' ? '2px solid #f44336' : '2px solid transparent',
@@ -412,211 +375,84 @@ export default function MainPage() {
     </Box>
   )
 
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100dvh',
-        bgcolor: 'background.default',
-      }}
-    >
-      <Paper
-        elevation={6}
-        sx={{
-          width: 'clamp(320px, 97%, 1800px)',
-          height: 'clamp(500px, 96dvh, 1080px)',
-          borderRadius: 3,
-          overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
-          p: 2,
-        }}
-      >
-        <Header />
-        <Divider sx={{ mb: 2 }} />
+  const desktop = '@media (min-width: 900px) and (min-height: 640px)'
+  const panel = { border: '1px solid', borderColor: 'divider', borderRadius: 2, bgcolor: 'background.paper' }
+  const completedCount = questions.filter(question => isQuestionComplete(question.id)).length
+  const resizeKey = (event, setter, current, min, max, vertical = false) => {
+    const decrease = vertical ? 'ArrowUp' : 'ArrowLeft'
+    const increase = vertical ? 'ArrowDown' : 'ArrowRight'
+    if (event.key === decrease || event.key === increase) {
+      event.preventDefault()
+      setter(Math.min(max, Math.max(min, current + (event.key === increase ? 2 : -2))))
+    }
+  }
+  const prompt = <Box component="section" aria-labelledby="exercise-title" tabIndex={0} sx={{ ...panel, flex: 1, minHeight: 0, [desktop]: { overflowY: 'auto' } }}>
+    <QuestionPrompt key={selectedQuestion?.id} question={selectedQuestion} />
+    <Box aria-live="polite" sx={{ px: 2.5, pb: testRunResult || isRunningTests ? 2 : 0 }}><FeedbackPanel testRunResult={testRunResult} isRunning={isRunningTests} /></Box>
+  </Box>
 
-        {isMobile ? (
-          <Box sx={{ display: 'flex', flex: 1, flexDirection: 'column', overflow: 'hidden' }}>
-            {/* Mobile: dropdown question selector */}
-            <FormControl size="small" fullWidth sx={{ mb: 1, mt: 1, flexShrink: 0 }}>
-              <InputLabel>Question</InputLabel>
-              <Select
-                value={selectedQuestion?.id ?? ''}
-                label="Question"
-                onChange={e => {
-                  if (e.target.value === TEST_QUESTION.id) { handleTestPopClick(); return }
-                  const q = questions.find(q => q.id === e.target.value)
-                  if (q) handleQuestionSelect(q)
-                }}
-                MenuProps={{ PaperProps: { style: { maxHeight: 200 } } }}
-              >
-                {import.meta.env.DEV && (
-                  <MenuItem value={TEST_QUESTION.id}>{TEST_QUESTION.title}</MenuItem>
-                )}
-                {questions.map((q, i) => (
-                  <MenuItem key={q.id} value={q.id}>
-                    {i + 1}. {q.title}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+  if (layout !== 'current') {
+    const island = layout === 'island'
+    const demoDesktop = '@media (min-width: 900px) and (min-height: 760px)'
+    const items = questions.map(question => ({ id: question.id, title: question.title, group: question.group, done: isQuestionComplete(question.id) }))
+    return <StudyWorkspace
+      title="LeetCode Python"
+      subtitle="The Python operations you reach for when solving problems."
+      library={<StudyLibrary items={items} selectedId={selectedQuestion?.id} choose={id => { const question = questions.find(item => item.id === id); if (question) handleQuestionSelect(question) }} disabled={isRunningTests} />}
+      prompt={<QuestionPrompt key={selectedQuestion?.id} question={selectedQuestion} />}
+      editor={<ThemeProvider theme={practiceTheme}><Box sx={{ border: '1px solid #2c394b', borderRadius: 2, overflow: 'hidden', bgcolor: '#101722', display: 'flex', flexDirection: 'column', ...(island && { [demoDesktop]: { flex: 1, minHeight: 0 } }) }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', px: 2, py: 1.5, borderBottom: '1px solid #2c394b', color: '#d7e3f3', bgcolor: '#151e2b', flexShrink: 0 }}><Typography sx={{ fontFamily: 'Consolas, monospace', fontSize: 12 }}>main.py</Typography><Typography sx={{ ml: 'auto', color: '#8d9bb0', fontSize: 11 }}>Browser Python</Typography></Box>
+        <Box sx={{ ...editorOutlineSx, height: { xs: 260, md: 280 }, flex: 'none', ...(island && { [demoDesktop]: { height: 'auto', flex: 1, minHeight: 100 } }) }}><CodeEditor code={userCode} onRun={handleRunCode} onNext={() => { if (selectedQuestion && awaitingPopIds.has(selectedQuestion.id)) handlePopComplete() }} onCodeChange={code => { if (!selectedQuestion) return; setUserCodeMap(previous => ({ ...previous, [selectedQuestion.id]: code })) }} /></Box>
+        <Box sx={{ px: 1.5, py: 1.5, borderTop: '1px solid #2c394b', display: 'flex', gap: 1, alignItems: 'center', flexShrink: 0 }}>
+          <Box sx={{ flex: 1 }} />
+          <Button variant="contained" onClick={handleRunCode} disabled={!selectedQuestion || isRunningTests || !pyodide}>Run code</Button>
+          <Button variant={selectedQuestion && awaitingPopIds.has(selectedQuestion.id) ? 'contained' : 'outlined'} onClick={handlePopComplete} disabled={!selectedQuestion || !awaitingPopIds.has(selectedQuestion.id) || isRunningTests}>Next rep</Button>
+        </Box>
+      </Box></ThemeProvider>}
+      feedback={isInitialLoading ? <Box role="status" sx={{ p: 1.5, fontSize: 12, color: 'text.secondary' }}>Loading Python and exercises...</Box> : <Box sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, p: 1.5 }}><FeedbackPanel testRunResult={testRunResult} isRunning={isRunningTests} />{!testRunResult && !isRunningTests && <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>Write it. Run it. See what happens.</Typography>}</Box>}
+      footer={<Typography sx={{ fontSize: 11, color: 'text.secondary' }}>Code and progress stay in this browser.</Typography>}
+    />
+  }
 
-            {/* Mobile: prompt + editor split with vertical drag handle */}
-            <Box ref={mobileContainerRef} sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
-              {/* Prompt + feedback — height controlled by drag (15%–60%) */}
-              <Box sx={{ height: `${mobileSplitPct}%`, overflowY: 'auto', flexShrink: 0, border: '1px solid', borderColor: 'divider', borderRadius: 1 }}>
-                <QuestionPrompt key={selectedQuestion?.id} question={selectedQuestion} />
-                <FeedbackPanel testRunResult={testRunResult} isRunning={isRunningTests} />
-              </Box>
-
-              {/* Mobile vertical drag handle */}
-              <Box
-                onMouseDown={handleMobileVerticalDragStart}
-                onTouchStart={handleMobileVerticalDragStart}
-                sx={{
-                  height: '16px',
-                  flexShrink: 0,
-                  cursor: 'row-resize',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  position: 'relative',
-                  '&:hover .drag-track': { bgcolor: 'primary.main' },
-                  '&:hover .drag-pill': { borderColor: 'primary.main' },
-                }}
-              >
-                <Box className="drag-track" sx={{ position: 'absolute', height: '2px', width: '100%', bgcolor: 'divider', borderRadius: 1, transition: 'background-color 0.15s' }} />
-                <Box className="drag-pill"><DragHandlePill direction="row" /></Box>
-              </Box>
-
-              {/* Editor */}
-              <Box sx={{ ...editorOutlineSx }}>
-                <CodeEditor code={userCode} onCodeChange={(code) => { if (!selectedQuestion) return; setUserCodeMap(prev => ({ ...prev, [selectedQuestion.id]: code })) }} />
-                {selectedQuestion && awaitingPopIds.has(selectedQuestion.id) && (
-                  <PopButton key={selectedQuestion.id} onPopped={handlePopComplete} emblem={selectedEmblem} />
-                )}
-              </Box>
-            </Box>
-
-            {/* Mobile: run button row — same as desktop, includes emblem selector */}
-            {runButtonRow}
-          </Box>
-        ) : (
-          <Box ref={containerRef} sx={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-
-            {/* Left Panel — question list, prompt, and feedback */}
-            <Box ref={leftPanelRef} sx={{ width: `${leftPanelWidth}%`, display: 'flex', flexDirection: 'column', overflow: 'hidden', flexShrink: 0 }}>
-
-              {/* Question list — height controlled by drag (15%–65%) */}
-              <Box sx={{ height: `${questionListHeightPct}%`, overflow: 'hidden', flexShrink: 0 }}>
-                <QuestionList
-                  questions={questions}
-                  selectedQuestionId={selectedQuestion?.id}
-                  onQuestionSelect={handleQuestionSelect}
-                  testItem={TEST_QUESTION}
-                  onTestItemClick={handleTestPopClick}
-                />
-              </Box>
-
-              {/* Vertical drag handle (between list and prompt) */}
-              <Box
-                onMouseDown={handleVerticalDragStart}
-                onTouchStart={handleVerticalDragStart}
-                sx={{
-                  height: '16px',
-                  flexShrink: 0,
-                  cursor: 'row-resize',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  position: 'relative',
-                  '&:hover .drag-track': { bgcolor: 'primary.main' },
-                  '&:hover .drag-pill': { borderColor: 'primary.main' },
-                }}
-              >
-                <Box className="drag-track" sx={{ position: 'absolute', height: '2px', width: '100%', bgcolor: 'divider', borderRadius: 1, transition: 'background-color 0.15s' }} />
-                <Box className="drag-pill"><DragHandlePill direction="row" /></Box>
-              </Box>
-
-              {/* Prompt + feedback — fills remaining space */}
-              <Box sx={{ flex: 1, overflowY: 'auto', minHeight: 0, border: '1px solid', borderColor: 'divider', borderRadius: 1 }}>
-                <QuestionPrompt key={selectedQuestion?.id} question={selectedQuestion} />
-                <FeedbackPanel testRunResult={testRunResult} isRunning={isRunningTests} />
-              </Box>
-            </Box>
-
-            {/* Horizontal drag handle (between left and right panels) */}
-            <Box
-              onMouseDown={handleDragStart}
-              onTouchStart={handleDragStart}
-              sx={{
-                width: '16px',
-                flexShrink: 0,
-                cursor: 'col-resize',
-                mx: '2px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'relative',
-                '&:hover .drag-track': { bgcolor: 'primary.main' },
-                '&:hover .drag-pill': { borderColor: 'primary.main' },
-              }}
-            >
-              <Box className="drag-track" sx={{ position: 'absolute', width: '2px', height: '100%', bgcolor: 'divider', borderRadius: 1, transition: 'background-color 0.15s' }} />
-              <Box className="drag-pill"><DragHandlePill direction="col" /></Box>
-            </Box>
-
-            {/* Right Panel — code editor and run button */}
-            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-              <Box sx={{ ...editorOutlineSx }}>
-                <CodeEditor code={userCode} onCodeChange={(code) => { if (!selectedQuestion) return; setUserCodeMap(prev => ({ ...prev, [selectedQuestion.id]: code })) }} />
-                {selectedQuestion && awaitingPopIds.has(selectedQuestion.id) && (
-                  <PopButton key={selectedQuestion.id} onPopped={handlePopComplete} emblem={selectedEmblem} />
-                )}
-              </Box>
-              {runButtonRow}
-            </Box>
-
-          </Box>
-        )}
-      </Paper>
-
-      {/* Floating loading island — fades away once Pyodide is ready */}
-      <Backdrop
-        open={isInitialLoading}
-        sx={{ zIndex: 10, backdropFilter: 'blur(3px)', bgcolor: 'rgba(0,0,0,0.35)' }}
-      >
-        <Fade in={isInitialLoading}>
-          <Paper
-            elevation={12}
-            sx={{
-              px: 4, py: 3,
-              borderRadius: 3,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 1.5,
-              border: '1px solid',
-              borderColor: 'primary.main',
-              bgcolor: 'background.paper',
-              minWidth: 240,
-            }}
-          >
-            <Typography sx={{ fontSize: '2rem', lineHeight: 1 }}>🐍</Typography>
-            <CircularProgress size={28} thickness={4} />
-            <Box sx={{ textAlign: 'center' }}>
-              <Typography variant="body2" fontWeight={700} color="text.primary" gutterBottom>
-                {isLoadingPyodide ? 'Starting Python Runtime' : 'Loading Questions'}
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                {isLoadingPyodide ? 'Pyodide is spinning up in your browser…' : 'Fetching exercises from the server…'}
-              </Typography>
-            </Box>
-          </Paper>
-        </Fade>
-      </Backdrop>
+  return <Box component="main" sx={{ minWidth: 0, display: 'flex', flexDirection: 'column', [desktop]: { flex: 1, minHeight: 0 } }}>
+    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2, mb: 2, flexShrink: 0 }}>
+      <Box><Typography sx={{ fontSize: 10, letterSpacing: '0.13em', textTransform: 'uppercase', fontWeight: 700, color: 'primary.main', mb: 0.6 }}>Your practice workspace</Typography><Typography component="h1" sx={{ fontSize: { xs: 23, md: 30 }, fontWeight: 650, letterSpacing: '-0.7px' }}>Build fluency, one rep at a time.</Typography></Box>
+      <Box sx={{ minWidth: 90, textAlign: 'right' }}><Typography sx={{ fontSize: 12, color: 'text.secondary', mb: 1 }}>{completedCount} / {questions.length} passed</Typography><LinearProgress aria-label="Completed exercises" variant="determinate" value={questions.length ? completedCount / questions.length * 100 : 0} sx={{ height: 4, borderRadius: 3 }} /></Box>
     </Box>
-  )
+    <Box ref={containerRef} sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: { xs: 2, md: 0 }, [desktop]: { flex: 1, minHeight: 0 } }}>
+      <Box ref={leftPanelRef} sx={{ width: { xs: '100%', md: leftPanelWidth + '%' }, minWidth: 0, flexShrink: 0, display: 'flex', flexDirection: 'column', [desktop]: { minHeight: 0 } }}>
+        {isMobile ? <FormControl size="small" fullWidth sx={{ mb: 2 }}>
+          <InputLabel id="question-selector-label">Question</InputLabel>
+          <Select labelId="question-selector-label" value={selectedQuestion?.id ?? ''} label="Question" onChange={event => {
+            if (event.target.value === TEST_QUESTION.id) { handleTestPopClick(); return }
+            const question = questions.find(item => item.id === event.target.value)
+            if (question) handleQuestionSelect(question)
+          }} MenuProps={{ PaperProps: { style: { maxHeight: 250 } } }}>
+            {import.meta.env.DEV && <MenuItem value={TEST_QUESTION.id}>{TEST_QUESTION.title}</MenuItem>}
+            {questions.map((question, index) => <MenuItem key={question.id} value={question.id}>{index + 1}. {question.title}</MenuItem>)}
+          </Select>
+        </FormControl> : <>
+          <Box component="section" aria-label="Practice exercises" sx={{ ...panel, overflow: 'hidden', height: 235, display: 'flex', flexDirection: 'column', flexShrink: 0, [desktop]: { height: questionListHeightPct + '%', minHeight: 90 } }}>
+            <Typography sx={{ px: 2.5, py: 1.5, borderBottom: '1px solid', borderColor: 'divider', fontSize: 10, letterSpacing: '0.13em', textTransform: 'uppercase', fontWeight: 700, color: 'text.secondary', flexShrink: 0 }}>Exercise library</Typography>
+            <Box sx={{ flex: 1, minHeight: 0 }}><QuestionList questions={questions} selectedQuestionId={selectedQuestion?.id} onQuestionSelect={handleQuestionSelect} testItem={TEST_QUESTION} onTestItemClick={handleTestPopClick} /></Box>
+          </Box>
+          <Box role="separator" aria-label="Resize exercise library" aria-orientation="horizontal" aria-valuemin={15} aria-valuemax={65} aria-valuenow={questionListHeightPct} tabIndex={0} onKeyDown={event => resizeKey(event, setQuestionListHeightPct, questionListHeightPct, 15, 65, true)} onMouseDown={handleVerticalDragStart} onTouchStart={handleVerticalDragStart} sx={{ height: 16, flexShrink: 0, cursor: 'row-resize', display: 'flex', alignItems: 'center', justifyContent: 'center', '&:focus-visible': { outline: '2px solid', outlineColor: 'primary.main' } }}><DragHandlePill direction="row" /></Box>
+        </>}
+        {prompt}
+      </Box>
+      {!isMobile && <Box role="separator" aria-label="Resize practice panels" aria-orientation="vertical" aria-valuemin={25} aria-valuemax={60} aria-valuenow={leftPanelWidth} tabIndex={0} onKeyDown={event => resizeKey(event, setLeftPanelWidth, leftPanelWidth, 25, 60)} onMouseDown={handleDragStart} onTouchStart={handleDragStart} sx={{ width: 20, flexShrink: 0, cursor: 'col-resize', display: 'flex', alignItems: 'center', justifyContent: 'center', '&:focus-visible': { outline: '2px solid', outlineColor: 'primary.main' } }}><DragHandlePill direction="col" /></Box>}
+      <Box component="section" aria-label="Code workspace" sx={{ ...panel, overflow: 'hidden', flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', [desktop]: { minHeight: 0 } }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', px: 2.5, py: 1.6, borderBottom: '1px solid', borderColor: 'divider', flexShrink: 0, bgcolor: theme => theme.palette.mode === 'dark' ? '#151e2b' : '#f0f6f3' }}><Typography sx={{ fontFamily: 'Consolas, monospace', fontSize: 13 }}><Box component="span" sx={{ color: 'primary.main', mr: 1.5 }}>py</Box>main.py</Typography><Typography sx={{ ml: 'auto', color: 'text.secondary', fontSize: 11 }}>Python ? browser runner</Typography></Box>
+        <Box sx={{ ...editorOutlineSx, height: 400, flex: 'none', [desktop]: { height: 'auto', flex: 1 } }}>
+          <CodeEditor code={userCode} onCodeChange={code => { if (!selectedQuestion) return; setUserCodeMap(previous => ({ ...previous, [selectedQuestion.id]: code })) }} />
+          {selectedQuestion && awaitingPopIds.has(selectedQuestion.id) && <PopButton key={selectedQuestion.id} onPopped={handlePopComplete} emblem={selectedEmblem} />}
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 2, py: 1, borderTop: '1px solid', borderColor: 'divider', flexShrink: 0 }}><Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: pyodide ? 'primary.main' : 'text.disabled' }} /><Typography sx={{ fontSize: 11, color: 'text.secondary' }}>{isRunningTests ? 'Running?' : pyodide ? 'Ready to run' : 'Starting Python?'}</Typography><Typography sx={{ ml: 'auto', fontSize: 11, color: 'text.secondary' }}>Code stays in your browser</Typography></Box>
+        <Box sx={{ p: 2, borderTop: '1px solid', borderColor: 'divider', flexShrink: 0 }}>{runButtonRow}</Box>
+      </Box>
+    </Box>
+    <Backdrop open={isInitialLoading} sx={{ zIndex: 10, backdropFilter: 'blur(3px)', bgcolor: 'rgba(0,0,0,0.35)' }}>
+      <Fade in={isInitialLoading}><Paper elevation={12} sx={{ px: 4, py: 3, borderRadius: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5, border: '1px solid', borderColor: 'primary.main', minWidth: 240 }}><CircularProgress size={28} /><Typography fontWeight={700}>{isLoadingPyodide ? 'Starting Python Runtime' : 'Loading Questions'}</Typography><Typography variant="caption" color="text.secondary">{isLoadingPyodide ? 'Python runs in your browser.' : 'Fetching exercises from the server?'}</Typography></Paper></Fade>
+    </Backdrop>
+  </Box>
 }

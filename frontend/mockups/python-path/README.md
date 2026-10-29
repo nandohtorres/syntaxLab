@@ -1,4 +1,71 @@
-﻿# Python Path
+# SyntaxLab study workspace
+
+The normal site uses the approved island layout and three folder tabs:
+
+- **Python Basics** (`/#python`): 98 core drills plus six optional projects.
+  Topics contain unique lettered skills, with numbered variations underneath.
+- **LeetCode Patterns** (`/` or `/#practice`, the default): exactly 75 canonical
+  questions. Pattern groups follow the recommended learning order. Every question
+  has context, an example, focused preparation, a full graded task and an explanation.
+- **Learning Hub** (`/#learn`): concise Python teaching, facts, quirks and visuals
+  covering all 15 pattern groups. Old `/#interview` links open the Hub.
+
+After a pass, a six-tap celebration appears inside the editor. Choose Rocket,
+Lightning, Star, Flame or Seedling; the choice is saved on this browser. Keyboard
+Enter/Space works too. There is no speed requirement or charge decay. A short
+launch advances once; reduced-motion mode removes the animation. Back to code
+dismisses it, and the normal Next button/shortcut remains available. Celebration
+taps never change earned practice credit.
+
+Skip sits beside Run. Passing changes Skip into Next; editing requires another
+pass. Warm-ups do not earn parent-question credit. Revealed solutions and corrected
+attempts count as assisted. File tools are shown only for applicable exercises.
+
+The original 216 lesson IDs, previous sample IDs and new curriculum IDs remain
+recognized in browser storage. The underlying inventory now has 221 exercises;
+the visible LeetCode path has 162 parts inside 75 questions. Basics and LeetCode
+share `synlab_python_path_v1` with separate selections. The earlier
+`synlab_progress`/`synlab_code` values and Interview Prep answers are untouched.
+The archived interview source/data lives in `archives/interview-prep/`.
+
+## Build and verify
+
+From the repo root (use npm.cmd on Windows if npm.ps1 is blocked):
+
+```powershell
+npm.cmd run lint --prefix frontend
+node --test frontend/mockups/python-path/tests/*.test.mjs
+node frontend/mockups/python-path/tests/export-content.mjs
+python -B frontend/mockups/python-path/tests/verify_content.py
+python -B frontend/mockups/python-path/tests/verify_alternatives.py
+python -B frontend/mockups/python-path/tests/verify_blind75_practice.py
+python -B frontend/mockups/python-path/tests/verify_hub_examples.py
+node frontend/scripts/build-layout-demos.mjs --sample
+```
+
+The build helper preserves frontend/dist and writes the complete app to
+`.cache/sliding-window-sample`. Serve it with Vite preview on 127.0.0.1:4319,
+using that directory as `--outDir`. The root URL now tests the normal experience;
+`?sample=sliding-window` starts at LC #3. `?layout=flow` remains an explicit comparison.
+
+Browser checks, with that preview running:
+
+```powershell
+node frontend/mockups/python-path/tests/verify-production.mjs
+```
+
+Browser scripts resolve `@playwright/test` normally. If it is not installed,
+install the optional browser-test tooling in frontend with
+`npm install --no-save @playwright/test`, then `npx playwright install chromium`.
+Alternatively set `PLAYWRIGHT_PACKAGE` to an existing installation. Set
+`SAMPLE_BASE_URL` to change the preview URL. The checks use the real built Pyodide worker and
+need access to its CDN. Details and limitations: [curriculum audit](../../../docs/curriculum-audit.md).
+
+## Historical standalone preview
+
+The notes below describe the earlier combined path and recall prototype. Its
+standalone `serve.mjs` entry is retained for development and does not represent
+the normal three-section site. Use the production preview above for review.
 
 A functioning learning workspace using the approved editor layout, now integrated
 into the normal SyntaxLab frontend. The standalone preview below is still

@@ -28,7 +28,7 @@ export default function QuestionList({ questions, selectedQuestionId, onQuestion
   }, {})
 
   return (
-    <Box sx={{ overflowY: 'auto', height: '100%' }}>
+    <Box tabIndex={0} aria-label="Scroll exercise library" sx={{ overflowY: 'auto', height: '100%', p: 1 }}>
       {import.meta.env.DEV && testItem && (
         <ListItemButton
           selected={selectedQuestionId === testItem.id}
@@ -98,10 +98,13 @@ export default function QuestionList({ questions, selectedQuestionId, onQuestion
                   key={question.id}
                   selected={isSelected}
                   onClick={() => onQuestionSelect(question)}
-                  sx={{ borderRadius: 1, mx: 1 }}
+                  aria-current={isSelected ? 'true' : undefined}
+                  sx={{ borderRadius: 1, mx: 0, mb: 0.3, border: '1px solid', borderColor: isSelected ? 'primary.main' : 'transparent', color: isSelected ? 'primary.main' : 'text.secondary', '&.Mui-selected': { bgcolor: theme => theme.palette.mode === 'dark' ? '#98e7c410' : '#24684f10' } }}
                 >
                   <ListItemIcon sx={{ minWidth: 36 }}>
                     <Checkbox
+                      sx={{ pointerEvents: 'none' }}
+                      slotProps={{ input: { 'aria-hidden': true } }}
                       edge="start"
                       checked={isComplete}
                       disableRipple
