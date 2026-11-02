@@ -181,7 +181,7 @@ export default function PracticePreview({ scope = 'all' }) {
   const questionBody = partSelector => <>
     <LessonSection title="Your task" icon={AssignmentOutlinedIcon}>
       {partSelector && <Box sx={{ mb: 1.5, pb: 1.5, borderBottom: '1px solid', borderColor: 'divider' }}>{partSelector}</Box>}
-      <Typography sx={{ fontSize: 14, lineHeight: 1.8, whiteSpace: 'pre-wrap' }}>{taskPrompt}</Typography>
+      <Typography sx={{ fontSize: 14, lineHeight: 1.75, whiteSpace: 'pre-wrap' }}>{taskPrompt}</Typography>
       {exercise.argv && <Typography sx={{ mt: 1, fontFamily: mono, fontSize: 12 }}>python {exercise.entry} {exercise.argv.join(' ')}</Typography>}
       {data.drafts[exercise.id] && data.progress.records[exercise.id]?.successes > 0 && <Typography sx={{ mt: 1, fontSize: 11, color: 'text.secondary' }}>Saved code loaded. Reset for a fresh attempt.</Typography>}
     </LessonSection>
@@ -205,10 +205,10 @@ export default function PracticePreview({ scope = 'all' }) {
     <Dialog open={roundDialog} onClose={() => setRoundDialog(false)}><DialogTitle>Ten more reps done.</DialogTitle><DialogContent>{round.completed} completed this session; {round.independent} passed without help on that visit. Retained status requires evidence across different days, plus different variations where available. Take a break or keep going.</DialogContent><DialogActions><Button onClick={() => setRoundDialog(false)}>Continue practice</Button></DialogActions></Dialog>
     </>
   if (layout !== 'current') {
-    const libraryItems = catalogLessons.map(item => {
+    const libraryItems = catalogLessons.map((item, index) => {
       const track = tracks.find(value => value.id === item.track)
       const unit = track.units.find(value => value.id === item.unit)
-      return { id: item.id, title: leetcode ? `${item.problemId}. ${item.title}` : item.title + (item.variant ? ` (${item.variant + 1})` : ''), optional: compact && item.track === 'scripts', group: compact && item.track === 'scripts' ? `Optional project: ${unit.title}` : leetcode && item.unit === 'P06' ? 'Sliding Window' : unit?.title ?? unit?.name ?? track.title, done: !!data.progress.records[item.id]?.successes }
+      return { id: item.id, title: leetcode ? `${item.problemId}. ${item.title}` : `${compact ? `${index + 1}. ` : ''}${item.title}${item.variant ? ` (${item.variant + 1})` : ''}`, optional: compact && item.track === 'scripts', group: compact && item.track === 'scripts' ? `Optional project: ${unit.title}` : leetcode && item.unit === 'P06' ? 'Sliding Window' : unit?.title ?? unit?.name ?? track.title, done: !!data.progress.records[item.id]?.successes }
     })
     const selectedListId = exercise.libraryId ?? exercise.id
     return <>
@@ -217,7 +217,7 @@ export default function PracticePreview({ scope = 'all' }) {
         libraryFraction={45}
         library={<StudyLibrary learningOrder={leetcode} key={exercise.unit} items={libraryItems} selectedId={selectedListId} choose={id => openCatalogExercise(catalogLessons.find(item => item.id === id))} disabled={busy} />}
         prompt={<Box ref={promptRef} sx={{ p: layout === 'island' ? 2 : 0 }}>
-          {leetcode ? <QuestionBreakdown exercise={exercise} lessons={questionParts} choose={choose} disabled={busy} layout={partsLayout} pattern={exercise.unit === 'P06' ? 'Sliding Window' : tracks.find(track => track.id === exercise.track)?.units.find(unit => unit.id === exercise.unit)?.title ?? 'Python patterns'}>{questionBody}</QuestionBreakdown> : compact ? <BasicsBreakdown exercise={exercise} lessons={lessons} topic={tracks.find(track => track.id === exercise.track)?.units.find(unit => unit.id === exercise.unit)?.title ?? 'Python practice'} choose={choose} disabled={busy} controls={<Button size="small" disabled={busy} aria-label="Change practice order" onClick={() => setOrder(value => value === 'ordered' ? 'mixed' : 'ordered')}>{order === 'ordered' ? 'In order' : 'Mixed: current unit'}</Button>}>{questionBody}</BasicsBreakdown> : <>
+          {leetcode ? <QuestionBreakdown exercise={exercise} lessons={questionParts} choose={choose} disabled={busy} layout={partsLayout} pattern={exercise.unit === 'P06' ? 'Sliding Window' : tracks.find(track => track.id === exercise.track)?.units.find(unit => unit.id === exercise.unit)?.title ?? 'Python patterns'}>{questionBody}</QuestionBreakdown> : compact ? <BasicsBreakdown exercise={exercise} questionNumber={catalogLessons.findIndex(item => item.id === exercise.id) + 1} lessons={lessons} topic={tracks.find(track => track.id === exercise.track)?.units.find(unit => unit.id === exercise.unit)?.title ?? 'Python practice'} choose={choose} disabled={busy} controls={<Button size="small" disabled={busy} aria-label="Change practice order" onClick={() => setOrder(value => value === 'ordered' ? 'mixed' : 'ordered')}>{order === 'ordered' ? 'In order' : 'Mixed: current unit'}</Button>}>{questionBody}</BasicsBreakdown> : <>
             <Typography component="h1" sx={{ fontSize: 24, fontWeight: 650 }}>{exercise.title}</Typography>
             {compact && <Button size="small" disabled={busy} onClick={() => setOrder(value => value === 'ordered' ? 'mixed' : 'ordered')}>{order === 'ordered' ? 'In order' : 'Mixed: current unit'}</Button>}
             {questionBody()}

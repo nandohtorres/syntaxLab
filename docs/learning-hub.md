@@ -1,5 +1,8 @@
 # Learning Hub
 
+Shipped October 29, 2026, through PR #15. See [release status](release-status.md)
+for current deployment evidence and subsequent changes.
+
 Local preview: `http://127.0.0.1:4319/?sample=sliding-window#learn`.
 Normal site route: `/#learn`. Older `/#interview` links resolve to this tab.
 
@@ -50,4 +53,5 @@ snapshot integrity. The example verifier executes all 25 snippets and compares
 actual/displayed output. Browser checks cover all selections, the interactive
 window, mobile overflow, themes, old links, preserved practice/interview storage,
 and cold loading without coding downloads. Frontend lint and the isolated sample
-production build pass. Nothing was pushed or deployed.
+production build passed in the original local verification. The workspace was
+subsequently published through the October 29 production release.

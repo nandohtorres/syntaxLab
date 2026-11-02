@@ -1,25 +1,19 @@
 import { createContext, useContext, useState, useMemo } from 'react'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
+import { activeDarkTheme, darkPreview, previewPalette } from '@/utils/darkPreview'
 
 const ThemeContext = createContext(null)
 
 export function ThemeContextProvider({ children }) {
-  const [themeMode, setThemeMode] = useState('light')
+  const [themeMode, setThemeMode] = useState(darkPreview ? 'dark' : 'light')
 
   function toggleThemeMode() {
     setThemeMode(previousMode => previousMode === 'dark' ? 'light' : 'dark')
   }
 
   const muiTheme = useMemo(() => {
-    const darkPalette = {
-      mode: 'dark',
-      primary: { main: '#98e7c4', contrastText: '#0c251b' },
-      secondary: { main: '#98e7c4' },
-      background: { default: '#0c111b', paper: '#111925' },
-      text: { primary: '#edf1f7', secondary: '#8d9bb0' },
-      divider: '#253042',
-    }
+    const darkPalette = previewPalette
 
     const lightPalette = {
       mode: 'light',
@@ -30,8 +24,8 @@ export function ThemeContextProvider({ children }) {
     }
 
     const dark = themeMode === 'dark'
-    const track = dark ? '#111925' : '#f5f8f6'
-    const thumb = dark ? '#526b61' : '#a3b8ac'
+    const track = dark ? darkPalette.background.paper : '#f5f8f6'
+    const thumb = dark ? activeDarkTheme.divider : '#a3b8ac'
     return createTheme({
       palette: dark ? darkPalette : lightPalette,
       typography: {
@@ -46,7 +40,7 @@ export function ThemeContextProvider({ children }) {
           '*::-webkit-scrollbar': { width: 8, height: 8 },
           '*::-webkit-scrollbar-track': { background: track, borderRadius: 8 },
           '*::-webkit-scrollbar-thumb': { background: thumb, borderRadius: 8, border: `2px solid ${track}` },
-          '*::-webkit-scrollbar-thumb:hover': { background: dark ? '#7c9e8b' : '#6e9180' },
+          '*::-webkit-scrollbar-thumb:hover': { background: dark ? activeDarkTheme.primary : '#6e9180' },
           '*::-webkit-scrollbar-corner': { background: track },
         } },
       },

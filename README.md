@@ -1,7 +1,8 @@
 # SyntaxLab
 
-An online IDE for learning Python syntax through simple, practical exercises.
-Designed for beginners who want to learn idiomatic Python fast.
+A browser-based Python learning workspace with syntax drills, guided Blind 75
+practice and a visual reference library. Write and run Python locally in your
+browser; progress stays on your device without an account.
 
 🌐 **Live Demo:** [syntaxlab.work](https://syntaxlab.work)
 
@@ -19,6 +20,10 @@ Designed for beginners who want to learn idiomatic Python fast.
 ---
 
 ## Screenshots
+
+These screenshots show the current three-tab workspace in light and Graphite dark
+themes. Open [the live app](https://syntaxlab.work) to try the released workspace;
+see [release status](docs/release-status.md) for the latest deployment checkpoint.
 
 | Dark Mode | Light Mode |
 |---|---|
@@ -51,8 +56,26 @@ a future separate site. Existing browser recall data is preserved; old
 `/#interview` links open Learning Hub. See the [Hub guide](docs/learning-hub.md),
 [study plan and release handoff](docs/study-workflow-plan.md),
 [printable reference](docs/interview-reference.md) and
-[workspace guide](frontend/mockups/python-path/README.md). These local changes
-require review and publication before they describe the live site.
+[workspace guide](frontend/mockups/python-path/README.md).
+
+## Release status
+
+The three-section learning workspace shipped on **October 29, 2026**, through
+[release PR #15](https://github.com/nandohtorres/syntaxLab/pull/15), at
+`36fb85f854c673fbc4880d349fbbc077f33ab8ea`.
+Both frontend and backend jobs in the
+[production workflow](https://github.com/nandohtorres/syntaxLab/actions/runs/40928579943)
+passed. The frontend is hosted on Vercel and the API on Railway.
+
+Direct links: [Python Basics](https://syntaxlab.work/#python),
+[LeetCode Patterns](https://syntaxlab.work/#practice),
+[Learning Hub](https://syntaxlab.work/#learn).
+[Vercel alternative](https://syntaxlab-lake.vercel.app).
+
+The November 2 release adds Graphite as the normal dark palette, clearer folder tabs,
+sequential Basics numbering and consistent task cards. Light remains the initial
+default. See [current deployment and readiness](docs/release-status.md) for the
+verification record, limitations and release progress.
 
 The earlier 30-question practice implementation remains in source for reference;
 its storage is preserved. The following list describes that historical version:
@@ -91,7 +114,7 @@ its storage is preserved. The following list describes that historical version:
 ## Local Setup
 
 ### Prerequisites
-- Node.js 18+
+- Node.js 20.19+ or 22.12+ (Vite 7 requirement)
 - Java 21
 - Maven (or use the included `./mvnw` wrapper)
 
@@ -111,7 +134,7 @@ Backend runs at `http://localhost:8080`. Wait for `Started SynlabApplication` be
 ### 3. Run the frontend
 ```bash
 cd frontend
-npm install
+npm ci
 npm run dev
 ```
 Frontend runs at `http://localhost:3000`
