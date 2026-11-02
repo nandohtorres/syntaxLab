@@ -1,7 +1,8 @@
 # Curriculum review and release handoff
 
-Reviewed locally on 2026-10-28. This describes the pending source changes, not
-the currently published website. Nothing was pushed or deployed.
+Reviewed locally on 2026-10-28. This curriculum shipped on October 29 through
+PR #15. See [release status](release-status.md) for the verified deployment and
+the newer Graphite update. The results below record the original local audit.
 
 ## Result
 
@@ -107,10 +108,10 @@ Reproducible commands and browser prerequisites are in the
 
 ## Publication boundary and limits
 
-Review the refreshed local demo at http://127.0.0.1:4319/ before publishing.
-Publishing remains a separate owner-authorized step; this session does not push,
-deploy or modify the hosted site. Existing local/deployed browser origins have
-separate progress; no automatic cross-device transfer is claimed.
+The audited workspace shipped October 29. New visual changes are reviewed at
+http://127.0.0.1:4319/ and released through develop/main with deployment checks.
+Existing local/deployed browser origins have separate progress; no automatic
+cross-device transfer is claimed. See [release status](release-status.md).
 
 These are authored learning checks, not the full LeetCode judge or proof of an
 optimal algorithm. No stress/performance certification or complete accessibility

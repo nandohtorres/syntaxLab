@@ -1,5 +1,10 @@
 # SyntaxLab study workspace
 
+The three-section workspace shipped October 29, 2026. The November 2 update adds
+Graphite as the normal dark palette, clearer dark folder tabs, sequential Basics
+numbers and consistent task-card typography. Light remains the initial default.
+See [release status](../../../docs/release-status.md) for deployment evidence.
+
 The normal site uses the approved island layout and three folder tabs:
 
 - **Python Basics** (`/#python`): 98 core drills plus six optional projects.
@@ -53,6 +58,9 @@ Browser checks, with that preview running:
 ```powershell
 node frontend/mockups/python-path/tests/verify-production.mjs
 ```
+
+The browser suite includes normal-entry light/Graphite switching, the shared
+editor palette, tab styling and all three sections on a phone-width viewport.
 
 Browser scripts resolve `@playwright/test` normally. If it is not installed,
 install the optional browser-test tooling in frontend with

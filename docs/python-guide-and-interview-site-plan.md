@@ -1,6 +1,6 @@
-﻿# Learning Hub and separate Interview Prep site
+# Learning Hub and separate Interview Prep site
 
-Status: Learning Hub implemented locally on 2026-10-27; not deployed.
+Status (2026-11-02): Learning Hub shipped on October 29 through PR #15. See [release status](release-status.md). The separate Interview Prep site remains unbuilt.
 
 The tabs are Python Basics, LeetCode Patterns and Learning Hub. The first two
 remain coding practice. Learning Hub is a reading companion, with concise
