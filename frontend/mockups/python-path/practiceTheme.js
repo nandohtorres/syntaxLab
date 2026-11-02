@@ -1,4 +1,5 @@
 import { createTheme } from '@mui/material/styles'
+import { previewPalette } from '../../src/utils/darkPreview.js'
 
 // Preserve the reviewed workspace appearance inside the existing site.
 export const lightPracticeTheme = createTheme({
@@ -9,13 +10,7 @@ export const lightPracticeTheme = createTheme({
 })
 
 export default createTheme({
-  palette: {
-    mode: 'dark',
-    primary: { main: '#98e7c4', contrastText: '#0c251b' },
-    background: { default: '#0c111b', paper: '#111925' },
-    text: { primary: '#edf1f7', secondary: '#8d9bb0' },
-    divider: '#253042',
-  },
+  palette: previewPalette,
   typography: {
     fontFamily: '"Segoe UI", Inter, system-ui, sans-serif',
     button: { textTransform: 'none', fontWeight: 650 },

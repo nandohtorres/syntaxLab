@@ -38,7 +38,7 @@ export default function SitePage() {
   }
   const content = { practice: OriginalPractice, python: PythonPath, learn: LearningHub }
   return <StudyLayoutContext.Provider value={layout}>
-    <Box data-layout-demo={layout} sx={{ minHeight: '100dvh', p: { xs: 1.5, md: framed ? 2.5 : 3 }, background: theme => framed ? (theme.palette.mode === 'dark' ? 'radial-gradient(ellipse at 15% 0%, #173230 0%, #0a1019 65%)' : 'radial-gradient(ellipse at 15% 0%, #d9eee5 0%, #f0f4fa 65%)') : theme.palette.background.default, ...(bounded && { [desktop]: { height: '100dvh', display: 'flex', flexDirection: 'column', overflow: 'hidden' } }) }}>
+    <Box data-layout-demo={layout} sx={{ minHeight: '100dvh', p: { xs: 1.5, md: framed ? 2.5 : 3 }, background: theme => framed ? (theme.palette.mode === 'dark' ? theme.palette.background.glow ? `radial-gradient(ellipse at 15% 0%, ${theme.palette.background.glow} 0%, ${theme.palette.background.default} 75%)` : 'radial-gradient(ellipse at 15% 0%, #173230 0%, #0a1019 65%)' : 'radial-gradient(ellipse at 15% 0%, #d9eee5 0%, #f0f4fa 65%)') : theme.palette.background.default, ...(bounded && { [desktop]: { height: '100dvh', display: 'flex', flexDirection: 'column', overflow: 'hidden' } }) }}>
       {demo && !sample && <Stack component="nav" aria-label="Layout comparison" direction="row" sx={{ width: '100%', maxWidth: 1560, mx: 'auto', mb: 1.5, gap: 1, alignItems: 'center', flexShrink: 0, flexWrap: 'wrap' }}>
         <Typography sx={{ color: 'text.secondary', fontSize: 11, mr: 'auto' }}>Layout preview</Typography>
         <Button component="a" href={demoLink('island')} size="small" variant={layout === 'island' ? 'contained' : 'text'} aria-pressed={layout === 'island'}>A - Floating island</Button>

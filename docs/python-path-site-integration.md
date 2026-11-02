@@ -1,9 +1,10 @@
 # Python Path and Interview prep: site integration
 
-Current status (2026-10-28): see [the completed curriculum review](curriculum-audit.md).
-The notes below preserve the earlier plan or sample review; counts and pending
-items describe that stage. The approved island and all 75 guided questions are
-now available on the normal local route. Nothing has been published.
+Current status (2026-11-02): the three-section workspace shipped on October 29
+through PR #15. See [release status](release-status.md) for deployment evidence
+and the Graphite update, and [curriculum review](curriculum-audit.md)
+for content checks. The notes below are historical; their counts and statements
+about unpublished work describe that earlier stage.
 
 Historical integration record, 2026-10-20. The current three-section redesign is
 described in [study-workflow-plan.md](study-workflow-plan.md). It separates Basics
