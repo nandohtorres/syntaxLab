@@ -1,7 +1,7 @@
 # SyntaxLab release status
 
-Updated November 2, 2026. This page records the original workspace deployment
-and the Graphite release. Older planning documents retain their historical notes.
+Updated November 3, 2026. This page records the original workspace deployment,
+the Graphite release and the link preview release. Older planning documents retain their historical notes.
 
 ## Public release
 
@@ -44,6 +44,20 @@ With the local sample preview running on port 4319:
 Graphite also works through the normal dark toggle without query parameters.
 The [workspace guide](../frontend/mockups/python-path/README.md) contains build
 and verification commands, including the normal-entry theme regression.
+
+## Link preview release, November 3
+
+Adds Open Graph and Twitter card tags plus a 2400x1260 preview image, so links
+shared on LinkedIn and other sites show a title, description and image. The
+image was re-rendered at a higher resolution the same day after the first
+version looked blurry. No app behavior, exercise IDs or stored progress keys change.
+
+- Merged through [PR #18](https://github.com/nandohtorres/syntaxLab/pull/18) and
+  [PR #20](https://github.com/nandohtorres/syntaxLab/pull/20), released by
+  [PR #19](https://github.com/nandohtorres/syntaxLab/pull/19) and
+  [PR #21](https://github.com/nandohtorres/syntaxLab/pull/21).
+- [Production workflow](https://github.com/nandohtorres/syntaxLab/actions/runs/41689712881)
+  for `52285241f250a64028f2842ffada89276be43b57`: both jobs succeeded.
 
 ## Verification and practical limits
 
