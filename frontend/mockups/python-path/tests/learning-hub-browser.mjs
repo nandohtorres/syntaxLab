@@ -97,7 +97,7 @@ try {
   // Reading the guide must not replace practice drafts owned by the shared store.
   await page.getByRole('tab', { name: 'Python Basics', exact: true }).click()
   const basics = page.locator('#site-panel-python')
-  await basics.locator('.monaco-editor').waitFor({ timeout: 65000 })
+  await basics.locator('.cm-editor').waitFor({ timeout: 65000 })
   assert.equal(await basics.getByRole('heading', { name: 'Python Basics', exact: true }).count(), 0)
   assert.equal(await basics.getByText(/this session|Ctrl\/Cmd/).count(), 0)
   const questionList = basics.getByRole('region', { name: 'Full questions list', exact: true })
@@ -106,9 +106,9 @@ try {
   assert.equal(await basics.getByText(/grouped by respective pattern/).count(), 0)
   await page.getByRole('tab', { name: 'LeetCode Patterns', exact: true }).click()
   const practice = page.locator('#site-panel-practice')
-  await practice.locator('.monaco-editor').waitFor({ timeout: 65000 })
+  await practice.locator('.cm-editor').waitFor({ timeout: 65000 })
   const code = 'def add_character(counts, char):\n    # preserved draft\n    pass'
-  await practice.locator('.monaco-editor').click()
+  await practice.locator('.cm-editor').click()
   await page.keyboard.press('ControlOrMeta+A')
   await page.evaluate(value => navigator.clipboard.writeText(value), code)
   await page.keyboard.press('ControlOrMeta+V')

@@ -1,6 +1,7 @@
 import { useId, useLayoutEffect, useRef, useState } from 'react'
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Typography } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { insetScrollArea } from './layoutContext.js'
 
 export default function StudyLibrary({ items, selectedId, choose, disabled = false, learningOrder = false }) {
   const core = items.filter(item => !item.optional)
@@ -21,7 +22,7 @@ export default function StudyLibrary({ items, selectedId, choose, disabled = fal
       {optional.length > 0 && <Typography sx={{ fontSize: 11, color: 'text.secondary', mt: 0.5 }}>Optional projects: {optional.filter(item => item.done).length}/{optional.length}</Typography>}
       {learningOrder && <Typography sx={{ fontSize: 11, color: 'text.secondary', mt: 0.5 }}>Recommended learning order · foundations to advanced patterns</Typography>}
     </Box>
-    <Box ref={navRef} component="nav" aria-label="Question patterns" tabIndex={0} sx={{ flex: 1, minHeight: 0, overflow: 'auto', scrollbarGutter: 'stable', p: 1 }}>
+    <Box ref={navRef} component="nav" aria-label="Question patterns" tabIndex={0} sx={{ ...insetScrollArea, flex: 1, minHeight: 0, p: 1 }}>
       {groups.map((group, index) => <Accordion key={group} expanded={expanded === group} onChange={(_, open) => setExpanded(open ? group : false)} disableGutters elevation={0} sx={{ bgcolor: 'transparent', '&:before': { display: 'none' }, borderBottom: '1px solid', borderColor: 'divider' }}>
         <AccordionSummary expandIcon={<ExpandMoreIcon fontSize="small" />} id={`${instanceId}-pattern-${index}-heading`} aria-controls={`${instanceId}-pattern-${index}-questions`} sx={{ minHeight: 42, px: 1, '& .MuiAccordionSummary-content': { my: 1 } }}>
           <Typography sx={{ fontSize: 12, fontWeight: 650, flex: 1 }}>{group}</Typography><Typography sx={{ fontSize: 11, color: 'text.secondary', mr: 1 }}>{items.filter(item => item.group === group).length}</Typography>

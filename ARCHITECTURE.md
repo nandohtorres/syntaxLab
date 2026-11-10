@@ -17,7 +17,7 @@ flowchart LR
     UI --> Basics[Python Basics]
     UI --> Patterns[LeetCode Patterns]
     UI --> Hub[Learning Hub]
-    Basics --> Editor[Monaco editor]
+    Basics --> Editor[CodeSurface: CodeMirror 6]
     Patterns --> Editor
     Editor --> Worker[Web Worker / Pyodide]
     Worker --> CDN[Pyodide CDN on first coding load]
@@ -52,9 +52,21 @@ these modules are imported by the normal production application through the
 `@practice` alias. `archives/interview-prep/` preserves the older authored content
 and manifest; it is not a separate deployed product.
 
+The header's **Rapid fire** button opens `RapidFireMode.jsx` as a large focus
+window over the dimmed site (Esc or Exit closes it). It runs timed reps from
+`content/rapidFire.js`: 20 concepts, three reps each, grouped into three levels
+plus a 60-rep full run. Every rep is added to one growing program and checked
+through the same worker runner; later levels start from the earlier levels'
+program. Data bubbles show each variable's value from authored `data` fields,
+which content checks verify against real Python; each rep also shows a one-line
+Python tip about the syntax it practices. The clock can be paused or
+hidden. Finished times per level stay in this browser under `synlab_rapid_fire_v1`.
+On phones the typing area moves into the same code drawer the practice pages use
+(below), with symbol keys and a visible Submit button.
+
 ## Running and grading Python
 
-Monaco supplies editor text and virtual files. `usePracticeRunner.js` sends the
+`CodeSurface.jsx` (CodeMirror 6) supplies editor text and virtual files. `usePracticeRunner.js` sends the
 exercise/files to `python.worker.js`; Pyodide evaluates them using `runner.py`.
 Results return by message and update the visible feedback/progress. Startup is
 bounded at 45 seconds and a run at five seconds. Stop terminates and recreates
@@ -63,12 +75,50 @@ the worker while preserving the draft. Request identities reject stale results.
 Authored tests establish the exercise contract; they are not the complete
 LeetCode judge, proof of optimal complexity, or a general security sandbox audit.
 The backend has no Python execution endpoint. Initial coding use requires a CDN
-download, and the large Monaco bundle remains a first-load limitation.
+download for Pyodide.
 
-The editor theme is shared across mounted editor instances. The site starts in
-light mode. The Graphite release uses Graphite for normal dark mode; explicit palette
-query parameters retain earlier color comparisons. Editor and site theme controls
-remain independent.
+## Editor and phone layout
+
+Every live editor goes through one wrapper, `CodeSurface.jsx`, built on CodeMirror 6
+([ADR 0001](docs/decisions/0001-codemirror-editor.md)). Pages never import an editor
+library directly, so the editor can change again without touching them. It provides:
+
+- Python highlighting
+- built-in names colored like keywords (`pythonBuiltins.js`)
+- Monaco-style indent guides
+- 4-space indent and auto-indent after a colon
+- page-specific key bindings
+- an `insertText` handle for the symbol keys
+
+Colors come from the one `editorPalette` in `editorSupport.js`. Moving from Monaco
+cut the largest production JS chunk from about 3.7 MB to about 0.5 MB.
+
+Themes are per editor instance. One shared dark/light preference
+(`editorThemeStore.js`) keeps the mounted practice editors matching their toolbar.
+Rapid Fire's editor is always dark. The site starts in light mode; Graphite is the
+normal dark mode, and explicit palette query parameters keep earlier color
+comparisons. Editor and site theme controls stay independent.
+
+Under 900px wide (`PHONE_LAYOUT_QUERY`), `StudyWorkspace` renders
+`PhoneStudyWorkspace`:
+
+- **The page:** the question reads as a normal page.
+- **Questions:** the list opens from a **Questions** button.
+- **The drawer:** the editor, feedback and footer sit in `CodeDrawer`.
+  - Drag the handle to any height between a peek bar and 90% of the visible
+    screen. Tapping the handle folds or reopens it.
+  - **Lock** freezes the height.
+  - **Reset** restores the default height and unlocks it.
+  - It follows the visual viewport, so it stays above the phone keyboard and
+    browser bars.
+- **Symbol keys:** `SymbolKeys.jsx` inserts the symbols phone keyboards hide.
+
+Drawer height and lock state are kept per browser in `synlab_code_drawer_v1` for
+practice and `synlab_rapid_fire_drawer_v1` for Rapid Fire. Desktop layouts are
+unchanged. The retained legacy `MainPage` / `CodeEditor.jsx`, the archived interview
+practice and the `RedesignDraft` mockup still use Monaco and are not routed in the
+live app. The rollout record is the
+[mobile code drawer plan](docs/mobile-code-drawer-plan.md).
 
 ## Persistence and completion
 

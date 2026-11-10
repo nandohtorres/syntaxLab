@@ -35,7 +35,7 @@ try {
   writeFileSync(new URL('../.cache/browser-content-report.json', import.meta.url), JSON.stringify(outcomes, null, 2))
   assert.deepEqual(outcomes.filter(item => !item.passed), [], 'All reference solutions must pass real Pyodide')
   async function write(code) {
-    await page.locator('.monaco-editor').first().click()
+    await page.locator('.cm-editor').first().click()
     await page.keyboard.press('ControlOrMeta+A')
     await page.evaluate(value => navigator.clipboard.writeText(value), code)
     await page.keyboard.press('ControlOrMeta+V')
