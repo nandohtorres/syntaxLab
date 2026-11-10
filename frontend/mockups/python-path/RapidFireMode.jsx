@@ -19,6 +19,11 @@ import RapidFireTimer from './RapidFireTimer.jsx'
 import { FULL_RUN_ID, RAPID_FIRE_LEVELS, RAPID_FIRE_STORAGE_KEY, elapsedMs, formatDuration, valueType } from './content/rapidFire.js'
 
 const EDITOR_LINE_HEIGHT = 27
+// Typed text lines up with the "Type this" example: its 16px padding = the editor's 2px border + 14px inset,
+// and 11px top padding plus CodeMirror's 4px content padding lands on the example's first line.
+const EDITOR_BORDER = 2
+const EXAMPLE_PADDING_X = 16
+const EDITOR_PADDING_TOP = 11
 const SAVED_RUN_LIMIT = 100
 const FRESH_HIGHLIGHT_MS = 900
 const IDLE_CLOCK = { startedAt: null, finishedAt: null, pausedAt: null, pausedMs: 0 }
@@ -229,13 +234,13 @@ export default function RapidFireMode({ onExit }) {
     return <>
       {inDrawer && <SymbolKeys onInsert={text => editorRef.current?.insertText(text)} />}
       <Box sx={{
-        border: '2px solid', borderColor: editorBorder, borderRadius: 2, overflow: 'hidden', transition: 'border-color 0.15s', flexShrink: 0,
+        border: `${EDITOR_BORDER}px solid`, borderColor: editorBorder, borderRadius: 2, overflow: 'hidden', transition: 'border-color 0.15s', flexShrink: 0,
         ...(inDrawer ? { flex: 1, minHeight: EDITOR_LINE_HEIGHT * 2 + 24, mx: 1 } : { height: Math.max(1, lineCount(step.code)) * EDITOR_LINE_HEIGHT + 24 }),
         animation: feedback?.kind === 'error' ? 'rapidShake 0.35s ease' : 'none',
         '@keyframes rapidShake': { '0%, 100%': { transform: 'translateX(0)' }, '25%': { transform: 'translateX(-6px)' }, '50%': { transform: 'translateX(6px)' }, '75%': { transform: 'translateX(-3px)' } },
       }}>
         <CodeSurface key={`${attempt}-${stepIndex}`} ref={editorRef} onChange={startClock} keyBindings={keyBindings} autoFocus
-          mode="dark" ariaLabel="Type the example here" lineNumbers={false} highlightActiveLine={false} lineHeight={EDITOR_LINE_HEIGHT} paddingTop={12} />
+          mode="dark" ariaLabel="Type the example here" lineNumbers={false} highlightActiveLine={false} lineHeight={EDITOR_LINE_HEIGHT} paddingTop={EDITOR_PADDING_TOP} textInset={EXAMPLE_PADDING_X - EDITOR_BORDER} />
       </Box>
       <Stack direction="row" sx={{ alignItems: 'center', gap: 2, minHeight: 24, ...(inDrawer && { px: 1.5, py: 1, flexWrap: 'wrap' }) }}>
         <Typography aria-live="polite" sx={{ fontSize: 14, color: 'error.main', fontFamily: mono }}>
@@ -334,7 +339,7 @@ export default function RapidFireMode({ onExit }) {
           </Box>
           <Box>
             <Typography sx={sectionLabel}>Type this</Typography>
-            <Box component="pre" aria-label="Example to type" sx={{ ...panel, m: 0, px: 2, py: 1.5, fontFamily: mono, fontSize: 16, lineHeight: `${EDITOR_LINE_HEIGHT}px`, color: 'text.secondary', overflowX: 'auto', whiteSpace: 'pre' }}>{step.code}</Box>
+            <Box component="pre" aria-label="Example to type" sx={{ ...panel, m: 0, px: `${EXAMPLE_PADDING_X}px`, py: 1.5, fontFamily: mono, fontSize: 16, lineHeight: `${EDITOR_LINE_HEIGHT}px`, color: 'text.secondary', overflowX: 'auto', whiteSpace: 'pre' }}>{step.code}</Box>
           </Box>
           {!phone && renderTypingArea(false)}
         </>}
