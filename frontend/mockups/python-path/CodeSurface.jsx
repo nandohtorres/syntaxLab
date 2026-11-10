@@ -13,7 +13,7 @@ import { pythonBuiltins } from './pythonBuiltins.js'
 // The one editor seam (ADR 0001): pages talk to CodeSurface, never to an editor library.
 const TAB_SIZE = 4
 
-function surfaceTheme(colors, { dark, fontSize, lineHeight, paddingTop }) {
+function surfaceTheme(colors, { dark, fontSize, lineHeight, paddingTop, textInset }) {
   return [
     EditorView.theme({
       '&': { height: '100%', color: colors.foreground, backgroundColor: colors.background, fontSize: `${fontSize}px` },
@@ -28,6 +28,8 @@ function surfaceTheme(colors, { dark, fontSize, lineHeight, paddingTop }) {
       '.cm-activeLineGutter': { backgroundColor: 'transparent', color: colors.foreground },
       '.cm-lineNumbers .cm-gutterElement': { padding: '0 12px 0 16px', minWidth: '2ch' },
       '.cm-builtin': { color: colors.keyword },
+      // Optional left inset for the text, so it can line up with an example shown above the editor.
+      ...(textInset !== undefined && { '.cm-line': { paddingLeft: `${textInset}px` } }),
     }, { dark }),
     syntaxHighlighting(HighlightStyle.define([
       { tag: tags.comment, color: colors.comment, fontStyle: 'italic' },
@@ -54,7 +56,7 @@ const languageFor = name => name === 'python' ? [python(), pythonBuiltins] : []
 export default function CodeSurface({
   ref, value, onChange, language = 'python', mode = 'dark', readOnly = false, ariaLabel = 'Python code editor',
   keyBindings = NO_KEY_BINDINGS, lineNumbers = true, highlightActiveLine = true, autoFocus = false,
-  fontSize = 16, lineHeight = 27, paddingTop = 15,
+  fontSize = 16, lineHeight = 27, paddingTop = 15, textInset,
 }) {
   const editorRef = useRef(null)
   // A stable change handler: the CodeMirror wrapper reconfigures every extension when onChange's identity changes.
@@ -80,8 +82,8 @@ export default function CodeSurface({
     keymap.of([indentWithTab, { key: 'Escape', run: leaveEditor }]),
     // Phones: no autocorrect, autocapitalize or spellcheck inside code.
     EditorView.contentAttributes.of({ 'aria-label': ariaLabel, autocapitalize: 'off', autocorrect: 'off', spellcheck: 'false' }),
-    surfaceTheme(editorPalette[mode], { dark: mode === 'dark', fontSize, lineHeight, paddingTop }),
-  ], [language, keyBindings, ariaLabel, mode, fontSize, lineHeight, paddingTop])
+    surfaceTheme(editorPalette[mode], { dark: mode === 'dark', fontSize, lineHeight, paddingTop, textInset }),
+  ], [language, keyBindings, ariaLabel, mode, fontSize, lineHeight, paddingTop, textInset])
 
   const basicSetup = useMemo(() => ({
     lineNumbers, highlightActiveLine, highlightActiveLineGutter: highlightActiveLine, foldGutter: false,
