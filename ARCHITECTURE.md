@@ -59,7 +59,9 @@ plus a 60-rep full run. Every rep is added to one growing program and checked
 through the same worker runner; later levels start from the earlier levels'
 program. Data bubbles show each variable's value from authored `data` fields,
 which content checks verify against real Python; each rep also shows a one-line
-Python tip about the syntax it practices. The clock can be paused or
+Python tip about the syntax it practices. Questions mark code with backticks, which render as code chips
+(`RapidFireTask.jsx`), so variable names never read as English words. Data
+bubbles sit in one column per value type, newest first (`RapidFireDataBank.jsx`). The clock can be paused or
 hidden. Finished times per level stay in this browser under `synlab_rapid_fire_v1`.
 On phones the typing area moves into the same code drawer the practice pages use
 (below), with symbol keys and a visible Submit button.

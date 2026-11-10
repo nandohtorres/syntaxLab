@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Box, Button, IconButton, LinearProgress, Stack, ToggleButton, ToggleButtonGroup, Tooltip, Typography, useMediaQuery } from '@mui/material'
-import { alpha } from '@mui/material/styles'
 import CloseIcon from '@mui/icons-material/Close'
 import LightbulbOutlinedIcon from '@mui/icons-material/LightbulbOutlined'
 import PauseIcon from '@mui/icons-material/Pause'
@@ -16,7 +15,9 @@ import { PHONE_LAYOUT_QUERY } from './layoutContext.js'
 import { mono } from './editorSupport.js'
 import usePracticeRunner from './usePracticeRunner.js'
 import RapidFireTimer from './RapidFireTimer.jsx'
-import { FULL_RUN_ID, RAPID_FIRE_LEVELS, RAPID_FIRE_STORAGE_KEY, elapsedMs, formatDuration, valueType } from './content/rapidFire.js'
+import RapidFireTask from './RapidFireTask.jsx'
+import RapidFireDataBank from './RapidFireDataBank.jsx'
+import { FULL_RUN_ID, RAPID_FIRE_LEVELS, RAPID_FIRE_STORAGE_KEY, elapsedMs, formatDuration } from './content/rapidFire.js'
 
 const EDITOR_LINE_HEIGHT = 27
 // Typed text lines up with the "Type this" example: its 16px padding = the editor's 2px border + 14px inset,
@@ -69,23 +70,6 @@ function readableFailure(message, step, linesBefore) {
   return withoutLabel
     .replace(/main\.py, /g, '')
     .replace(/\bline (\d+)/g, (_, line) => `line ${Math.max(1, Number(line) - linesBefore)}`)
-}
-
-function DataBubble({ name, value, fresh }) {
-  const isFunction = valueType(value) === 'function'
-  return <Box component="span" sx={theme => ({
-    display: 'inline-flex', alignItems: 'baseline', gap: 0.75, px: 1.5, py: 0.5, borderRadius: 999, fontFamily: mono, fontSize: 14,
-    border: '1px solid', borderColor: fresh ? 'primary.main' : 'transparent',
-    bgcolor: alpha(theme.palette.primary.main, fresh ? 0.28 : theme.palette.mode === 'dark' ? 0.16 : 0.11),
-    transition: 'background-color 0.6s, border-color 0.6s',
-  })}>
-    {isFunction ? <Box component="span" sx={{ fontWeight: 700 }}>{value}</Box> : <>
-      <Box component="span" sx={{ fontWeight: 700 }}>{name}</Box>
-      <Box component="span" sx={{ color: 'primary.main', fontWeight: 700 }}>=</Box>
-      <Box component="span">{value}</Box>
-    </>}
-    <Box component="span" sx={{ fontFamily: 'inherit', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'text.secondary' }}>{valueType(value)}</Box>
-  </Box>
 }
 
 export default function RapidFireMode({ onExit }) {
@@ -326,7 +310,7 @@ export default function RapidFireMode({ onExit }) {
         </Box> : <>
           <Box>
             <Typography sx={{ fontSize: 12, color: 'text.secondary', mb: 0.5 }}>{step.concept} · rep {step.rep} of {step.repCount}</Typography>
-            <Typography component="h2" sx={{ fontSize: { xs: 22, md: 28 }, fontWeight: 700, letterSpacing: '-0.5px', textWrap: 'balance' }}>{step.task}</Typography>
+            <Typography component="h2" sx={{ fontSize: { xs: 22, md: 28 }, fontWeight: 700, letterSpacing: '-0.5px', textWrap: 'balance' }}><RapidFireTask text={step.task} /></Typography>
             {step.tip && <Box sx={{ mt: 1 }}>
               <Stack direction="row" sx={{ alignItems: 'center', gap: 0.75 }}>
                 <LightbulbOutlinedIcon aria-hidden="true" sx={{ fontSize: 18, color: 'warning.main' }} />
@@ -345,11 +329,7 @@ export default function RapidFireMode({ onExit }) {
         </>}
         <Box>
           <Typography sx={sectionLabel}>Your data</Typography>
-          <Box aria-label="Variables so far" sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, maxHeight: 220, overflowY: 'auto' }}>
-            {bubbles.length
-              ? bubbles.map(([name, value]) => <DataBubble key={name} name={name} value={value} fresh={freshNames.includes(name)} />)
-              : <Typography sx={{ fontSize: 13, color: 'text.secondary' }}>Variables you create show up here.</Typography>}
-          </Box>
+          <RapidFireDataBank bubbles={bubbles} freshNames={freshNames} />
         </Box>
       </Box>
       {phone && !finished && <CodeDrawer title="Type here" storageKey="synlab_rapid_fire_drawer_v1" defaultShare={0.45} zIndex={2}>{renderTypingArea(true)}</CodeDrawer>}
