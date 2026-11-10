@@ -24,7 +24,6 @@ export function ThemeContextProvider({ children }) {
     }
 
     const dark = themeMode === 'dark'
-    const track = dark ? darkPalette.background.paper : '#f5f8f6'
     const thumb = dark ? activeDarkTheme.divider : '#a3b8ac'
     return createTheme({
       palette: dark ? darkPalette : lightPalette,
@@ -36,12 +35,12 @@ export function ThemeContextProvider({ children }) {
       components: {
         MuiButton: { defaultProps: { disableElevation: true } },
         MuiCssBaseline: { styleOverrides: {
-          '*': { scrollbarWidth: 'thin', scrollbarColor: `${thumb} ${track}` },
+          '*': { scrollbarWidth: 'thin', scrollbarColor: `${thumb} transparent` },
           '*::-webkit-scrollbar': { width: 8, height: 8 },
-          '*::-webkit-scrollbar-track': { background: track, borderRadius: 8 },
-          '*::-webkit-scrollbar-thumb': { background: thumb, borderRadius: 8, border: `2px solid ${track}` },
-          '*::-webkit-scrollbar-thumb:hover': { background: dark ? activeDarkTheme.primary : '#6e9180' },
-          '*::-webkit-scrollbar-corner': { background: track },
+          '*::-webkit-scrollbar-track': { background: 'transparent' },
+          '*::-webkit-scrollbar-thumb': { backgroundColor: thumb, borderRadius: 8, border: '2px solid transparent', backgroundClip: 'padding-box' },
+          '*::-webkit-scrollbar-thumb:hover': { backgroundColor: dark ? activeDarkTheme.primary : '#6e9180' },
+          '*::-webkit-scrollbar-corner': { background: 'transparent' },
         } },
       },
     })

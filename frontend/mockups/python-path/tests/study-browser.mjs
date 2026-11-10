@@ -48,7 +48,7 @@ try {
   await basics.getByText('Python ready', { exact: true }).waitFor({ timeout: 65000 })
   assert.equal(await basics.getByText('Blind 75', { exact: true }).count(), 0)
   async function write(panel, code) {
-    await panel.locator('.monaco-editor').first().click()
+    await panel.locator('.cm-editor').first().click()
     await page.keyboard.press('ControlOrMeta+A')
     await page.keyboard.insertText(code)
   }
@@ -75,7 +75,7 @@ try {
   await algorithms.getByText('That works. Nice rep.', { exact: true }).waitFor()
   await selectSection('Python Basics')
   await basics.getByRole('heading', { name: 'Make the output visible.' }).waitFor()
-  assert.ok((await basics.locator('.monaco-editor').innerText()).includes('unsaved'))
+  assert.ok((await basics.locator('.cm-editor').innerText()).includes('unsaved'))
   await page.waitForTimeout(450)
   const saved = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), STORAGE_KEY)
   assert.equal(saved.progress.records.assign.successes, 1)

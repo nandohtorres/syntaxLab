@@ -1,16 +1,15 @@
-import React, { useRef } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { Box, Button, CircularProgress, IconButton, Stack, Tab, Tabs, ThemeProvider, Tooltip, Typography } from '@mui/material'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import LightModeIcon from '@mui/icons-material/LightMode'
 import RefreshIcon from '@mui/icons-material/Refresh'
-import Editor from '@monaco-editor/react'
-import './editorRuntime.js'
-
-import { mono, definePracticeTheme, download } from './editorSupport.js'
+import CodeSurface from './CodeSurface.jsx'
+import { mono, download } from './editorSupport.js'
 import practiceTheme, { lightPracticeTheme } from './practiceTheme.js'
 import { exerciseFileTools } from './exerciseFeatures.js'
 import { useEditorTheme } from './editorThemeStore.js'
-import { useStudyLayout } from './layoutContext.js'
+import { useInCodeDrawer, useStudyLayout } from './layoutContext.js'
+import SymbolKeys from './SymbolKeys.jsx'
 import PassCelebration from './PassCelebration.jsx'
 
 export default function ExerciseEditor({ exercise, files, active, setActive, change, addFile, reset, status, run, stop, passed, compact = false, next, skip, skipLabel = 'Skip question', nextLabel = 'Next question' }) {
@@ -18,6 +17,8 @@ export default function ExerciseEditor({ exercise, files, active, setActive, cha
   const [editorMode, toggleEditorMode] = useEditorTheme()
   const tools = exerciseFileTools(exercise)
   const island = layout === 'island'
+  // Inside the phone code drawer the editor fills the drawer and gains a symbol row.
+  const inDrawer = useInCodeDrawer()
   const demo = layout !== 'current'
   const desktop = '@media (min-width: 900px) and (min-height: 760px)'
   const runAction = useRef(run)
@@ -25,7 +26,11 @@ export default function ExerciseEditor({ exercise, files, active, setActive, cha
   const editor = useRef(null)
   React.useEffect(() => { runAction.current = run }, [run])
   React.useEffect(() => { nextAction.current = passed && status === 'ready' ? next : null }, [passed, status, next])
-  return <ThemeProvider theme={editorMode === 'light' ? lightPracticeTheme : practiceTheme}><Box sx={{ border: '1px solid', borderColor: passed ? 'primary.main' : 'divider', borderRadius: 2, overflow: 'hidden', bgcolor: 'background.default', ...(island && { [desktop]: { display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 } }) }}>
+  const keyBindings = useMemo(() => [
+    { key: 'Mod-Enter', run: () => { runAction.current(); return true } },
+    { key: 'Mod-Shift-Enter', run: () => { nextAction.current?.(); return true } },
+  ], [])
+  return <ThemeProvider theme={editorMode === 'light' ? lightPracticeTheme : practiceTheme}><Box sx={{ border: '1px solid', borderColor: passed ? 'primary.main' : 'divider', borderRadius: 2, overflow: 'hidden', bgcolor: 'background.default', ...(island && { [desktop]: { display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 } }), ...(inDrawer && { display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, border: 0, borderRadius: 0 }) }}>
     <Stack direction="row" sx={{ bgcolor: 'background.paper', alignItems: 'center', flexWrap: 'wrap' }}>
       <Tabs value={active} onChange={(_, name) => setActive(name)} variant="scrollable" scrollButtons="auto" aria-label="Workspace files" sx={{ flex: 1, minWidth: 140 }}>
         {Object.keys(files).map(name => <Tab key={name} value={name} label={name} sx={{ fontFamily: mono, textTransform: 'none', fontSize: 12 }} />)}
@@ -36,13 +41,12 @@ export default function ExerciseEditor({ exercise, files, active, setActive, cha
       <Tooltip title={`Use ${editorMode === 'light' ? 'dark' : 'light'} editor`}><IconButton size="small" onClick={toggleEditorMode} aria-label={`Use ${editorMode === 'light' ? 'dark' : 'light'} editor`} sx={{ mx: 0.5 }}>{editorMode === 'light' ? <DarkModeIcon fontSize="small" /> : <LightModeIcon fontSize="small" />}</IconButton></Tooltip>
       </Box>
     </Stack>
-    <Box sx={{ position: 'relative', height: demo ? { xs: 260, md: 280 } : compact ? { xs: 180, sm: 220 } : { xs: 320, sm: 380 }, ...(island && { [desktop]: { height: 'auto', flex: 1, minHeight: 100 } }) }}>
-      <Editor height="100%" path={`${exercise.id}/${active}`} value={files[active] ?? ''}
-        language={active.endsWith('.py') ? 'python' : active.endsWith('.json') ? 'json' : 'plaintext'}
-        onChange={value => change(value ?? '')} theme={editorMode === 'light' ? 'synlab-practice-light' : 'synlab-practice'}
-        beforeMount={definePracticeTheme}
-        onMount={(instance, api) => { editor.current = instance; instance.addCommand(api.KeyMod.CtrlCmd | api.KeyCode.Enter, () => runAction.current()); instance.addCommand(api.KeyMod.CtrlCmd | api.KeyMod.Shift | api.KeyCode.Enter, () => nextAction.current?.()); instance.focus() }}
-        options={{ ariaLabel: 'Python code editor', fontFamily: mono, fontSize: 16, lineHeight: 27, minimap: { enabled: false }, scrollbar: { verticalScrollbarSize: 8, horizontalScrollbarSize: 8, useShadows: false }, tabSize: 4, automaticLayout: true, occurrencesHighlight: 'off', scrollBeyondLastLine: false, padding: { top: 15 }, quickSuggestions: false, suggestOnTriggerCharacters: false, wordBasedSuggestions: 'off', readOnly: status === 'running' }} />
+    {inDrawer && <SymbolKeys onInsert={text => editor.current?.insertText(text)} />}
+    <Box sx={{ position: 'relative', height: demo ? { xs: 260, md: 280 } : compact ? { xs: 180, sm: 220 } : { xs: 320, sm: 380 }, ...(island && { [desktop]: { height: 'auto', flex: 1, minHeight: 100 } }), ...(inDrawer && { height: 'auto', flex: 1, minHeight: 120 }) }}>
+      {/* Keyed per file so each file keeps its own editor, like Monaco's per-path models. */}
+      <CodeSurface key={`${exercise.id}/${active}`} ref={editor} value={files[active] ?? ''} onChange={change}
+        language={active.endsWith('.py') ? 'python' : 'plaintext'} mode={editorMode} readOnly={status === 'running'}
+        keyBindings={keyBindings} autoFocus />
       {passed && status === 'ready' && next && <PassCelebration key={exercise.id} onNext={next} onReturn={() => editor.current?.focus()} />}
     </Box>
     <Stack direction="row" spacing={1} sx={{ p: 1.5, alignItems: 'center', borderTop: '1px solid', borderColor: 'divider' }}>

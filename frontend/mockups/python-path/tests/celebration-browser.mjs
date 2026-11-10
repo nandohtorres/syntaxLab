@@ -19,7 +19,7 @@ try {
   const celebration = () => panel.getByRole('region', { name: 'Practice celebration', exact: true })
   const store = () => page.evaluate(key => JSON.parse(localStorage.getItem(key) ?? '{}'), STORAGE_KEY)
   async function write(code) {
-    await panel.locator('.monaco-editor').click()
+    await panel.locator('.cm-editor').click()
     await page.keyboard.press('ControlOrMeta+A')
     await page.evaluate(value => navigator.clipboard.writeText(value), code)
     await page.keyboard.press('ControlOrMeta+V')
