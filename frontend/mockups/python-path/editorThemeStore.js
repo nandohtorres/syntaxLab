@@ -1,8 +1,7 @@
 import { useSyncExternalStore } from 'react'
 import { darkPreview } from '../../src/utils/darkPreview.js'
 
-// Monaco themes apply to every editor instance, including mounted hidden sections.
-// Keep one preference so the toolbar always describes the actual editor theme.
+// One dark/light preference shared by every practice editor, so all mounted sections match the toolbar.
 let mode = darkPreview ? 'dark' : 'light'
 const listeners = new Set()
 const subscribe = listener => { listeners.add(listener); return () => listeners.delete(listener) }

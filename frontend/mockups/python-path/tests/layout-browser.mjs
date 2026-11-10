@@ -23,7 +23,7 @@ try {
       await page.screenshot({ path: fileURLToPath(new URL(`../.cache/layout-${layout}-${name}.png`, import.meta.url)), fullPage })
     }
     async function write(panel, code) {
-      await panel.locator('.monaco-editor').first().click()
+      await panel.locator('.cm-editor').first().click()
       await page.keyboard.press('ControlOrMeta+A')
       await page.keyboard.insertText(code)
     }
@@ -103,7 +103,7 @@ try {
     await page.getByRole('link', { name: target === 'island' ? 'A - Floating island' : 'B - Open practice', exact: true }).click()
     await page.locator(`[data-layout-demo="${target}"]`).waitFor()
     await page.locator('#site-panel-python').getByRole('heading', { name: 'Make the output visible.', exact: true }).waitFor()
-    await page.waitForFunction(() => document.querySelector('#site-panel-python .monaco-editor')?.innerText.replace(/\u00a0/g, ' ').includes('draft for comparison'))
+    await page.waitForFunction(() => document.querySelector('#site-panel-python .cm-editor')?.innerText.replace(/\u00a0/g, ' ').includes('draft for comparison'))
     assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('synlab_python_path_v1')).drafts.print['main.py']), 'print("draft for comparison")')
     assert.equal(new URL(page.url()).hash, '#python')
     assert.deepEqual(errors, [])

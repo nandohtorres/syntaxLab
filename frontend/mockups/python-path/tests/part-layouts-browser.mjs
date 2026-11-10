@@ -61,7 +61,7 @@ try {
   await options.waitFor({ state: 'hidden' })
   assert.equal(await trigger.evaluate(element => document.activeElement === element), true)
   await choosePart(1)
-  await editor.locator('.monaco-editor').click()
+  await editor.locator('.cm-editor').click()
   await page.keyboard.press('ControlOrMeta+A')
   const code = steps[1].solutionFiles['main.py']
   await page.evaluate(value => navigator.clipboard.writeText(value), code)

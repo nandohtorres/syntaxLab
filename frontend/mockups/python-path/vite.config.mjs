@@ -18,6 +18,9 @@ export default {
     exclude: ['monaco-editor'],
     include: [
       'react', 'react-dom/client', '@mui/material', '@monaco-editor/react',
+      // Pre-bundle CodeMirror together; a late-optimized extension would otherwise load a second @codemirror/state.
+      '@uiw/react-codemirror', '@codemirror/view', '@codemirror/state', '@codemirror/language',
+      '@codemirror/commands', '@codemirror/lang-python', '@lezer/highlight', '@replit/codemirror-indentation-markers',
       ...['TerminalRounded', 'ArrowForwardRounded', 'PlayArrowRounded',
         'RestartAltRounded', 'LightbulbOutlined', 'CheckRounded',
         'ChevronRightRounded', 'CodeRounded', 'StopRounded']
@@ -25,6 +28,7 @@ export default {
     ],
   },
   resolve: {
+    dedupe: ['@codemirror/state', '@codemirror/view', '@codemirror/language', '@lezer/highlight'],
     alias: Object.fromEntries([
       'react', 'react-dom', '@mui/material', '@mui/icons-material',
       '@emotion/react', '@emotion/styled', '@monaco-editor/react', 'monaco-editor',

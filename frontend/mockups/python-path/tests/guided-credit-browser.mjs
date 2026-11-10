@@ -20,7 +20,7 @@ try {
     await page.waitForFunction(() => [...document.querySelectorAll('#site-panel-practice button')].some(button => button.textContent.trim() === 'Run code' && !button.disabled), null, { timeout: 90000 })
   }
   async function write(code) {
-    await editor.locator('.monaco-editor').click()
+    await editor.locator('.cm-editor').click()
     await page.keyboard.press('ControlOrMeta+A')
     await page.evaluate(value => navigator.clipboard.writeText(value), code)
     await page.keyboard.press('ControlOrMeta+V')

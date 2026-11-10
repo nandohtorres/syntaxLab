@@ -41,7 +41,7 @@ try {
   await question.click()
   await skip.waitFor()
   async function write(code, root = editor) {
-    await root.locator('.monaco-editor').click()
+    await root.locator('.cm-editor').click()
     await page.keyboard.press('ControlOrMeta+A')
     await page.evaluate(value => navigator.clipboard.writeText(value), code)
     await page.keyboard.press('ControlOrMeta+V')

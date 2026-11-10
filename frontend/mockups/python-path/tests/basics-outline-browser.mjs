@@ -27,9 +27,9 @@ try {
   assert.equal(await variants.getByRole('button').count(), 3)
   await variants.getByRole('button', { name: 'Variation 2 of 3', exact: true }).click()
   assert.equal(await variants.getByRole('button', { name: 'Variation 2 of 3', exact: true }).getAttribute('aria-pressed'), 'true')
-  await panel.locator('.monaco-editor').waitFor()
+  await panel.locator('.cm-editor').waitFor()
   const draft = '# preserved variation two\nretries = 4'
-  await panel.locator('.monaco-editor').click()
+  await panel.locator('.cm-editor').click()
   await page.keyboard.press('ControlOrMeta+A')
   await page.evaluate(code => navigator.clipboard.writeText(code), draft)
   await page.keyboard.press('ControlOrMeta+V')
