@@ -36,6 +36,50 @@ def valid_path(name):
     )
 
 
+MISSING = object()
+
+
+def value_summary(value):
+    text = repr(value)
+    return {"text": text if len(text) <= 80 else text[:77] + "...", "type": "None" if value is None else type(value).__name__}
+
+
+def rereadable(node):
+    """Names, attributes, subscripts and literals only, so reading the value again never reruns learner code."""
+    for child in ast.walk(node):
+        if isinstance(child, ast.Call):
+            # The captured output is the runner's own string: _stdout.strip() is safe to repeat.
+            func = child.func
+            if not (isinstance(func, ast.Attribute) and isinstance(func.value, ast.Name)
+                    and func.value.id == "_stdout" and not child.args and not child.keywords):
+                return False
+        elif not isinstance(child, (ast.Name, ast.Attribute, ast.Subscript, ast.Constant, ast.Slice,
+                                    ast.Tuple, ast.List, ast.UnaryOp, ast.USub, ast.Load, ast.expr_context)):
+            return False
+    return True
+
+
+def compared_values(code, namespace, error):
+    """Expected and actual values of a failed check, only when they can be known for certain."""
+    if hasattr(error, "expected"):
+        return value_summary(error.expected), value_summary(error.actual)
+    tree = ast.parse(code)
+    asserts = [node for node in tree.body if isinstance(node, ast.Assert)]
+    if len(asserts) != 1 or tree.body[-1] is not asserts[0]:
+        return None
+    test = asserts[0].test
+    if not (isinstance(test, ast.Compare) and len(test.ops) == 1 and isinstance(test.ops[0], (ast.Eq, ast.Is))):
+        return None
+    try:
+        expected = ast.literal_eval(test.comparators[0])
+    except (ValueError, TypeError, SyntaxError, MemoryError, RecursionError):
+        return None
+    if not rereadable(test.left):
+        return None
+    actual = eval(compile(ast.Expression(test.left), "<check>", "eval"), namespace)
+    return value_summary(expected), value_summary(actual)
+
+
 def grade_request(payload):
     started = time.monotonic()
     request = json.loads(payload) if isinstance(payload, str) else payload
@@ -121,7 +165,15 @@ def grade_request(payload):
                     checks.append({"label": check["label"], "passed": True})
                 except BaseException as error:
                     detail = str(error)[:300] or "The result did not match this check."
-                    checks.append({"label": check["label"], "passed": False, "message": detail})
+                    failure = {"label": check["label"], "passed": False, "message": detail}
+                    if isinstance(error, AssertionError):
+                        try:
+                            values = compared_values(check["code"], namespace, error)
+                        except Exception:
+                            values = None
+                        if values:
+                            failure["expected"], failure["got"] = values
+                    checks.append(failure)
         generated = {}
         for target in run_root.rglob("*"):
             if target.is_file() and not target.is_symlink() and target.suffix in {".py", ".txt", ".json", ".csv", ".log"}:

@@ -1,11 +1,22 @@
 export const check = (label, code) => ({ label, code })
 export const syntax = (label, ...anyOf) => ({ label, anyOf, message: `Use ${label.toLowerCase()} in this rep, then run again.` })
 
-export function lesson({ id, unit, title, prompt, solution, tests, starter = '# Write your Python here\n', files, solutionFiles, hints, note, track = 'foundations', variant = 0, skillId = id, ...extra }) {
+const DEFAULT_STARTER = '# Write your Python here\n'
+
+// First variations of "Write name(args) ..." tasks start from the function's signature, so the learner
+// begins with the body. Skipped when the signature has defaults (often the skill itself) or several functions.
+function signatureStub(solution, prompt) {
+  const definitions = (solution ?? '').split('\n').filter(line => /^def \w+\(/.test(line))
+  const match = definitions.length === 1 && definitions[0].match(/^def (\w+)\(([^)]*)\):\s*$/)
+  if (!match || match[2].includes('=') || !prompt.startsWith(`Write ${match[1]}(`)) return null
+  return `${definitions[0].trimEnd()}\n    # Write your code here\n    pass\n`
+}
+
+export function lesson({ id, unit, title, prompt, solution, tests, starter, files, solutionFiles, hints, note, track = 'foundations', variant = 0, skillId = id, ...extra }) {
   return {
     id: variant ? `${id}-v${variant}` : id,
     skillId, variant, version: 1, track, unit, title, prompt,
-    entry: 'main.py', initialFiles: files ?? { 'main.py': starter },
+    entry: 'main.py', initialFiles: files ?? { 'main.py': starter ?? ((variant === 0 && signatureStub(solution, prompt)) || DEFAULT_STARTER) },
     solutionFiles: solutionFiles ?? { ...(files ?? {}), 'main.py': solution },
     checks: tests.map((value, index) => typeof value === 'string' ? check(`Check ${index + 1}`, value) : value),
     hints: hints ?? ['Break the task into its input, operation and result.', 'Write the smallest version first. Inspect the feedback after running.'],

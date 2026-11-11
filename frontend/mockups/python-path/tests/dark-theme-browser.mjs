@@ -29,12 +29,12 @@ try {
   await page.waitForFunction(() => [...document.querySelectorAll('#site-panel-practice button')].some(button => button.textContent.trim() === 'Run code' && !button.disabled), null, { timeout: 65000 })
   await page.screenshot({ path: fileURLToPath(new URL('../.cache/release-light.png', import.meta.url)) })
   await page.getByRole('button', { name: 'Switch to dark mode', exact: true }).click()
-  await panel.getByRole('button', { name: 'Use dark editor', exact: true }).click()
+  // Practice editors follow the site theme; the editor-only override lives in the "Editor options" menu.
   await page.waitForFunction(() => getComputedStyle(document.querySelector('#site-panel-practice .cm-editor')).backgroundColor === 'rgb(37, 42, 49)')
   await page.screenshot({ path: fileURLToPath(new URL('../.cache/release-dark.png', import.meta.url)) })
   await page.getByRole('tab', { name: 'Python Basics', exact: true }).click()
   await page.locator('#site-panel-python .cm-editor').waitFor({ timeout: 65000 })
-  assert.equal(await page.locator('#site-panel-python').getByRole('button', { name: 'Use light editor', exact: true }).count(), 1, 'Editors share the selected dark palette')
+  assert.equal(await page.locator('#site-panel-python .cm-editor').evaluate(element => getComputedStyle(element).backgroundColor), 'rgb(37, 42, 49)', 'Editors follow the dark site theme')
   await page.setViewportSize({ width: 390, height: 844 })
   for (const name of ['Python Basics', 'LeetCode Patterns', 'Learning Hub']) {
     await page.getByRole('tab', { name, exact: true }).click()

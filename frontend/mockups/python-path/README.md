@@ -15,12 +15,11 @@ The normal site uses the approved island layout and three folder tabs:
 - **Learning Hub** (`/#learn`): concise Python teaching, facts, quirks and visuals
   covering all 15 pattern groups. Old `/#interview` links open the Hub.
 
-After a pass, a six-tap celebration appears inside the editor. Choose Rocket,
-Lightning, Star, Flame or Seedling; the choice is saved on this browser. Keyboard
-Enter/Space works too. There is no speed requirement or charge decay. A short
-launch advances once; reduced-motion mode removes the animation. Back to code
-dismisses it, and the normal Next button/shortcut remains available. Celebration
-taps never change earned practice credit.
+After a pass, an inline pass bar under the editor shows the check count, a short
+reflection line and a focused Next button; it never covers the code. Tapping the
+code launches its characters off the screen and advances once (a quick fade under
+reduced motion). Next and Ctrl+Shift+Enter still work, and launching never changes
+earned practice credit. A small streak counts consecutive first-try passes.
 
 Skip sits beside Run. Passing changes Skip into Next; editing requires another
 pass. Warm-ups do not earn parent-question credit. Revealed solutions and corrected

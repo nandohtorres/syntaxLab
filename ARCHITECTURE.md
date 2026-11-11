@@ -59,12 +59,52 @@ plus a 60-rep full run. Every rep is added to one growing program and checked
 through the same worker runner; later levels start from the earlier levels'
 program. Data bubbles show each variable's value from authored `data` fields,
 which content checks verify against real Python; each rep also shows a one-line
-Python tip about the syntax it practices. Questions mark code with backticks, which render as code chips
+Python tip about the syntax it practices. A correct rep pulses a green border around
+the whole window for a quarter second before the next rep appears; a wrong one shows a red
+border and a short shake (a color fade only under reduced motion). Questions mark code with backticks, which render as code chips
 (`RapidFireTask.jsx`), so variable names never read as English words. Data
 bubbles sit in one column per value type, newest first (`RapidFireDataBank.jsx`). The clock can be paused or
 hidden. Finished times per level stay in this browser under `synlab_rapid_fire_v1`.
 On phones the typing area moves into the same code drawer the practice pages use
-(below), with symbol keys and a visible Submit button.
+(below), with symbol keys and a visible Submit button; its **Reset code panel** control sits
+in the Rapid Fire header.
+
+## Practice feedback and pass flow
+
+`runner.py` grades checks in order. When a check fails it also reports `expected` and `got`
+(value text and type) if they can be known for certain: from `_expect` mismatches in
+`content/structures.py`, or from a single `assert <name> == <literal>` whose left side is only
+names, attributes and subscripts (so reading it again never reruns learner code). Otherwise
+only the message is shown; nothing is guessed.
+
+`FeedbackPanel.jsx` leads with the first failed check (the root cause), shows Expected and
+"You wrote" side by side as small bubbles (`ValueComparison.jsx`), then the exercise's
+**Watch for** tip (the Basics pitfall, or the pattern's watch-for on LeetCode Patterns), then
+the full check list. Failed checks use a theme-aware tone (#8a4b08 on light, the theme's
+warning tone on dark; both at least 4.5:1) and a ✕ mark.
+
+The task sentence leads **Your task** at 17px with code chips (`TaskText.jsx` only chips calls,
+snake_case or dotted names and True/False/None). Part, variation and order controls share
+one quiet line under it, and the original LeetCode problem follows the task card. A
+**See worked example** link opens the matching Learning Hub topic or pattern
+(`learning/hubLink.js`) when a mapping exists. The explanation card reads **Hint** until the
+exercise's first run, then **Why this works**. Basics numbers each topic and skill once;
+variations are listed under their skill instead of as new numbered questions. First
+variations of single-function "Write name(args)" tasks start from a signature stub
+(`content/lesson.js`), except when the signature has default values.
+
+After a pass, an inline pass bar replaces the editor footer (it never covers the code):
+"Passed · N/N checks", the exercise's reflection line and a focused Next button. Tapping or
+clicking the code then launches it: `CodeSurface`'s `characterBoxes()` reports every visible
+character's screen box, and `codeLaunch.js` animates each as its own piece (Web Animations,
+about 0.8s, a short vibration on touch devices) before advancing. Reduced motion uses a quick
+fade. Next and Ctrl+Shift+Enter still advance immediately; launching never grants credit.
+Desktop shows "Ctrl+Enter to run" beside Run code.
+
+A small streak (`streakStore.js`, `synlab_first_try_streak_v1`) counts consecutive first-try
+passes: passes with no earlier miss, revealed solution or reloaded answer on that visit. A
+miss quietly resets it to zero; other passes leave it unchanged. There are no points or
+leaderboards.
 
 ## Running and grading Python
 
@@ -95,11 +135,12 @@ library directly, so the editor can change again without touching them. It provi
 Colors come from the one `editorPalette` in `editorSupport.js`. Moving from Monaco
 cut the largest production JS chunk from about 3.7 MB to about 0.5 MB.
 
-Themes are per editor instance. One shared dark/light preference
-(`editorThemeStore.js`) keeps the mounted practice editors matching their toolbar.
-Rapid Fire's editor is always dark. The site starts in light mode; Graphite is the
-normal dark mode, and explicit palette query parameters keep earlier color
-comparisons. Editor and site theme controls stay independent.
+The site theme follows the OS `prefers-color-scheme` until the learner picks one with the
+header toggle; that choice is kept in `synlab_theme_v1`. Graphite is the normal dark mode,
+and explicit palette query parameters (`?dark=`) still force dark for color comparisons.
+Practice editors follow the site theme. An editor-only override (Match site / Light / Dark)
+lives in the editor toolbar's **Editor options** (⋯) menu and is shared by every mounted
+practice editor (`editorThemeStore.js`). Rapid Fire's editor is always dark.
 
 Under 900px wide (`PHONE_LAYOUT_QUERY`), `StudyWorkspace` renders
 `PhoneStudyWorkspace`:
@@ -107,12 +148,20 @@ Under 900px wide (`PHONE_LAYOUT_QUERY`), `StudyWorkspace` renders
 - **The page:** the question reads as a normal page.
 - **Questions:** the list opens from a **Questions** button.
 - **The drawer:** the editor, feedback and footer sit in `CodeDrawer`.
-  - Drag the handle to any height between a peek bar and 90% of the visible
-    screen. Tapping the handle folds or reopens it.
-  - **Lock** freezes the height.
-  - **Reset** restores the default height and unlocks it.
+  - Drag the handle to any height inside a safe range: the handle always stays fully
+    above the bottom safe area (`env(safe-area-inset-bottom)`) and browser bars, and at
+    least 48px below the top of the visible screen (at most 90% of it). Saved heights
+    are clamped into that range on every screen size; the drawer is never auto-reset.
+    Tapping the handle folds or reopens it.
+  - **Lock** freezes the height and stays on the drawer.
+  - **Reset code panel** (in the page header next to **Questions**, and in the Rapid
+    Fire header) restores the default height and unlocks it. It is outside the drawer
+    so it never sits beside the editor's own Reset code button.
+  - A one-line task summary is pinned at the top of the drawer; tap it to read the
+    whole task without folding the drawer.
   - It follows the visual viewport, so it stays above the phone keyboard and
-    browser bars.
+    browser bars. On phones the active section panel stacks above the section tabs,
+    so a tall drawer never slides under them.
 - **Symbol keys:** `SymbolKeys.jsx` inserts the symbols phone keyboards hide.
 
 Drawer height and lock state are kept per browser in `synlab_code_drawer_v1` for
@@ -129,8 +178,8 @@ shared save owner. Old exercise IDs are retained. Legacy `synlab_progress`,
 `synlab_code` and `synlab_interview_recall_v1` records are preserved separately.
 
 Passing a warm-up does not complete its parent question. Editing a passed answer
-requires another pass; revealed/corrected work is tracked as assisted. Celebration
-taps never grant practice credit. Browser checks cover backup replacement during
+requires another pass; revealed/corrected work is tracked as assisted. Launching
+passed code never grants practice credit. Browser checks cover backup replacement during
 runs, reload and cross-section drafts.
 
 Storage is specific to a browser profile and origin. Supported export/import

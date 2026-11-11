@@ -6,12 +6,14 @@ import PauseIcon from '@mui/icons-material/Pause'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+import VerticalAlignBottomIcon from '@mui/icons-material/VerticalAlignBottom'
 import { insertNewlineAndIndent } from '@codemirror/commands'
 
 import CodeSurface from './CodeSurface.jsx'
 import CodeDrawer from './CodeDrawer.jsx'
 import SymbolKeys from './SymbolKeys.jsx'
 import { PHONE_LAYOUT_QUERY } from './layoutContext.js'
+import { RAPID_FIRE_DRAWER_KEY, resetDrawer } from './codeDrawerStore.js'
 import { mono } from './editorSupport.js'
 import usePracticeRunner from './usePracticeRunner.js'
 import RapidFireTimer from './RapidFireTimer.jsx'
@@ -27,6 +29,9 @@ const EXAMPLE_PADDING_X = 16
 const EDITOR_PADDING_TOP = 11
 const SAVED_RUN_LIMIT = 100
 const FRESH_HIGHLIGHT_MS = 900
+// The green window pulse shows before the next rep appears; long enough to see, short enough for a timed drill.
+const PASS_PULSE_MS = 260
+const PULSE_COLORS = { light: { correct: '#16a34a', error: '#dc2626' }, dark: { correct: '#4ade80', error: '#f87171' } }
 const IDLE_CLOCK = { startedAt: null, finishedAt: null, pausedAt: null, pausedMs: 0 }
 
 function loadStore() {
@@ -83,6 +88,8 @@ export default function RapidFireMode({ onExit }) {
   const [clock, setClock] = useState(IDLE_CLOCK)
   const [misses, setMisses] = useState(0)
   const [feedback, setFeedback] = useState(null)
+  // Each result restarts the window's border pulse; count alternates the animation name so repeats replay.
+  const [pulse, setPulse] = useState({ kind: null, count: 0 })
   const [attempt, setAttempt] = useState(0)
   const [runs, setRuns] = useState(() => loadStore().runs ?? [])
   const [clockHidden, setClockHidden] = useState(() => Boolean(loadStore().hideClock))
@@ -94,6 +101,8 @@ export default function RapidFireMode({ onExit }) {
   const submitRef = useRef(null)
   const editorRef = useRef(null)
   const phone = useMediaQuery(PHONE_LAYOUT_QUERY)
+  const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const advanceTimer = useRef(null)
   const flashTimer = useRef(null)
   const freshTimer = useRef(null)
 
@@ -108,6 +117,8 @@ export default function RapidFireMode({ onExit }) {
     const chosen = findLevel(nextLevelId)
     clearTimeout(flashTimer.current)
     clearTimeout(freshTimer.current)
+    clearTimeout(advanceTimer.current)
+    runInFlight.current = false
     submitToken.current += 1
     setLevelId(chosen.id)
     setStepIndex(0)
@@ -117,6 +128,7 @@ export default function RapidFireMode({ onExit }) {
     setClock(IDLE_CLOCK)
     setMisses(0)
     setFeedback(null)
+    setPulse(current => ({ kind: null, count: current.count }))
     setAttempt(value => value + 1)
     saveStore({ lastLevel: chosen.id })
   }, [])
@@ -136,6 +148,7 @@ export default function RapidFireMode({ onExit }) {
     runInFlight.current = false
     if (token !== submitToken.current) return // the level changed while this rep was running
     clearTimeout(flashTimer.current)
+    setPulse(current => ({ kind: outcome?.passed ? 'correct' : 'error', count: current.count + 1 }))
     if (outcome?.passed) {
       const changed = Object.keys(step.data)
       setAcceptedCode(program)
@@ -145,7 +158,7 @@ export default function RapidFireMode({ onExit }) {
       freshTimer.current = setTimeout(() => setFreshNames([]), FRESH_HIGHLIGHT_MS)
       refocusAfterRep.current = true
       setFeedback({ kind: 'correct' })
-      flashTimer.current = setTimeout(() => setFeedback(null), 350)
+      flashTimer.current = setTimeout(() => setFeedback(null), PASS_PULSE_MS + 150)
       if (stepIndex === steps.length - 1) {
         const endedAt = Date.now()
         // Read the clock through the ref: a pause during this run must still count.
@@ -156,7 +169,12 @@ export default function RapidFireMode({ onExit }) {
         setRuns(updatedRuns)
         saveStore({ runs: updatedRuns })
       } else {
-        setStepIndex(index => index + 1)
+        // Stay locked until the next rep shows, so a quick second Enter can't submit this rep again.
+        runInFlight.current = true
+        advanceTimer.current = setTimeout(() => {
+          runInFlight.current = false
+          if (token === submitToken.current) setStepIndex(index => index + 1)
+        }, PASS_PULSE_MS)
       }
     } else {
       setMisses(count => count + 1)
@@ -173,7 +191,7 @@ export default function RapidFireMode({ onExit }) {
   }, [stepIndex])
 
   useEffect(() => { submitRef.current = submit }, [submit])
-  useEffect(() => () => { clearTimeout(flashTimer.current); clearTimeout(freshTimer.current) }, [])
+  useEffect(() => () => { clearTimeout(flashTimer.current); clearTimeout(freshTimer.current); clearTimeout(advanceTimer.current) }, [])
 
   // Focus mode: no page scroll behind the window, Esc exits.
   useEffect(() => {
@@ -220,8 +238,6 @@ export default function RapidFireMode({ onExit }) {
       <Box sx={{
         border: `${EDITOR_BORDER}px solid`, borderColor: editorBorder, borderRadius: 2, overflow: 'hidden', transition: 'border-color 0.15s', flexShrink: 0,
         ...(inDrawer ? { flex: 1, minHeight: EDITOR_LINE_HEIGHT * 2 + 24, mx: 1 } : { height: Math.max(1, lineCount(step.code)) * EDITOR_LINE_HEIGHT + 24 }),
-        animation: feedback?.kind === 'error' ? 'rapidShake 0.35s ease' : 'none',
-        '@keyframes rapidShake': { '0%, 100%': { transform: 'translateX(0)' }, '25%': { transform: 'translateX(-6px)' }, '50%': { transform: 'translateX(6px)' }, '75%': { transform: 'translateX(-3px)' } },
       }}>
         <CodeSurface key={`${attempt}-${stepIndex}`} ref={editorRef} onChange={startClock} keyBindings={keyBindings} autoFocus
           mode="dark" ariaLabel="Type the example here" lineNumbers={false} highlightActiveLine={false} lineHeight={EDITOR_LINE_HEIGHT} paddingTop={EDITOR_PADDING_TOP} textInset={EXAMPLE_PADDING_X - EDITOR_BORDER} />
@@ -251,9 +267,27 @@ export default function RapidFireMode({ onExit }) {
     bgcolor: 'rgba(10, 12, 20, 0.6)', backdropFilter: 'blur(3px)',
     p: { xs: 1, md: 3 }, pt: { xs: 'max(8px, env(safe-area-inset-top, 0px))', md: 3 }, pb: { xs: 'max(8px, env(safe-area-inset-bottom, 0px))', md: 3 },
   }}>
-    <Box sx={{
-      width: '100%', maxWidth: 1100, height: { xs: '100%', md: '90vh' }, display: 'flex', flexDirection: 'column', overflow: 'hidden',
-      bgcolor: 'background.default', color: 'text.primary', borderRadius: 3, boxShadow: '0 30px 80px rgba(0, 0, 0, 0.4)',
+    <Box data-rapid-fire-pulse={pulse.kind ?? 'none'} sx={theme => {
+      const ring = PULSE_COLORS[theme.palette.mode][pulse.kind] ?? 'transparent'
+      const parity = pulse.count % 2
+      // Shake moves the window with "left", not a transform, so the phone drawer's fixed position is untouched.
+      const shake = pulse.kind === 'error' && !reducedMotion
+      return {
+        position: 'relative', left: 0, width: '100%', maxWidth: 1100, height: { xs: '100%', md: '90vh' }, display: 'flex', flexDirection: 'column', overflow: 'hidden',
+        bgcolor: 'background.default', color: 'text.primary', borderRadius: 3, boxShadow: '0 30px 80px rgba(0, 0, 0, 0.4)',
+        animation: shake ? `rapidWindowShake${parity} 0.35s ease` : 'none',
+        [`@keyframes rapidWindowShake${parity}`]: { '0%, 100%': { left: 0 }, '25%': { left: '-8px' }, '50%': { left: '8px' }, '75%': { left: '-4px' } },
+        // The ring sits above the content (and the phone drawer) without catching taps.
+        '&::after': {
+          content: '""', position: 'absolute', inset: 0, zIndex: 3, borderRadius: 'inherit', pointerEvents: 'none',
+          animation: pulse.kind ? `rapidWindowRing${parity} ${pulse.kind === 'correct' ? 0.5 : 0.7}s ease-out forwards` : 'none',
+        },
+        [`@keyframes rapidWindowRing${parity}`]: {
+          '0%': { boxShadow: `inset 0 0 0 3px ${ring}, inset 0 0 28px ${ring}66` },
+          '60%': { boxShadow: `inset 0 0 0 3px ${ring}, inset 0 0 12px ${ring}33` },
+          '100%': { boxShadow: `inset 0 0 0 3px ${ring}00, inset 0 0 0 ${ring}00` },
+        },
+      }
     }}>
       <Stack direction="row" sx={{ alignItems: 'center', flexWrap: 'wrap', gap: { xs: 1, md: 2 }, px: { xs: 2, md: 3 }, py: 1.5, bgcolor: 'background.paper', borderBottom: '1px solid', borderColor: 'divider' }}>
         <Box sx={{ minWidth: 0 }}>
@@ -282,6 +316,10 @@ export default function RapidFireMode({ onExit }) {
           <Tooltip title={clockHidden ? 'Show clock' : 'Hide clock'}>
             <IconButton aria-label={clockHidden ? 'Show clock' : 'Hide clock'} onClick={toggleClockHidden} size="small">{clockHidden ? <VisibilityIcon /> : <VisibilityOffIcon />}</IconButton>
           </Tooltip>
+          {/* The drawer's reset lives up here, outside the drawer, like the practice pages' header control. */}
+          {phone && !finished && <Tooltip title="Reset code panel">
+            <IconButton aria-label="Reset code panel" onClick={() => resetDrawer(RAPID_FIRE_DRAWER_KEY)} size="small"><VerticalAlignBottomIcon /></IconButton>
+          </Tooltip>}
           <Button onClick={onExit} variant="outlined" color="inherit" startIcon={<CloseIcon />} sx={{ flexShrink: 0, ml: 0.5 }}>Exit</Button>
         </Stack>
       </Stack>
@@ -332,7 +370,7 @@ export default function RapidFireMode({ onExit }) {
           <RapidFireDataBank bubbles={bubbles} freshNames={freshNames} />
         </Box>
       </Box>
-      {phone && !finished && <CodeDrawer title="Type here" storageKey="synlab_rapid_fire_drawer_v1" defaultShare={0.45} zIndex={2}>{renderTypingArea(true)}</CodeDrawer>}
+      {phone && !finished && <CodeDrawer title="Type here" storageKey={RAPID_FIRE_DRAWER_KEY} defaultShare={0.45} zIndex={2}>{renderTypingArea(true)}</CodeDrawer>}
     </Box>
   </Box>
 }

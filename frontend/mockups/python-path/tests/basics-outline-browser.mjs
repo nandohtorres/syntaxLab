@@ -39,7 +39,8 @@ try {
   await trigger.click()
   await options.getByRole('button', { name: 'b. Print text', exact: true }).click()
   await options.waitFor({ state: 'hidden' })
-  await prompt.getByRole('heading', { name: '2. Start a Python program', exact: true }).waitFor()
+  // The heading numbers the topic, so changing part or variation keeps "1." (variations are not new questions).
+  await prompt.getByRole('heading', { name: '1. Start a Python program', exact: true }).waitFor()
   assert.equal(await variants.getByRole('button', { name: 'Variation 1 of 3', exact: true }).getAttribute('aria-pressed'), 'true')
   const state = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), STORAGE_KEY)
   assert.equal(state.progress.attempts.length, 0, 'Choosing parts/variations never earns progress')
@@ -48,10 +49,15 @@ try {
   const library = panel.getByRole('region', { name: 'Full questions list', exact: true })
   const labels = await library.locator('.question-item').allTextContents()
   assert.equal(labels.length, 104)
-  labels.forEach((label, index) => assert.match(label.replace(/^[✓○]\s*/, ''), new RegExp(`^${index + 1}\\. `)))
+  // Each skill is numbered once; its variations follow it with the same number and "· variation N".
+  let skillNumber = 0
+  for (const label of labels.map(value => value.replace(/^[✓○]\s*/, ''))) {
+    if (/ · variation \d+$/.test(label)) assert.match(label, new RegExp(`^${skillNumber}\\. `))
+    else assert.match(label, new RegExp(`^${++skillNumber}\\. `))
+  }
   await library.getByRole('button', { name: /Variables and types/ }).click()
   await library.getByRole('button').filter({ hasText: 'Create a string' }).first().click()
-  await prompt.getByRole('heading', { name: /^7\. Variables and types$/ }).waitFor()
+  await prompt.getByRole('heading', { name: /^2\. Variables and types$/ }).waitFor()
   await trigger.click()
   assert.equal(await options.getByRole('button').count(), 6, 'Six skills with their existing variations retained')
   await page.keyboard.press('Escape')
@@ -61,7 +67,7 @@ try {
 
   await library.getByRole('button', { name: /Summarize an inventory/ }).click()
   await library.getByRole('button').filter({ hasText: 'Summarize a service inventory' }).click()
-  await prompt.getByRole('heading', { name: /^99\. Summarize an inventory$/ }).waitFor()
+  await prompt.getByRole('heading', { name: /^13\. Summarize an inventory$/ }).waitFor()
   assert.equal(await variants.count(), 0, 'Single-exercise topics do not show a variation control')
   await page.setViewportSize({ width: 390, height: 844 })
   await trigger.click()

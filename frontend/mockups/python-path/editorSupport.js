@@ -1,6 +1,8 @@
 import { activeDarkTheme as darkPreview } from '../../src/utils/darkPreview.js'
 
 export const mono = '"Cascadia Code", Consolas, monospace'
+// Inline code chip shared by task sentences (Rapid Fire and practice), so code never reads as English.
+export const codeChip = { fontFamily: mono, fontSize: '0.88em', px: 0.6, py: 0.1, borderRadius: 1, whiteSpace: 'pre-wrap' }
 
 // One palette for every editor theme, so Monaco and CodeSurface (ADR 0001) can't drift apart.
 export const editorPalette = {

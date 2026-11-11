@@ -99,6 +99,26 @@ says so.
   - A real-phone check of typing and paste (roadmap items P and X).
   - The legacy Monaco users listed below.
 
+## Status (2026-11-11): reset location and safe limits
+
+- **Reset moved off the drawer.** It is now **Reset code panel** in the phone page
+  header next to **Questions**, and an icon button with the same name in the Rapid
+  Fire header. Phones no longer show two look-alike reset icons (Reset code and
+  Reset drawer) side by side. **Lock** stays on the drawer.
+- **No auto-reset; safe limits instead.** On every render the height is clamped so
+  the handle stays fully visible: above `env(safe-area-inset-bottom)` and the
+  browser bars (visual viewport), and at least 48px below the top of the visible
+  screen. The learner still places it anywhere inside that range.
+- **Stacking fix.** On phones the active section panel now stacks above the section
+  tabs; before, a drawer dragged near the top slid under them and its handle could
+  not be grabbed.
+- **Task summary.** A one-line task summary is pinned at the top of the practice
+  drawer; tapping it expands the full task.
+- **Checked** in the production preview at 390px, light and dark: drag to the top
+  stops at 84px (48px margin), drag to the bottom keeps the whole handle on screen,
+  Reset code panel restores the default, no horizontal scroll. A real-phone check
+  of the safe-area inset is still open (roadmap items P and X).
+
 ## Out of scope
 
 These need their own decision:
