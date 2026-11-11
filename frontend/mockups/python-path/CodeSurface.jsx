@@ -52,6 +52,34 @@ const NO_KEY_BINDINGS = []
 
 const languageFor = name => name === 'python' ? [python(), pythonBuiltins] : []
 
+// Enough pieces for a full exercise answer while keeping the launch animation smooth.
+const MAX_CHARACTER_BOXES = 900
+
+function visibleCharacterBoxes(view) {
+  if (!view) return { fontFamily: '', fontSize: '', boxes: [] }
+  const frame = view.scrollDOM.getBoundingClientRect()
+  const boxes = []
+  for (const { from, to } of view.visibleRanges) {
+    const text = view.state.doc.sliceString(from, to)
+    for (let offset = 0; offset < text.length && boxes.length < MAX_CHARACTER_BOXES; offset += 1) {
+      const char = text[offset]
+      if (!char.trim()) continue
+      const start = view.coordsAtPos(from + offset, 1)
+      const end = view.coordsAtPos(from + offset + 1, -1)
+      // Skip characters scrolled out of the editor's frame.
+      if (!start || start.bottom < frame.top || start.top > frame.bottom || start.left < frame.left || start.left > frame.right) continue
+      const { node } = view.domAtPos(from + offset, 1)
+      const element = node.nodeType === Node.TEXT_NODE ? node.parentElement : node
+      boxes.push({
+        char, left: start.left, top: start.top, height: start.bottom - start.top,
+        width: end && end.top === start.top ? end.left - start.left : 0, color: getComputedStyle(element).color,
+      })
+    }
+  }
+  const text = getComputedStyle(view.contentDOM)
+  return { fontFamily: text.fontFamily, fontSize: text.fontSize, boxes }
+}
+
 // keyBindings: [{ key: 'Mod-Enter', run: () => true }]; they win over CodeMirror's defaults.
 export default function CodeSurface({
   ref, value, onChange, language = 'python', mode = 'dark', readOnly = false, ariaLabel = 'Python code editor',
@@ -72,6 +100,8 @@ export default function CodeSurface({
       view.dispatch(view.state.replaceSelection(text))
       view.focus()
     },
+    // Each visible character's screen box and color, so pages can animate the code without touching CodeMirror.
+    characterBoxes: () => visibleCharacterBoxes(editorRef.current?.view),
   }), [])
 
   const extensions = useMemo(() => [

@@ -34,9 +34,9 @@ try {
     const original = element.querySelector('[aria-label="Original problem"]')
     const nav = element.querySelector('[aria-label="Question parts"]')
     const task = element.querySelector('[aria-label="Your task"]')
-    return !!(original.compareDocumentPosition(task) & Node.DOCUMENT_POSITION_FOLLOWING) && task.contains(nav)
+    return !!(task.compareDocumentPosition(original) & Node.DOCUMENT_POSITION_FOLLOWING) && task.contains(nav)
   })
-  assert.equal(order, true, 'Original problem precedes one task card containing its part selector')
+  assert.equal(order, true, 'The task card (with its part selector) comes before the original problem')
   await page.waitForFunction(() => [...document.querySelectorAll('#site-panel-practice button')].some(button => button.textContent.trim() === 'Run code' && !button.disabled), null, { timeout: 65000 })
   const originalText = await originalCard.textContent()
   async function choosePart(index) {
@@ -52,7 +52,12 @@ try {
   async function shot(name, fullPage = false) { await page.screenshot({ path: fileURLToPath(new URL(`../.cache/${name}.png`, import.meta.url)), fullPage }) }
   await shot('outline-dropdown-original')
   for (const index of [1, 3, 2, 0]) await choosePart(index)
-  assert.ok(await prompt.evaluate(element => element.scrollTop > 0), 'Part changes keep the selector/task in view')
+  // The task card now leads the panel, so "in view" means its top is inside the scrolling panel.
+  assert.ok(await task.evaluate(element => {
+    const panel = element.closest('[aria-label="Exercise instructions"]').getBoundingClientRect()
+    const top = element.getBoundingClientRect().top
+    return top >= panel.top - 1 && top < panel.bottom
+  }), 'Part changes keep the selector/task in view')
   await shot('outline-dropdown-task')
   await trigger.focus()
   await page.keyboard.press('Enter')
@@ -92,5 +97,5 @@ try {
   assert.equal(await originalCard.textContent(), originalText)
   assert.deepEqual(errors, [])
   await context.close()
-  console.log('PASS: combined task/selector, cumulative pattern ordering, original-first sequence, outline-style dropdown, selection closes list, all part counts, keyboard Escape, task scroll position, real code/Next part, draft reload, mobile and dark mode.')
+  console.log('PASS: combined task/selector, cumulative pattern ordering, task-first sequence, outline-style dropdown, selection closes list, all part counts, keyboard Escape, task scroll position, real code/Next part, draft reload, mobile and dark mode.')
 } finally { await browser.close() }

@@ -4,10 +4,10 @@ import PhoneStudyWorkspace from './PhoneStudyWorkspace.jsx'
 
 const desktop = '@media (min-width: 900px) and (min-height: 760px)'
 
-export default function StudyWorkspace({ title, library, prompt, editor, feedback, footer, libraryFraction = 40 }) {
+export default function StudyWorkspace({ title, library, prompt, taskSummary, editor, feedback, footer, libraryFraction = 40 }) {
   const island = useStudyLayout() === 'island'
   const phone = useMediaQuery(PHONE_LAYOUT_QUERY)
-  if (phone) return <PhoneStudyWorkspace title={title} library={library} prompt={prompt} editor={editor} feedback={feedback} footer={footer} />
+  if (phone) return <PhoneStudyWorkspace title={title} library={library} prompt={prompt} taskSummary={taskSummary} editor={editor} feedback={feedback} footer={footer} />
   const surface = { border: '1px solid', borderColor: 'divider', borderRadius: 2, bgcolor: 'background.paper', minWidth: 0 }
   return <Box component="main" data-workspace-layout={island ? 'island' : 'flow'} sx={{ minWidth: 0, display: 'flex', flexDirection: 'column', ...(island && { [desktop]: { flex: 1, minHeight: 0 } }) }}>
     {title && <Box component="header" sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1, mb: 1.5, flexShrink: 0 }}>

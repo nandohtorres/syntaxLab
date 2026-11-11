@@ -4,7 +4,7 @@ import { sectionFromHash, siteSections } from '@/utils/siteSections'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import Header from '@/components/Header'
 import { folderPanelStyle, folderTabStyle, islandColor } from '@/utils/tabDepthStyles'
-import { isSlidingWindowSample, layoutFromSearch, StudyLayoutContext } from '@practice/layoutContext.js'
+import { PHONE_LAYOUT_QUERY, isSlidingWindowSample, layoutFromSearch, StudyLayoutContext } from '@practice/layoutContext.js'
 
 const OriginalPractice = lazy(() => import('@/pages/LeetCodePage'))
 const PythonPath = lazy(() => import('@practice/PracticePreview.jsx'))
@@ -58,7 +58,8 @@ export default function SitePage() {
         </Box>
         {siteSections.map(item => {
           const Page = content[item.id]
-          return <Box key={item.id} role="tabpanel" id={`site-panel-${item.id}`} aria-labelledby={`site-tab-${item.id}`} hidden={section !== item.id} sx={theme => ({ ...folderPanelStyle(theme), ...((bounded || item.id === 'practice') && { [desktop]: { flex: 1, minHeight: 0, ...(section === item.id && { display: 'flex', flexDirection: 'column' }) } }) })}>
+          // Phones: the panel stacks above the section tabs, so a tall code drawer never slides under them.
+          return <Box key={item.id} role="tabpanel" id={`site-panel-${item.id}`} aria-labelledby={`site-tab-${item.id}`} hidden={section !== item.id} sx={theme => ({ ...folderPanelStyle(theme), [`@media ${PHONE_LAYOUT_QUERY}`]: { zIndex: 2 }, ...((bounded || item.id === 'practice') && { [desktop]: { flex: 1, minHeight: 0, ...(section === item.id && { display: 'flex', flexDirection: 'column' }) } }) })}>
             {visited[item.id] && <ErrorBoundary>
               <Suspense fallback={<Box role="status" sx={{ p: 4, display: 'flex', gap: 2, alignItems: 'center' }}><CircularProgress size={20} /><Typography>Opening {item.label}...</Typography></Box>}>
                 {item.id === 'python' ? <Page scope="basics" /> : <Page />}

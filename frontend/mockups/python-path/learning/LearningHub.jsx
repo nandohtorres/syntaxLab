@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Box, Button, Link, MenuItem, Stack, TextField, Typography } from '@mui/material'
 import { alpha } from '@mui/material/styles'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
@@ -11,6 +11,10 @@ import { patternLearningOrder } from '../content/learningPath.js'
 import { patternGuide } from '../content/patternGuide.js'
 import PatternVisual from './PatternVisual.jsx'
 import PatternWalkthrough from './PatternWalkthrough.jsx'
+import { onHubRequest, takeHubRequest } from './hubLink.js'
+
+// Wait for the hub's tab panel to become visible after the hash change before scrolling to it.
+const HUB_SCROLL_DELAY_MS = 80
 
 const card = { border: '1px solid', borderColor: 'divider', borderRadius: 2, bgcolor: 'background.paper', minWidth: 0 }
 const mono = '"Cascadia Code", Consolas, monospace'
@@ -34,6 +38,24 @@ function JumpButton({ target, children, icon }) {
 export default function LearningHub() {
   const [topicId, setTopicId] = useState(pythonTopics[0].id)
   const [patternId, setPatternId] = useState('P06')
+  const [scrollTarget, setScrollTarget] = useState(null)
+  // "See worked example" links from practice open a specific topic or pattern here.
+  useEffect(() => {
+    const applyRequest = () => {
+      const request = takeHubRequest()
+      if (!request) return
+      if (request.topic) setTopicId(request.topic)
+      if (request.pattern) setPatternId(request.pattern)
+      setScrollTarget({ id: request.topic ? 'hub-topic' : 'hub-patterns' })
+    }
+    applyRequest()
+    return onHubRequest(applyRequest)
+  }, [])
+  useEffect(() => {
+    if (!scrollTarget) return undefined
+    const timer = setTimeout(() => document.getElementById(scrollTarget.id)?.scrollIntoView({ block: 'start' }), HUB_SCROLL_DELAY_MS)
+    return () => clearTimeout(timer)
+  }, [scrollTarget])
   const topicIndex = pythonTopics.findIndex(item => item.id === topicId)
   const topic = pythonTopics[topicIndex]
   const guide = patternGuide[patternId]

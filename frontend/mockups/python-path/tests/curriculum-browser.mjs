@@ -50,7 +50,8 @@ try {
       ? 'Implement the full problem in the editor. Keep the provided class and method names.'
       : parts.at(-1).prompt
     assert.ok((await task.innerText()).includes(expectedTask), `Full task for LC ${question.problemId}`)
-    await prompt.getByRole('region', { name: 'Why this works', exact: true }).waitFor()
+    // Labeled "Hint" until the first attempt, then "Why this works".
+    await prompt.getByRole('region', { name: /^(Hint|Why this works)$/ }).waitFor()
   }
   assert.equal(await library.locator('.question-item').count(), 75)
   assert.equal(await page.evaluate(key => JSON.parse(localStorage.getItem(key)).progress.attempts.length, STORAGE_KEY), 0)
