@@ -1,15 +1,46 @@
-import { createContext, useContext, useState, useMemo } from 'react'
+import { createContext, useContext, useEffect, useState, useMemo } from 'react'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { activeDarkTheme, darkPreview, previewPalette } from '@/utils/darkPreview'
 
 const ThemeContext = createContext(null)
+const THEME_STORAGE_KEY = 'synlab_theme_v1'
+const DARK_SCHEME_QUERY = '(prefers-color-scheme: dark)'
+
+function readSavedMode() {
+  try {
+    const saved = localStorage.getItem(THEME_STORAGE_KEY)
+    return saved === 'dark' || saved === 'light' ? saved : null
+  } catch { return null }
+}
+
+const systemMode = () => globalThis.matchMedia?.(DARK_SCHEME_QUERY).matches ? 'dark' : 'light'
+
+// An explicit ?dark= palette query (color comparisons) wins, then the learner's saved choice, then the OS setting.
+function initialMode() {
+  if (darkPreview) return 'dark'
+  return readSavedMode() ?? systemMode()
+}
 
 export function ThemeContextProvider({ children }) {
-  const [themeMode, setThemeMode] = useState(darkPreview ? 'dark' : 'light')
+  const [themeMode, setThemeMode] = useState(initialMode)
+
+  // Until the learner picks a theme, keep following the OS when it switches (for example at sunset).
+  useEffect(() => {
+    if (darkPreview || readSavedMode()) return undefined
+    const query = globalThis.matchMedia?.(DARK_SCHEME_QUERY)
+    if (!query) return undefined
+    const follow = () => { if (!readSavedMode()) setThemeMode(systemMode()) }
+    query.addEventListener('change', follow)
+    return () => query.removeEventListener('change', follow)
+  }, [])
 
   function toggleThemeMode() {
-    setThemeMode(previousMode => previousMode === 'dark' ? 'light' : 'dark')
+    setThemeMode(previousMode => {
+      const nextMode = previousMode === 'dark' ? 'light' : 'dark'
+      try { localStorage.setItem(THEME_STORAGE_KEY, nextMode) } catch { /* the choice still applies for this visit */ }
+      return nextMode
+    })
   }
 
   const muiTheme = useMemo(() => {

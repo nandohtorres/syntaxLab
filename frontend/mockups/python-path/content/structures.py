@@ -6,12 +6,21 @@ import math
 from functools import lru_cache
 
 
+class _Mismatch(AssertionError):
+    """Carries both values so the feedback can show what was expected next to what came back."""
+
+    def __init__(self, message, expected, actual):
+        super().__init__(message)
+        self.expected, self.actual = expected, actual
+
+
 def _expect(actual, expected):
-    assert actual == expected, f"Expected {expected!r}; got {actual!r}"
-    if type(expected) is int:
-        assert type(actual) is int, "Return an integer, not a boolean or float"
-    if type(expected) is bool:
-        assert type(actual) is bool, "Return a boolean, not an integer"
+    if not actual == expected:
+        raise _Mismatch(f"Expected {expected!r}; got {actual!r}", expected, actual)
+    if type(expected) is int and type(actual) is not int:
+        raise _Mismatch("Return an integer, not a boolean or float", expected, actual)
+    if type(expected) is bool and type(actual) is not bool:
+        raise _Mismatch("Return a boolean, not an integer", expected, actual)
 
 
 class ListNode:

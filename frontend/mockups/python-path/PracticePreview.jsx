@@ -25,6 +25,10 @@ import { partLayoutFromSearch } from './partLayouts.js'
 import LessonSection from './LessonSection.jsx'
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined'
 import CodeOutlinedIcon from '@mui/icons-material/CodeOutlined'
+import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined'
+import TaskText from './TaskText.jsx'
+import { hubTargetFor, openHubTarget } from './learning/hubLink.js'
+import { recordFirstTryPass, resetStreak } from './streakStore.js'
 
 const randomPracticeItem = items => items[Math.floor(Math.random() * items.length)]
 
@@ -106,8 +110,11 @@ export default function PracticePreview({ scope = 'all' }) {
     setData(current => ({ ...current, progress: recordAttempt(current.progress, exercise, { id: crypto.randomUUID(), passed: outcome.passed, assisted: wasAssisted }) }))
     if (outcome.passed) {
       credited.current = true
+      // Only a pass with no earlier miss, revealed solution or reloaded answer extends the streak.
+      if (!wasAssisted) recordFirstTryPass()
       setRound(current => ({ completed: current.completed + 1, independent: current.independent + (wasAssisted ? 0 : 1) }))
     } else {
+      resetStreak()
       assisted.current = true
       helped.current = true
       if (!retryQueue.current.some(item => item.skillId === exercise.skillId)) retryQueue.current.push({ skillId: exercise.skillId, fromId: exercise.id, turn: turn.current + 3 })
@@ -164,29 +171,36 @@ export default function PracticePreview({ scope = 'all' }) {
   const sidebar = <PathSidebar lessons={lessons} progress={data.progress} exercise={exercise} choose={choose} browse={() => setCatalog(true)} busy={busy} scope={scope} />
   const guide = leetcode && patternGuide[exercise.unit]
   const trackTitle = tracks.find(track => track.id === exercise.track)?.title
+  const hubTarget = layout !== 'current' ? hubTargetFor(exercise) : null
+  // Before any run of this exercise the explanation reads as a hint; afterwards it explains why the answer works.
+  const attempted = !!result || !!data.progress.records[exercise.id]
+  const watchFor = exercise.pitfall ?? (leetcode ? patternGuide[exercise.unit]?.[4] : undefined)
   const retained = new Set(lessons.filter(item => skillStatus(data.progress, item, lessons.filter(other => other.skillId === item.skillId).length) === 'Retained').map(item => item.skillId)).size
 
-  const workspaceEditor = <ExerciseEditor exercise={exercise} files={files} active={Object.hasOwn(files, active) ? active : exercise.entry} setActive={setActive} change={change} addFile={() => { setFileName(''); setFileError(''); setFileDialog(true) }} reset={() => setResetDialog(true)} status={status} run={submit} stop={stop} passed={passed} compact={compact} next={next} skip={skip} skipLabel={leetcode ? 'Skip question' : 'Skip exercise'} nextLabel={leetcode ? questionParts.at(-1).id === exercise.id ? 'Next question' : 'Next part' : 'Next exercise'} />
+  const workspaceEditor = <ExerciseEditor exercise={exercise} files={files} active={Object.hasOwn(files, active) ? active : exercise.entry} setActive={setActive} change={change} addFile={() => { setFileName(''); setFileError(''); setFileDialog(true) }} reset={() => setResetDialog(true)} status={status} run={submit} stop={stop} passed={passed} passResult={passed ? result : null} compact={compact} next={next} skip={skip} skipLabel={leetcode ? 'Skip question' : 'Skip exercise'} nextLabel={leetcode ? questionParts.at(-1).id === exercise.id ? 'Next question' : 'Next part' : 'Next exercise'} />
   const solutionPanel = <LessonSection title="Code solution" icon={CodeOutlinedIcon}>
     <Button size="small" variant="outlined" aria-expanded={solution} onClick={() => { setSolution(value => !value); assisted.current = true; helped.current = true }}>{solution ? 'Hide solution' : 'Show solution'}</Button>
     <Collapse in={solution}>
-      {Object.entries(exercise.solutionFiles).map(([name, text]) => <Box key={name} sx={{ mt: 1.5 }}><Typography sx={{ fontSize: 11, color: 'text.secondary' }}>{name}</Typography><Typography component="pre" sx={{ fontFamily: mono, fontSize: 12, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', mt: 0.5 }}>{text}</Typography></Box>)}
+      {Object.entries(exercise.solutionFiles).map(([name, text]) => <Box key={name} sx={{ mt: 1.5 }}><Typography sx={{ fontSize: 12, color: 'text.secondary' }}>{name}</Typography><Typography component="pre" sx={{ fontFamily: mono, fontSize: 12, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', mt: 0.5 }}>{text}</Typography></Box>)}
     </Collapse>
   </LessonSection>
   const guidePanel = leetcode && exercise.unit === 'P06' ? <SlidingWindowGuide key={`guide-${exercise.id}`} exercise={exercise} /> : guide ? <LessonSection title="Pattern visual" tone="info">
     <PatternVisual problemId={exercise.problemId} unit={exercise.unit} binaryTree={exercise.unit === 'P09' && ![98, 230, 235].includes(exercise.problemId)} focus={[39,79].includes(exercise.problemId) ? 'backtrack' : [208,211].includes(exercise.problemId) ? 'trie' : undefined} />
-    <Typography sx={{ fontSize: 12, color: 'text.secondary', mt: 1 }}>A small illustration of the pattern. The problem context and explanation describe this question's specific rules.</Typography>
+    <Typography sx={{ fontSize: 13, color: 'text.secondary', mt: 1 }}>A small illustration of the pattern. The problem context and explanation describe this question's specific rules.</Typography>
   </LessonSection> : null
 
-  const questionBody = partSelector => <>
+  // The task sentence leads; part, variation and order follow as one quiet line.
+  const questionBody = (partSelector, originalProblem) => <>
     <LessonSection title="Your task" icon={AssignmentOutlinedIcon}>
-      {partSelector && <Box sx={{ mb: 1.5, pb: 1.5, borderBottom: '1px solid', borderColor: 'divider' }}>{partSelector}</Box>}
-      <Typography sx={{ fontSize: 14, lineHeight: 1.75, whiteSpace: 'pre-wrap' }}>{taskPrompt}</Typography>
-      {exercise.argv && <Typography sx={{ mt: 1, fontFamily: mono, fontSize: 12 }}>python {exercise.entry} {exercise.argv.join(' ')}</Typography>}
-      {data.drafts[exercise.id] && data.progress.records[exercise.id]?.successes > 0 && <Typography sx={{ mt: 1, fontSize: 11, color: 'text.secondary' }}>Saved code loaded. Reset for a fresh attempt.</Typography>}
+      <Typography sx={{ fontSize: 17, fontWeight: 600, lineHeight: 1.6, whiteSpace: 'pre-wrap' }}><TaskText text={taskPrompt} /></Typography>
+      {exercise.argv && <Typography sx={{ mt: 1, fontFamily: mono, fontSize: 13 }}>python {exercise.entry} {exercise.argv.join(' ')}</Typography>}
+      {data.drafts[exercise.id] && data.progress.records[exercise.id]?.successes > 0 && <Typography sx={{ mt: 1, fontSize: 13, color: 'text.secondary' }}>Saved code loaded. Reset for a fresh attempt.</Typography>}
+      {hubTarget && <Button size="small" startIcon={<MenuBookOutlinedIcon fontSize="small" />} onClick={() => openHubTarget(hubTarget)} aria-label={`See worked example: ${hubTarget.label}, in the Learning Hub`} sx={{ mt: 0.75, ml: -0.75 }}>See worked example</Button>}
+      {partSelector && <Box sx={{ mt: 1.25, pt: 1, borderTop: '1px solid', borderColor: 'divider' }}>{partSelector}</Box>}
     </LessonSection>
+    {originalProblem}
     {guidePanel}
-    {(leetcode || compact) && <ExerciseExplanation exercise={exercise} />}
+    {(leetcode || compact) && <ExerciseExplanation exercise={exercise} attempted={attempted} />}
     {solutionPanel}
   </>
   const dialogs = <><Dialog open={catalog} onClose={() => setCatalog(false)} fullWidth maxWidth="sm">
@@ -205,10 +219,13 @@ export default function PracticePreview({ scope = 'all' }) {
     <Dialog open={roundDialog} onClose={() => setRoundDialog(false)}><DialogTitle>Ten more reps done.</DialogTitle><DialogContent>{round.completed} completed this session; {round.independent} passed without help on that visit. Retained status requires evidence across different days, plus different variations where available. Take a break or keep going.</DialogContent><DialogActions><Button onClick={() => setRoundDialog(false)}>Continue practice</Button></DialogActions></Dialog>
     </>
   if (layout !== 'current') {
-    const libraryItems = catalogLessons.map((item, index) => {
+    // Basics numbers each skill once; its variations sit right under it as versions, not new questions.
+    const skillOrder = [...new Set(catalogLessons.map(item => item.skillId))]
+    const listedLessons = compact ? [...catalogLessons].sort((left, right) => skillOrder.indexOf(left.skillId) - skillOrder.indexOf(right.skillId)) : catalogLessons
+    const libraryItems = listedLessons.map(item => {
       const track = tracks.find(value => value.id === item.track)
       const unit = track.units.find(value => value.id === item.unit)
-      return { id: item.id, title: leetcode ? `${item.problemId}. ${item.title}` : `${compact ? `${index + 1}. ` : ''}${item.title}${item.variant ? ` (${item.variant + 1})` : ''}`, optional: compact && item.track === 'scripts', group: compact && item.track === 'scripts' ? `Optional project: ${unit.title}` : leetcode && item.unit === 'P06' ? 'Sliding Window' : unit?.title ?? unit?.name ?? track.title, done: !!data.progress.records[item.id]?.successes }
+      return { id: item.id, title: leetcode ? `${item.problemId}. ${item.title}` : `${compact ? `${skillOrder.indexOf(item.skillId) + 1}. ` : ''}${item.title}${item.variant ? ` · variation ${item.variant + 1}` : ''}`, optional: compact && item.track === 'scripts', group: compact && item.track === 'scripts' ? `Optional project: ${unit.title}` : leetcode && item.unit === 'P06' ? 'Sliding Window' : unit?.title ?? unit?.name ?? track.title, done: !!data.progress.records[item.id]?.successes }
     })
     const selectedListId = exercise.libraryId ?? exercise.id
     return <>
@@ -216,16 +233,17 @@ export default function PracticePreview({ scope = 'all' }) {
       <StudyWorkspace
         libraryFraction={45}
         library={<StudyLibrary learningOrder={leetcode} key={exercise.unit} items={libraryItems} selectedId={selectedListId} choose={id => openCatalogExercise(catalogLessons.find(item => item.id === id))} disabled={busy} />}
+        taskSummary={taskPrompt}
         prompt={<Box ref={promptRef} sx={{ p: layout === 'island' ? 2 : 0 }}>
-          {leetcode ? <QuestionBreakdown exercise={exercise} lessons={questionParts} choose={choose} disabled={busy} layout={partsLayout} pattern={exercise.unit === 'P06' ? 'Sliding Window' : tracks.find(track => track.id === exercise.track)?.units.find(unit => unit.id === exercise.unit)?.title ?? 'Python patterns'}>{questionBody}</QuestionBreakdown> : compact ? <BasicsBreakdown exercise={exercise} questionNumber={catalogLessons.findIndex(item => item.id === exercise.id) + 1} lessons={lessons} topic={tracks.find(track => track.id === exercise.track)?.units.find(unit => unit.id === exercise.unit)?.title ?? 'Python practice'} choose={choose} disabled={busy} controls={<Button size="small" disabled={busy} aria-label="Change practice order" onClick={() => setOrder(value => value === 'ordered' ? 'mixed' : 'ordered')}>{order === 'ordered' ? 'In order' : 'Mixed: current unit'}</Button>}>{questionBody}</BasicsBreakdown> : <>
+          {leetcode ? <QuestionBreakdown exercise={exercise} lessons={questionParts} choose={choose} disabled={busy} layout={partsLayout} pattern={exercise.unit === 'P06' ? 'Sliding Window' : tracks.find(track => track.id === exercise.track)?.units.find(unit => unit.id === exercise.unit)?.title ?? 'Python patterns'}>{questionBody}</QuestionBreakdown> : compact ? <BasicsBreakdown exercise={exercise} topicNumber={[...new Set(lessons.map(item => `${item.track}:${item.unit}`))].indexOf(`${exercise.track}:${exercise.unit}`) + 1} lessons={lessons} topic={tracks.find(track => track.id === exercise.track)?.units.find(unit => unit.id === exercise.unit)?.title ?? 'Python practice'} choose={choose} disabled={busy} controls={<Button size="small" disabled={busy} aria-label="Change practice order" onClick={() => setOrder(value => value === 'ordered' ? 'mixed' : 'ordered')}>{order === 'ordered' ? 'In order' : 'Mixed: current unit'}</Button>}>{questionBody}</BasicsBreakdown> : <>
             <Typography component="h1" sx={{ fontSize: 24, fontWeight: 650 }}>{exercise.title}</Typography>
             {compact && <Button size="small" disabled={busy} onClick={() => setOrder(value => value === 'ordered' ? 'mixed' : 'ordered')}>{order === 'ordered' ? 'In order' : 'Mixed: current unit'}</Button>}
             {questionBody()}
           </>}
         </Box>}
         editor={workspaceEditor}
-        feedback={result ? <FeedbackPanel result={result} /> : null}
-        footer={status !== 'ready' ? <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between', gap: 1 }}><Typography role="status" sx={{ fontSize: 11, color: 'text.secondary' }}>{status === 'unavailable' ? 'Python could not load' : status === 'running' ? 'Running your code' : 'Preparing Python runtime...'}</Typography>{status === 'unavailable' && <Button onClick={restart}>Retry loading</Button>}</Stack> : null}
+        feedback={result ? <FeedbackPanel result={result} watchFor={watchFor} /> : null}
+        footer={status !== 'ready' ? <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between', gap: 1 }}><Typography role="status" sx={{ fontSize: 13, color: 'text.secondary' }}>{status === 'unavailable' ? 'Python could not load' : status === 'running' ? 'Running your code' : 'Preparing Python runtime...'}</Typography>{status === 'unavailable' && <Button onClick={restart}>Retry loading</Button>}</Stack> : null}
       />
       {dialogs}
     </>
@@ -261,7 +279,7 @@ export default function PracticePreview({ scope = 'all' }) {
         {data.drafts[exercise.id] && data.progress.records[exercise.id]?.successes > 0 && <Typography sx={{ fontSize: 12, color: 'text.secondary', mb: 1 }}>Saved answer loaded. Refresh for a fresh attempt.</Typography>}
         {workspaceEditor}
         {solutionPanel}
-        <FeedbackPanel result={result} />
+        <FeedbackPanel result={result} watchFor={watchFor} />
         <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
           {status !== 'ready' && <Typography role="status" sx={{ fontSize: 11, color: 'text.secondary' }}>{status === 'unavailable' ? 'Python could not load' : status === 'running' ? 'Running your code' : 'Preparing Python runtime...'}</Typography>}
           {status === 'unavailable' && <Button onClick={restart}>Retry loading</Button>}
